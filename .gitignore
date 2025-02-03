@@ -1,0 +1,37 @@
+# User preferences
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Builds / Caches
+dist/
+*.tsbuildinfo
+**/.vitepress/cache/
+**/.vitepress/.temp/
+.eslintcache
+
+# Dotenv configs
+.env
+.env.*
+
+# Logs
+npm-debug.log
+debug
+.clinic
+
+# IDEs / Editors
+.devcontainer/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.code-workspace
+*.sublime-settings
+.*.swp
+
+# Environments / Workspaces
+.gitpod.yml
+.netlify
+
+# Temporary files
+TODO

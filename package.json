@@ -1,0 +1,46 @@
+{
+	"name": "@directus/visual-editing",
+	"version": "1.0.0",
+	"description": "Directus Visual Editing Package",
+	"homepage": "https://directus.io",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/directus/directus.git",
+		"directory": "visual-editing"
+	},
+	"funding": "https://github.com/directus/directus?sponsor=1",
+	"license": "MIT",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./dist/index.js",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "NODE_ENV=production tsup",
+		"dev": "NODE_ENV=development tsup",
+		"test": "vitest --typecheck --watch=false"
+	},
+	"devDependencies": {
+		"@directus/tsconfig": "3.0.0",
+		"tsup": "8.3.5",
+		"@eslint/js": "9.17.0",
+		"eslint": "9.17.0",
+		"eslint-config-prettier": "9.1.0",
+		"eslint-plugin-vue": "9.32.0",
+		"globals": "15.14.0",
+		"prettier": "3.1.0",
+		"typescript": "5.7.3",
+		"typescript-eslint": "8.19.1",
+		"vitest": "2.1.8"
+	},
+	"engines": {
+		"node": ">=22"
+	}
+}
