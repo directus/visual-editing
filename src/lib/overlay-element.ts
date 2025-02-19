@@ -1,11 +1,49 @@
-export class OverlayElement {
-	static readonly HOVER_CLASS_NAME = 'directus-visual-editing-rect-hover';
+import { OverlayManager } from './overlay-manager.ts';
+import { DirectusFrame } from './directus-frame.ts';
+import type { Form } from './editable-element.ts';
 
+export class OverlayElement {
 	private noDimensions: boolean = false;
 	private element: HTMLElement;
+	private editButton: HTMLButtonElement;
+	private form: Form;
 
-	constructor(element: HTMLElement) {
-		this.element = element;
+	constructor(rect: DOMRect, form: Form, container?: HTMLElement) {
+		this.element = this.createElement();
+		this.editButton = this.createEditButton();
+		this.createRectElement();
+
+		container = container ?? OverlayManager.getGlobalOverlay();
+		container.appendChild(this.element);
+
+		this.updateRect(rect);
+
+		this.form = form;
+		this.editButton.addEventListener('click', this.onClickEdit.bind(this));
+	}
+
+	private createElement() {
+		const element = document.createElement('div');
+		element.classList.add(OverlayManager.RECT_CLASS_NAME);
+		return element;
+	}
+
+	private createRectElement() {
+		const rectInnerElement = document.createElement('div');
+		rectInnerElement.classList.add(OverlayManager.RECT_INNER_CLASS_NAME);
+		this.element.appendChild(rectInnerElement);
+	}
+
+	private createEditButton() {
+		const editButton = document.createElement('button');
+		editButton.type = 'button';
+		editButton.classList.add(OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME);
+		this.element.appendChild(editButton);
+		return editButton;
+	}
+
+	private onClickEdit() {
+		DirectusFrame.send('edit', this.form);
 	}
 
 	updateRect(rect: DOMRect) {
@@ -35,8 +73,8 @@ export class OverlayElement {
 	}
 
 	toggleHover(hover: boolean) {
-		if (hover) this.element.classList.add(OverlayElement.HOVER_CLASS_NAME);
-		else this.element.classList.remove(OverlayElement.HOVER_CLASS_NAME);
+		if (hover) this.element.classList.add(OverlayManager.RECT_HOVER_CLASS_NAME);
+		else this.element.classList.remove(OverlayManager.RECT_HOVER_CLASS_NAME);
 	}
 
 	disable() {

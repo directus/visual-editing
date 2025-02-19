@@ -3,7 +3,6 @@ import { DirectusFrame } from './lib/directus-frame.ts';
 import { EditableElement, type EditableElementOptions } from './lib/editable-element.ts';
 import { EditableStore } from './lib/editable-store.ts';
 
-const directusFrame = new DirectusFrame();
 const editableStore = new EditableStore();
 
 export function scan({
@@ -15,7 +14,7 @@ export function scan({
 	directusUrl: string;
 	elements?: HTMLElement | HTMLElement[];
 } & EditableElementOptions) {
-	const success = directusFrame.connect(directusUrl);
+	const success = DirectusFrame.connect(directusUrl);
 	if (success === false) return;
 
 	OverlayManager.addStyles();

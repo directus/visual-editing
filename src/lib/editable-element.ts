@@ -1,8 +1,7 @@
 import observeRect from '@reach/observe-rect';
-import { OverlayManager } from './overlay-manager.ts';
 import { OverlayElement } from './overlay-element.ts';
 
-type Form = {
+export type Form = {
 	collection: string;
 	item: string | number;
 	fields?: string[];
@@ -44,7 +43,7 @@ export class EditableElement {
 		this.form = this.strToObject(this.element.dataset[EditableElement.DATASET]!);
 
 		this.rect = this.element.getBoundingClientRect();
-		this.overlayElement = OverlayManager.addElement(this.rect);
+		this.overlayElement = new OverlayElement(this.rect, this.form);
 
 		// @ts-expect-error
 		this.rectObserver = observeRect(this.element, this.onObserveRect.bind(this));

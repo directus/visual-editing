@@ -1,13 +1,13 @@
-type Action = 'connect' | 'position';
+type SendAction = 'connect' | 'position' | 'edit';
 
 export class DirectusFrame {
 	private static readonly ERROR_PARENT_NOT_FOUND = 'Error sending message to Directus in parent frame:';
-	private origin: string | null = null;
+	private static origin: string | null = null;
 
-	private send(action: Action, data?: unknown) {
+	static send(action: SendAction, data?: unknown) {
 		try {
-			if (!this.origin) throw new Error();
-			window.parent.postMessage({ action, data }, this.origin);
+			if (!DirectusFrame.origin) throw new Error();
+			window.parent.postMessage({ action, data }, DirectusFrame.origin);
 			return true;
 		} catch (error) {
 			// eslint-disable-next-line
@@ -16,8 +16,8 @@ export class DirectusFrame {
 		}
 	}
 
-	connect(origin: string) {
-		this.origin = origin;
-		return this.send('connect');
+	static connect(origin: string) {
+		DirectusFrame.origin = origin;
+		return DirectusFrame.send('connect');
 	}
 }

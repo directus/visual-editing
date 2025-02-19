@@ -1,11 +1,4 @@
-import { OverlayElement } from './overlay-element.ts';
-
 export class OverlayManager {
-	private static readonly OVERLAY_ID = 'directus-visual-editing-overlay';
-	private static readonly STYLE_ID = 'directus-visual-editing-style';
-	private static readonly RECT_CLASS_NAME = 'directus-visual-editing-rect';
-	private static readonly RECT_INNER_CLASS_NAME = 'directus-visual-editing-rect-inner';
-	private static readonly RECT_EDIT_BUTTON_CLASS_NAME = 'directus-visual-editing-edit-button';
 	private static readonly CSS_VAR_Z_INDEX = '--directus-visual-editing--overlay--z-index';
 	private static readonly CSS_VAR_BORDER_SPACING = '--directus-visual-editing--rect--border-spacing';
 	private static readonly CSS_VAR_BORDER_WIDTH = '--directus-visual-editing--rect--border-width';
@@ -21,6 +14,14 @@ export class OverlayManager {
 
 	// For icons use https://fonts.google.com/icons?icon.set=Material+Icons&icon.color=%23ffffff
 	private static readonly ICON_EDIT = `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="%23ffffff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg>')`;
+
+	private static readonly OVERLAY_ID = 'directus-visual-editing-overlay';
+	private static readonly STYLE_ID = 'directus-visual-editing-style';
+
+	static readonly RECT_CLASS_NAME = 'directus-visual-editing-rect';
+	static readonly RECT_HOVER_CLASS_NAME = 'directus-visual-editing-rect-hover';
+	static readonly RECT_INNER_CLASS_NAME = 'directus-visual-editing-rect-inner';
+	static readonly RECT_EDIT_BUTTON_CLASS_NAME = 'directus-visual-editing-edit-button';
 
 	static addStyles(): void {
 		const existingStyle = document.getElementById(OverlayManager.STYLE_ID);
@@ -80,7 +81,7 @@ export class OverlayManager {
 					outline: none;
 				}
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover,
-				.${OverlayManager.RECT_CLASS_NAME}.${OverlayElement.HOVER_CLASS_NAME} .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
+				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME} .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
 					opacity: 1;
 				}
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover ~ .${OverlayManager.RECT_INNER_CLASS_NAME} {
@@ -92,30 +93,7 @@ export class OverlayManager {
 		document.head.appendChild(style);
 	}
 
-	static addElement(rect: DOMRect, container?: Element): OverlayElement {
-		container = container ?? OverlayManager.getGlobalOverlay();
-
-		const rectElement = document.createElement('div');
-		rectElement.classList.add(OverlayManager.RECT_CLASS_NAME);
-
-		const editButton = document.createElement('button');
-		editButton.type = 'button';
-		editButton.classList.add(OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME);
-		rectElement.appendChild(editButton);
-
-		const rectInnerElement = document.createElement('div');
-		rectInnerElement.classList.add(OverlayManager.RECT_INNER_CLASS_NAME);
-		rectElement.appendChild(rectInnerElement);
-
-		container.appendChild(rectElement);
-
-		const overlayElement = new OverlayElement(rectElement);
-		overlayElement.updateRect(rect);
-
-		return overlayElement;
-	}
-
-	private static getGlobalOverlay(): HTMLElement {
+	static getGlobalOverlay(): HTMLElement {
 		const existingOverlay = document.getElementById(OverlayManager.OVERLAY_ID);
 		if (existingOverlay) return existingOverlay;
 
