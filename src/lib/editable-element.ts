@@ -3,9 +3,9 @@ import { OverlayElement } from './overlay-element.ts';
 
 export type Form = {
 	collection: string;
-	item: string | number;
+	item: string | number | null;
 	fields?: string[];
-	mode: 'drawer';
+	overlay: 'drawer';
 };
 
 type RectObserver = {
@@ -19,7 +19,7 @@ export type EditableElementOptions = {
 };
 
 export class EditableElement {
-	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof Form> = ['collection', 'item', 'fields', 'mode'];
+	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof Form> = ['collection', 'item', 'fields', 'overlay'];
 
 	public static readonly DATASET = 'directus';
 
