@@ -45,7 +45,17 @@ export class DirectusFrame {
 		}
 	}
 
+	private sameOrigin(origin: string, url: string) {
+		try {
+			return origin === new URL(url).origin;
+		} catch {
+			return false;
+		}
+	}
+
 	receive(event: MessageEvent) {
+		if (!this.origin || !this.sameOrigin(event.origin, this.origin)) return;
+
 		const { action, data }: ReceiveData = event.data;
 
 		if (action === 'saved') this.receiveSaved(data);
