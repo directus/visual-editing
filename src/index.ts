@@ -5,7 +5,7 @@ import { EditableStore } from './lib/editable-store.ts';
 
 const directusFrame = new DirectusFrame();
 
-export function scan({
+export async function scan({
 	directusUrl,
 	elements = undefined,
 	customClass = undefined,
@@ -14,8 +14,11 @@ export function scan({
 	directusUrl: string;
 	elements?: HTMLElement | HTMLElement[];
 } & EditableElementOptions) {
-	const success = directusFrame.connect(directusUrl);
-	if (success === false) return;
+	const conntected = directusFrame.connect(directusUrl);
+	if (!conntected) return;
+
+	const confirmed = await directusFrame.receiveConfirm();
+	if (!confirmed) return;
 
 	OverlayManager.addStyles();
 

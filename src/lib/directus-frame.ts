@@ -2,7 +2,7 @@ import { EditableStore } from './editable-store.ts';
 import type { Form } from './editable-element.ts';
 
 type SendAction = 'connect' | 'position' | 'edit';
-type ReceiveAction = 'saved';
+type ReceiveAction = 'confirm' | 'saved';
 type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
 export type SavedData = {
@@ -19,6 +19,7 @@ export class DirectusFrame {
 	private static readonly ERROR_PARENT_NOT_FOUND = 'Error sending message to Directus in parent frame:';
 
 	private origin: string | null = null;
+	private confirmed = false;
 
 	constructor() {
 		if (DirectusFrame.SINGLETON) return DirectusFrame.SINGLETON;
@@ -48,6 +49,25 @@ export class DirectusFrame {
 		const { action, data }: ReceiveData = event.data;
 
 		if (action === 'saved') this.receiveSaved(data);
+		if (action === 'confirm') this.confirmed = true;
+	}
+
+	receiveConfirm() {
+		let attempts = 0;
+		const maxAttempts = 10;
+		const timeout = 100;
+
+		return new Promise<boolean>((resolve) => {
+			const checkConfirmed = () => {
+				if (attempts >= maxAttempts) return resolve(false);
+				attempts++;
+
+				if (this.confirmed) resolve(true);
+				else setTimeout(checkConfirmed, timeout);
+			};
+
+			checkConfirmed();
+		});
 	}
 
 	private receiveSaved(data: unknown) {
