@@ -88,17 +88,17 @@ export class EditableElement {
 			const keyValue = pair.split(':');
 			if (keyValue[0] === undefined || keyValue?.[1] === undefined) return;
 
-			const key = keyValue[0] as keyof Form;
+			const key = keyValue[0].trim() as keyof Form;
 			if (!EditableElement.DATA_ATTRIBUTE_VALID_KEYS.includes(key)) return;
 
 			const value = keyValue[1];
 
 			if (key === 'fields') {
-				result['fields'] = value.split(',');
+				result['fields'] = value.split(',').map((field) => field.trim());
 				return;
 			}
 
-			result[key] = value;
+			result[key] = value.trim();
 		});
 
 		return result as Form;
