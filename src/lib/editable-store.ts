@@ -1,33 +1,22 @@
 import { EditableElement } from './editable-element.ts';
 
 export class EditableStore {
-	private items: EditableElement[] = [];
+	private static items: EditableElement[] = [];
 
-	public static scan(elements: HTMLElement | HTMLElement[] | undefined) {
-		if (elements === undefined)
-			return Array.from(document.querySelectorAll(`[data-${EditableElement.DATASET}]`)) as HTMLElement[];
-
-		const elementsArray = Array.isArray(elements) ? elements : [elements];
-		return elementsArray
-			.filter((element) => element instanceof HTMLElement)
-			.map((element) => {
-				if (element.dataset[EditableElement.DATASET] !== undefined) return element;
-				const childElement = element.querySelector(`[data-${EditableElement.DATASET}]`);
-				return childElement as HTMLElement;
-			})
-			.filter((element) => element !== null);
+	static getItem(element: Element) {
+		return EditableStore.items.find((item) => item.element === element);
 	}
 
-	getItem(element: Element) {
-		return this.items.find((item) => item.element === element);
+	static getItemByKey(key: EditableElement['key']) {
+		return EditableStore.items.find((item) => item.key === key);
 	}
 
-	addItem(item: EditableElement) {
-		this.items.push(item);
+	static addItem(item: EditableElement) {
+		EditableStore.items.push(item);
 	}
 
-	enableItems(selectedItems?: EditableElement[]) {
-		const items = selectedItems ?? this.items;
+	static enableItems(selectedItems?: EditableElement[]) {
+		const items = selectedItems ?? EditableStore.items;
 
 		items.forEach((item) => {
 			item.disabled = false;
@@ -36,8 +25,8 @@ export class EditableStore {
 		});
 	}
 
-	disableItems(selectedItems?: EditableElement[]) {
-		const items = selectedItems ?? this.items.filter((item) => !item.disabled);
+	static disableItems(selectedItems?: EditableElement[]) {
+		const items = selectedItems ?? EditableStore.items.filter((item) => !item.disabled);
 
 		items.forEach((item) => {
 			item.disabled = true;
@@ -49,8 +38,8 @@ export class EditableStore {
 		return [...items];
 	}
 
-	removeItems(selectedItems?: EditableElement[]) {
-		const items = selectedItems ?? this.items;
+	static removeItems(selectedItems?: EditableElement[]) {
+		const items = selectedItems ?? EditableStore.items;
 
 		items.forEach((item) => {
 			item.rectObserver.unobserve();
@@ -58,6 +47,6 @@ export class EditableStore {
 			item.removeHoverListener();
 		});
 
-		this.items = this.items.filter((item) => !items.includes(item));
+		EditableStore.items = EditableStore.items.filter((item) => !items.includes(item));
 	}
 }

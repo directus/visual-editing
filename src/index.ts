@@ -3,7 +3,6 @@ import { DirectusFrame } from './lib/directus-frame.ts';
 import { EditableElement, type EditableElementOptions } from './lib/editable-element.ts';
 import { EditableStore } from './lib/editable-store.ts';
 
-const editableStore = new EditableStore();
 const directusFrame = new DirectusFrame();
 
 export function scan({
@@ -20,39 +19,41 @@ export function scan({
 
 	OverlayManager.addStyles();
 
-	const editableElements = EditableStore.scan(elements);
+	const editableElements = EditableElement.query(elements);
 	const scopedItems: EditableElement[] = [];
 
 	editableElements.forEach((element) => {
-		const existingItem = editableStore.getItem(element);
+		const existingItem = EditableStore.getItem(element);
 		const item = existingItem ?? new EditableElement(element);
 
 		item.applyOptions({ customClass, onSaved });
 
 		scopedItems.push(item);
-		if (!existingItem) editableStore.addItem(item);
+		if (!existingItem) EditableStore.addItem(item);
 	});
 
 	return {
 		remove() {
-			editableStore.removeItems(scopedItems);
+			EditableStore.removeItems(scopedItems);
 		},
 		enable() {
-			editableStore.enableItems(scopedItems);
+			EditableStore.enableItems(scopedItems);
 		},
 		disable() {
-			editableStore.disableItems(scopedItems);
+			EditableStore.disableItems(scopedItems);
 		},
 	};
 }
 
 export function remove() {
-	editableStore.removeItems();
+	EditableStore.removeItems();
 }
 
 export function disable() {
-	const items = editableStore.disableItems();
+	const items = EditableStore.disableItems();
 	return {
-		enable: () => editableStore.enableItems(items),
+		enable() {
+			EditableStore.enableItems(items);
+		},
 	};
 }

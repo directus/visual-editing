@@ -5,7 +5,6 @@ type SendAction = 'connect' | 'position' | 'edit';
 type ReceiveAction = 'saved';
 type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
-
 export type SavedData = {
 	key: string;
 	form: Pick<Form, 'collection' | 'item'> | null;

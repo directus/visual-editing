@@ -16,13 +16,12 @@ type RectObserver = {
 
 export type EditableElementOptions = {
 	customClass?: string | undefined;
-	onSaved?: ((payload: Record<string, any>) => void) | undefined;
+	onSaved?: ((data: Pick<SavedData, 'form' | 'edits'>) => void) | undefined;
 };
 
 export class EditableElement {
+	private static readonly DATASET = 'directus';
 	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof Form> = ['collection', 'item', 'fields', 'overlay'];
-
-	public static readonly DATASET = 'directus';
 
 	readonly element: HTMLElement;
 	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
@@ -49,6 +48,21 @@ export class EditableElement {
 		// @ts-expect-error
 		this.rectObserver = observeRect(this.element, this.onObserveRect.bind(this));
 		this.rectObserver.observe();
+	}
+
+	static query(elements: HTMLElement | HTMLElement[] | undefined) {
+		if (elements === undefined)
+			return Array.from(document.querySelectorAll(`[data-${EditableElement.DATASET}]`)) as HTMLElement[];
+
+		const elementsArray = Array.isArray(elements) ? elements : [elements];
+		return elementsArray
+			.filter((element) => element instanceof HTMLElement)
+			.map((element) => {
+				if (element.dataset[EditableElement.DATASET] !== undefined) return element;
+				const childElement = element.querySelector(`[data-${EditableElement.DATASET}]`);
+				return childElement as HTMLElement;
+			})
+			.filter((element) => element !== null);
 	}
 
 	applyOptions({ customClass, onSaved }: EditableElementOptions) {

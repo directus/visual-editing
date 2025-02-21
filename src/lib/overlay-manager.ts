@@ -23,6 +23,17 @@ export class OverlayManager {
 	static readonly RECT_INNER_CLASS_NAME = 'directus-visual-editing-rect-inner';
 	static readonly RECT_EDIT_BUTTON_CLASS_NAME = 'directus-visual-editing-edit-button';
 
+	static getGlobalOverlay(): HTMLElement {
+		const existingOverlay = document.getElementById(OverlayManager.OVERLAY_ID);
+		if (existingOverlay) return existingOverlay;
+
+		const globalOverlay = document.createElement('div');
+		globalOverlay.id = OverlayManager.OVERLAY_ID;
+		document.body.insertAdjacentElement('afterend', globalOverlay);
+
+		return globalOverlay;
+	}
+
 	static addStyles(): void {
 		const existingStyle = document.getElementById(OverlayManager.STYLE_ID);
 		if (existingStyle) return;
@@ -91,16 +102,5 @@ export class OverlayManager {
 		);
 
 		document.head.appendChild(style);
-	}
-
-	static getGlobalOverlay(): HTMLElement {
-		const existingOverlay = document.getElementById(OverlayManager.OVERLAY_ID);
-		if (existingOverlay) return existingOverlay;
-
-		const globalOverlay = document.createElement('div');
-		globalOverlay.id = OverlayManager.OVERLAY_ID;
-		document.body.insertAdjacentElement('afterend', globalOverlay);
-
-		return globalOverlay;
 	}
 }
