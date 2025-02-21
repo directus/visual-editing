@@ -7,8 +7,10 @@ export class OverlayElement {
 	private element: HTMLElement;
 	private editButton: HTMLButtonElement;
 	private form: Form;
+	private key: string;
 
-	constructor(rect: DOMRect, form: Form, container?: HTMLElement) {
+	constructor(key: string, rect: DOMRect, form: Form, container?: HTMLElement) {
+		this.key = key;
 		this.element = this.createElement();
 		this.editButton = this.createEditButton();
 		this.createRectElement();
@@ -43,7 +45,7 @@ export class OverlayElement {
 	}
 
 	private onClickEdit() {
-		DirectusFrame.send('edit', this.form);
+		new DirectusFrame().send('edit', { key: this.key, form: this.form });
 	}
 
 	updateRect(rect: DOMRect) {

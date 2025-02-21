@@ -1,5 +1,6 @@
 import observeRect from '@reach/observe-rect';
 import { OverlayElement } from './overlay-element.ts';
+import type { SavedData } from './directus-frame.ts';
 
 export type Form = {
 	collection: string;
@@ -24,7 +25,7 @@ export class EditableElement {
 	public static readonly DATASET = 'directus';
 
 	readonly element: HTMLElement;
-	readonly key: string;
+	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
 	readonly form: Form;
 	readonly rectObserver: RectObserver;
 	readonly overlayElement: OverlayElement;
@@ -43,7 +44,7 @@ export class EditableElement {
 		this.form = this.strToObject(this.element.dataset[EditableElement.DATASET]!);
 
 		this.rect = this.element.getBoundingClientRect();
-		this.overlayElement = new OverlayElement(this.rect, this.form);
+		this.overlayElement = new OverlayElement(this.key, this.rect, this.form);
 
 		// @ts-expect-error
 		this.rectObserver = observeRect(this.element, this.onObserveRect.bind(this));
