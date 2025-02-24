@@ -16,7 +16,7 @@ type RectObserver = {
 
 export type EditableElementOptions = {
 	customClass?: string | undefined;
-	onSaved?: ((data: Pick<SavedData, 'form' | 'edits'>) => void) | undefined;
+	onSaved?: ((data: Omit<SavedData, 'key'>) => void) | undefined;
 };
 
 export class EditableElement {

@@ -7,8 +7,9 @@ type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
 export type SavedData = {
 	key: string;
-	form: Pick<Form, 'collection' | 'item'> | null;
-	edits: Record<string, any>;
+	collection: Form['collection'];
+	item: Form['item'];
+	payload: Record<string, any>;
 };
 
 /**
@@ -81,12 +82,12 @@ export class DirectusFrame {
 	}
 
 	private receiveSaved(data: unknown) {
-		const { key = '', form = null, edits = {} } = data as SavedData;
+		const { key = '', collection = '', item = null, payload = {} } = data as SavedData;
 
-		const item = EditableStore.getItemByKey(key);
+		const storeItem = EditableStore.getItemByKey(key);
 
-		if (item && form !== null && typeof item.onSaved === 'function') {
-			item.onSaved({ form, edits });
+		if (storeItem && collection && typeof storeItem.onSaved === 'function') {
+			storeItem.onSaved({ collection, item, payload });
 			return;
 		}
 
