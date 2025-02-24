@@ -6,7 +6,7 @@ export type Form = {
 	collection: string;
 	item: string | number | null;
 	fields?: string[];
-	overlay: 'drawer';
+	mode: 'drawer';
 };
 
 type RectObserver = {
@@ -21,7 +21,7 @@ export type EditableElementOptions = {
 
 export class EditableElement {
 	private static readonly DATASET = 'directus';
-	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof Form> = ['collection', 'item', 'fields', 'overlay'];
+	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof Form> = ['collection', 'item', 'fields', 'mode'];
 
 	readonly element: HTMLElement;
 	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
