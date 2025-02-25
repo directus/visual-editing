@@ -2,6 +2,7 @@ import { EditableElement } from './editable-element.ts';
 
 export class EditableStore {
 	private static items: EditableElement[] = [];
+	static highlightOverlayElements = false;
 
 	static getItem(element: Element) {
 		return EditableStore.items.find((item) => item.element === element);
@@ -48,5 +49,15 @@ export class EditableStore {
 		});
 
 		EditableStore.items = EditableStore.items.filter((item) => !items.includes(item));
+	}
+
+	static highlightItems(show: boolean) {
+		if (this.highlightOverlayElements === show) return;
+
+		this.highlightOverlayElements = show;
+
+		EditableStore.items.forEach((item) => {
+			item.overlayElement.toggleHighlight(show);
+		});
 	}
 }

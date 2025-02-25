@@ -2,7 +2,7 @@ import { EditableStore } from './editable-store.ts';
 import type { Form } from './editable-element.ts';
 
 type SendAction = 'connect' | 'position' | 'edit';
-type ReceiveAction = 'confirm' | 'saved';
+type ReceiveAction = 'confirm' | 'showEditableElements' | 'saved';
 type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
 export type SavedData = {
@@ -59,8 +59,9 @@ export class DirectusFrame {
 
 		const { action, data }: ReceiveData = event.data;
 
-		if (action === 'saved') this.receiveSaved(data);
 		if (action === 'confirm') this.confirmed = true;
+		if (action === 'showEditableElements') this.receiveShowEditableElements(data);
+		if (action === 'saved') this.receiveSaved(data);
 	}
 
 	receiveConfirm() {
@@ -79,6 +80,11 @@ export class DirectusFrame {
 
 			checkConfirmed();
 		});
+	}
+
+	private receiveShowEditableElements(data: unknown) {
+		const show = !!data;
+		EditableStore.highlightItems(show);
 	}
 
 	private receiveSaved(data: unknown) {

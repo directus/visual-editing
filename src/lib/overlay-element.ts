@@ -1,5 +1,6 @@
 import { OverlayManager } from './overlay-manager.ts';
 import { DirectusFrame } from './directus-frame.ts';
+import { EditableStore } from './editable-store.ts';
 import type { Form } from './editable-element.ts';
 
 export class OverlayElement {
@@ -19,6 +20,7 @@ export class OverlayElement {
 		container.appendChild(this.element);
 
 		this.updateRect(rect);
+		if (EditableStore.highlightOverlayElements) this.toggleHighlight(true);
 
 		this.form = form;
 		this.editButton.addEventListener('click', this.onClickEdit.bind(this));
@@ -77,6 +79,11 @@ export class OverlayElement {
 	toggleHover(hover: boolean) {
 		if (hover) this.element.classList.add(OverlayManager.RECT_HOVER_CLASS_NAME);
 		else this.element.classList.remove(OverlayManager.RECT_HOVER_CLASS_NAME);
+	}
+
+	toggleHighlight(show: boolean) {
+		if (show) this.element.classList.add(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME);
+		else this.element.classList.remove(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME);
 	}
 
 	disable() {

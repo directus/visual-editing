@@ -4,7 +4,7 @@ export class OverlayManager {
 	private static readonly CSS_VAR_BORDER_WIDTH = '--directus-visual-editing--rect--border-width';
 	private static readonly CSS_VAR_BORDER_COLOR = '--directus-visual-editing--rect--border-color';
 	private static readonly CSS_VAR_BORDER_RADIUS = '--directus-visual-editing--rect--border-radius';
-	private static readonly CSS_VAR_VISIBLE_OPACITY = '--directus-visual-editing--rect-visible--opacity';
+	private static readonly CSS_VAR_HIGHLIGHT_OPACITY = '--directus-visual-editing--rect-highlight--opacity';
 	private static readonly CSS_VAR_BUTTON_WIDTH = '--directus-visual-editing--edit-btn--width';
 	private static readonly CSS_VAR_BUTTON_HEIGHT = '--directus-visual-editing--edit-btn--height';
 	private static readonly CSS_VAR_BUTTON_RADIUS = '--directus-visual-editing--edit-btn--radius';
@@ -19,6 +19,7 @@ export class OverlayManager {
 	private static readonly STYLE_ID = 'directus-visual-editing-style';
 
 	static readonly RECT_CLASS_NAME = 'directus-visual-editing-rect';
+	static readonly RECT_HIGHLIGHT_CLASS_NAME = 'directus-visual-editing-rect-highlight';
 	static readonly RECT_HOVER_CLASS_NAME = 'directus-visual-editing-rect-hover';
 	static readonly RECT_INNER_CLASS_NAME = 'directus-visual-editing-rect-inner';
 	static readonly RECT_EDIT_BUTTON_CLASS_NAME = 'directus-visual-editing-edit-button';
@@ -68,7 +69,10 @@ export class OverlayManager {
 					bottom: calc(-1 * ${borderSpacing});
 					border: ${borderWidth} solid var(${OverlayManager.CSS_VAR_BORDER_COLOR}, #6644ff);
 					border-radius: var(${OverlayManager.CSS_VAR_BORDER_RADIUS}, 6px);
-					opacity: var(${OverlayManager.CSS_VAR_VISIBLE_OPACITY}, 0.2);
+					opacity: 0;
+				}
+				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
+					opacity: var(${OverlayManager.CSS_VAR_HIGHLIGHT_OPACITY}, 0.333);
 				}
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
 					pointer-events: all;
