@@ -1,5 +1,5 @@
 import { DirectusFrame } from './lib/directus-frame.ts';
-import { EditableElement, type EditableElementOptions, type Form } from './lib/editable-element.ts';
+import { EditableElement, type EditableElementOptions, type EditConfig } from './lib/editable-element.ts';
 import { EditableStore } from './lib/editable-store.ts';
 import { OverlayManager } from './lib/overlay-manager.ts';
 
@@ -61,6 +61,6 @@ export function disable() {
 	};
 }
 
-export function toEditAttr(form: Form) {
-	return EditableElement.objectToEditAttr(form);
+export function toEditAttr(editConfig: EditConfig) {
+	return EditableElement.objectToEditAttr(editConfig);
 }

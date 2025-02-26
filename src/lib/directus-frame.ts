@@ -1,5 +1,5 @@
 import { EditableStore } from './editable-store.ts';
-import type { Form } from './editable-element.ts';
+import type { EditConfig } from './editable-element.ts';
 
 type SendAction = 'connect' | 'edit';
 type ReceiveAction = 'confirm' | 'showEditableElements' | 'saved';
@@ -7,8 +7,8 @@ type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
 export type SavedData = {
 	key: string;
-	collection: Form['collection'];
-	item: Form['item'];
+	collection: EditConfig['collection'];
+	item: EditConfig['item'];
 	payload: Record<string, any>;
 };
 

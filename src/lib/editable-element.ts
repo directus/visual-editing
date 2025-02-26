@@ -2,7 +2,7 @@ import observeRect from '@reach/observe-rect';
 import { DirectusFrame, type SavedData } from './directus-frame.ts';
 import { OverlayElement } from './overlay-element.ts';
 
-export type Form = {
+export type EditConfig = {
 	collection: string;
 	item: string | number | null;
 	fields?: string[];
@@ -21,11 +21,11 @@ export type EditableElementOptions = {
 
 export class EditableElement {
 	private static readonly DATASET = 'directus';
-	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof Form> = ['collection', 'item', 'fields', 'mode'];
+	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof EditConfig> = ['collection', 'item', 'fields', 'mode'];
 
 	readonly element: HTMLElement;
 	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
-	readonly form: Form;
+	readonly editConfig: EditConfig;
 	readonly rectObserver: RectObserver;
 	readonly overlayElement: OverlayElement;
 
@@ -40,7 +40,7 @@ export class EditableElement {
 		this.element.addEventListener('mouseleave', this.onMouseleave.bind(this));
 
 		this.key = crypto.randomUUID();
-		this.form = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
+		this.editConfig = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
 
 		this.rect = this.element.getBoundingClientRect();
 		this.overlayElement = new OverlayElement();
@@ -67,11 +67,11 @@ export class EditableElement {
 			.filter((element) => element !== null);
 	}
 
-	static objectToEditAttr(form: Form): string {
+	static objectToEditAttr(editConfig: EditConfig): string {
 		const dataAttr: string[] = [];
 
-		for (const [key, value] of Object.entries(form)) {
-			if (!EditableElement.validFormKey(key as keyof Form)) continue;
+		for (const [key, value] of Object.entries(editConfig)) {
+			if (!EditableElement.validEditConfigKey(key as keyof EditConfig)) continue;
 
 			if (key === 'fields' && Array.isArray(value)) {
 				dataAttr.push(`${key}:${value.join(',')}`);
@@ -91,8 +91,8 @@ export class EditableElement {
 			const keyValue = pair.split(':');
 			if (keyValue[0] === undefined || keyValue?.[1] === undefined) return;
 
-			const key = keyValue[0].trim() as keyof Form;
-			if (!EditableElement.validFormKey(key)) return;
+			const key = keyValue[0].trim() as keyof EditConfig;
+			if (!EditableElement.validEditConfigKey(key)) return;
 
 			const value = keyValue[1];
 
@@ -104,10 +104,10 @@ export class EditableElement {
 			result[key] = value.trim();
 		});
 
-		return result as Form;
+		return result as EditConfig;
 	}
 
-	private static validFormKey(key: keyof Form) {
+	private static validEditConfigKey(key: keyof EditConfig) {
 		return EditableElement.DATA_ATTRIBUTE_VALID_KEYS.includes(key);
 	}
 
@@ -122,7 +122,7 @@ export class EditableElement {
 	}
 
 	private onClickEdit() {
-		new DirectusFrame().send('edit', { key: this.key, form: this.form, rect: this.rect });
+		new DirectusFrame().send('edit', { key: this.key, editConfig: this.editConfig, rect: this.rect });
 	}
 
 	private onMouseenter(event: MouseEvent) {
