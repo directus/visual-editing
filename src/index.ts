@@ -1,7 +1,7 @@
-import { OverlayManager } from './lib/overlay-manager.ts';
 import { DirectusFrame } from './lib/directus-frame.ts';
-import { EditableElement, type EditableElementOptions } from './lib/editable-element.ts';
+import { EditableElement, type EditableElementOptions, type Form } from './lib/editable-element.ts';
 import { EditableStore } from './lib/editable-store.ts';
+import { OverlayManager } from './lib/overlay-manager.ts';
 
 const directusFrame = new DirectusFrame();
 
@@ -59,4 +59,8 @@ export function disable() {
 			EditableStore.enableItems(items);
 		},
 	};
+}
+
+export function toEditAttr(form: Form) {
+	return EditableElement.objectToEditAttr(form);
 }

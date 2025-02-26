@@ -40,7 +40,7 @@ export class EditableElement {
 		this.element.addEventListener('mouseleave', this.onMouseleave.bind(this));
 
 		this.key = crypto.randomUUID();
-		this.form = this.strToObject(this.element.dataset[EditableElement.DATASET]!);
+		this.form = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
 
 		this.rect = this.element.getBoundingClientRect();
 		this.overlayElement = new OverlayElement();
@@ -65,6 +65,50 @@ export class EditableElement {
 				return childElement as HTMLElement;
 			})
 			.filter((element) => element !== null);
+	}
+
+	static objectToEditAttr(form: Form): string {
+		const dataAttr: string[] = [];
+
+		for (const [key, value] of Object.entries(form)) {
+			if (!EditableElement.validFormKey(key as keyof Form)) continue;
+
+			if (key === 'fields' && Array.isArray(value)) {
+				dataAttr.push(`${key}:${value.join(',')}`);
+			} else {
+				dataAttr.push(`${key}:${value}`);
+			}
+		}
+
+		return dataAttr.join(';');
+	}
+
+	private static editAttrToObject(str: string) {
+		const pairs = str.split(';');
+		const result: Record<string, any> = {};
+
+		pairs.forEach((pair) => {
+			const keyValue = pair.split(':');
+			if (keyValue[0] === undefined || keyValue?.[1] === undefined) return;
+
+			const key = keyValue[0].trim() as keyof Form;
+			if (!EditableElement.validFormKey(key)) return;
+
+			const value = keyValue[1];
+
+			if (key === 'fields') {
+				result['fields'] = value.split(',').map((field) => field.trim());
+				return;
+			}
+
+			result[key] = value.trim();
+		});
+
+		return result as Form;
+	}
+
+	private static validFormKey(key: keyof Form) {
+		return EditableElement.DATA_ATTRIBUTE_VALID_KEYS.includes(key);
 	}
 
 	applyOptions({ customClass, onSaved }: EditableElementOptions) {
@@ -99,29 +143,5 @@ export class EditableElement {
 		if (this.disabled) return;
 		this.rect = rect;
 		this.overlayElement.updateRect(rect);
-	}
-
-	private strToObject(str: string) {
-		const pairs = str.split(';');
-		const result: Record<string, any> = {};
-
-		pairs.forEach((pair) => {
-			const keyValue = pair.split(':');
-			if (keyValue[0] === undefined || keyValue?.[1] === undefined) return;
-
-			const key = keyValue[0].trim() as keyof Form;
-			if (!EditableElement.DATA_ATTRIBUTE_VALID_KEYS.includes(key)) return;
-
-			const value = keyValue[1];
-
-			if (key === 'fields') {
-				result['fields'] = value.split(',').map((field) => field.trim());
-				return;
-			}
-
-			result[key] = value.trim();
-		});
-
-		return result as Form;
 	}
 }
