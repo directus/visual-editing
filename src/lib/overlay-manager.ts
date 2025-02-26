@@ -74,7 +74,12 @@ export class OverlayManager {
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
 					opacity: var(${OverlayManager.CSS_VAR_HIGHLIGHT_OPACITY}, 0.333);
 				}
+				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:visited,
+				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:active,
+				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover,
+				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:focus,
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
+					all: initial;
 					pointer-events: all;
 					cursor: pointer;
 					position: absolute;
@@ -91,9 +96,6 @@ export class OverlayManager {
 					background-position: center;
 					background-repeat: no-repeat;
 					opacity: 0;
-				}
-				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:focus {
-					outline: none;
 				}
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover,
 				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME} .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
