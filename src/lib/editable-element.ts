@@ -1,12 +1,12 @@
 import observeRect from '@reach/observe-rect';
+import { DirectusFrame, type SavedData } from './directus-frame.ts';
 import { OverlayElement } from './overlay-element.ts';
-import type { SavedData } from './directus-frame.ts';
 
 export type Form = {
 	collection: string;
 	item: string | number | null;
 	fields?: string[];
-	mode: 'drawer';
+	mode: 'drawer' | 'popover';
 };
 
 type RectObserver = {
@@ -43,7 +43,9 @@ export class EditableElement {
 		this.form = this.strToObject(this.element.dataset[EditableElement.DATASET]!);
 
 		this.rect = this.element.getBoundingClientRect();
-		this.overlayElement = new OverlayElement(this.key, this.rect, this.form);
+		this.overlayElement = new OverlayElement();
+		this.overlayElement.updateRect(this.rect);
+		this.overlayElement.editButton.addEventListener('click', this.onClickEdit.bind(this));
 
 		// @ts-expect-error
 		this.rectObserver = observeRect(this.element, this.onObserveRect.bind(this));
@@ -73,6 +75,10 @@ export class EditableElement {
 	removeHoverListener() {
 		this.element.removeEventListener('mouseenter', this.onMouseenter.bind(this));
 		this.element.removeEventListener('mouseleave', this.onMouseleave.bind(this));
+	}
+
+	private onClickEdit() {
+		new DirectusFrame().send('edit', { key: this.key, form: this.form, rect: this.rect });
 	}
 
 	private onMouseenter(event: MouseEvent) {

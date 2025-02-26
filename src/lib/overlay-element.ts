@@ -1,17 +1,13 @@
-import { OverlayManager } from './overlay-manager.ts';
-import { DirectusFrame } from './directus-frame.ts';
 import { EditableStore } from './editable-store.ts';
-import type { Form } from './editable-element.ts';
+import { OverlayManager } from './overlay-manager.ts';
 
 export class OverlayElement {
 	private noDimensions: boolean = false;
 	private element: HTMLElement;
-	private editButton: HTMLButtonElement;
-	private form: Form;
-	private key: string;
 
-	constructor(key: string, rect: DOMRect, form: Form, container?: HTMLElement) {
-		this.key = key;
+	readonly editButton: HTMLButtonElement;
+
+	constructor(container?: HTMLElement) {
 		this.element = this.createElement();
 		this.editButton = this.createEditButton();
 		this.createRectElement();
@@ -19,11 +15,7 @@ export class OverlayElement {
 		container = container ?? OverlayManager.getGlobalOverlay();
 		container.appendChild(this.element);
 
-		this.updateRect(rect);
 		if (EditableStore.highlightOverlayElements) this.toggleHighlight(true);
-
-		this.form = form;
-		this.editButton.addEventListener('click', this.onClickEdit.bind(this));
 	}
 
 	private createElement() {
@@ -44,10 +36,6 @@ export class OverlayElement {
 		editButton.classList.add(OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME);
 		this.element.appendChild(editButton);
 		return editButton;
-	}
-
-	private onClickEdit() {
-		new DirectusFrame().send('edit', { key: this.key, form: this.form });
 	}
 
 	updateRect(rect: DOMRect) {

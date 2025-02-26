@@ -1,7 +1,7 @@
 import { EditableStore } from './editable-store.ts';
 import type { Form } from './editable-element.ts';
 
-type SendAction = 'connect' | 'position' | 'edit';
+type SendAction = 'connect' | 'edit';
 type ReceiveAction = 'confirm' | 'showEditableElements' | 'saved';
 type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
