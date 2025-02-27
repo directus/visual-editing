@@ -4,25 +4,33 @@ import { OverlayManager } from './overlay-manager.ts';
 export class OverlayElement {
 	private noDimensions: boolean = false;
 	private element: HTMLElement;
+	private container: HTMLElement;
 
 	readonly editButton: HTMLButtonElement;
 
-	constructor(container?: HTMLElement) {
+	constructor() {
+		this.container = this.createContainer();
 		this.element = this.createElement();
 		this.editButton = this.createEditButton();
 		this.createRectElement();
 
-		container = container ?? OverlayManager.getGlobalOverlay();
-		container.appendChild(this.element);
+		OverlayManager.getGlobalOverlay().appendChild(this.container);
 
 		if (EditableStore.highlightOverlayElements) this.toggleHighlight(true);
 
 		this.element.addEventListener('click', () => this.editButton.click());
 	}
 
+	private createContainer() {
+		const container = document.createElement('div');
+		container.classList.add(OverlayManager.CONTAINER_RECT_CLASS_NAME);
+		return container;
+	}
+
 	private createElement() {
 		const element = document.createElement('div');
 		element.classList.add(OverlayManager.RECT_CLASS_NAME);
+		this.container.appendChild(element);
 		return element;
 	}
 
@@ -63,7 +71,7 @@ export class OverlayElement {
 		if (customClass === undefined) return;
 
 		const isValidClassName = /^[a-zA-Z_][\w-]*$/.test(customClass);
-		if (isValidClassName) this.element.classList.add(customClass);
+		if (isValidClassName) this.container.classList.add(customClass);
 	}
 
 	toggleHover(hover: boolean) {
