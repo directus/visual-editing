@@ -6,7 +6,7 @@ export type EditConfig = {
 	collection: string;
 	item: string | number | null;
 	fields?: string[];
-	mode: 'drawer' | 'popover';
+	mode?: 'drawer' | 'modal' | 'popover';
 };
 
 type RectObserver = {
