@@ -71,6 +71,10 @@ export class OverlayManager {
 					border-radius: var(${OverlayManager.CSS_VAR_BORDER_RADIUS}, 6px);
 					opacity: 0;
 				}
+				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} {
+					pointer-events: all;
+					cursor: pointer;
+				}
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
 					opacity: var(${OverlayManager.CSS_VAR_HIGHLIGHT_OPACITY}, 0.333);
 				}
@@ -98,10 +102,12 @@ export class OverlayManager {
 					opacity: 0;
 				}
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover,
-				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME} .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
+				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME} .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME},
+				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
 					opacity: 1;
 				}
-				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover ~ .${OverlayManager.RECT_INNER_CLASS_NAME} {
+				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover ~ .${OverlayManager.RECT_INNER_CLASS_NAME},
+				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_INNER_CLASS_NAME} {
 					opacity: 1;
 				}
 			`),

@@ -16,6 +16,8 @@ export class OverlayElement {
 		container.appendChild(this.element);
 
 		if (EditableStore.highlightOverlayElements) this.toggleHighlight(true);
+
+		this.element.addEventListener('click', () => this.editButton.click());
 	}
 
 	private createElement() {
