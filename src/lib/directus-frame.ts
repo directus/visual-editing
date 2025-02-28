@@ -26,7 +26,7 @@ export class DirectusFrame {
 		if (DirectusFrame.SINGLETON) return DirectusFrame.SINGLETON;
 		DirectusFrame.SINGLETON = this;
 
-		window.addEventListener('message', this.receive.bind(this));
+		window?.addEventListener('message', this.receive.bind(this));
 	}
 
 	connect(origin: string) {
