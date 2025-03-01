@@ -29,7 +29,7 @@ export async function scan({
 		const existingItem = EditableStore.getItem(element);
 		const item = existingItem ?? new EditableElement(element);
 
-		item.applyOptions({ customClass, onSaved });
+		item.applyOptions({ customClass, onSaved }, elements !== undefined);
 
 		scopedItems.push(item);
 		if (!existingItem) EditableStore.addItem(item);

@@ -23,6 +23,8 @@ export class EditableElement {
 	private static readonly DATASET = 'directus';
 	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof EditConfig> = ['collection', 'item', 'fields', 'mode'];
 
+	private optionsWritable = true;
+
 	readonly element: HTMLElement;
 	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
 	readonly editConfig: EditConfig;
@@ -111,7 +113,9 @@ export class EditableElement {
 		return EditableElement.DATA_ATTRIBUTE_VALID_KEYS.includes(key);
 	}
 
-	applyOptions({ customClass, onSaved }: EditableElementOptions) {
+	applyOptions({ customClass, onSaved }: EditableElementOptions, elementsSpecified = false) {
+		if (!this.optionsWritable) return;
+		if (elementsSpecified) this.optionsWritable = false;
 		this.overlayElement.setCustomClass(customClass);
 		if (onSaved !== undefined) this.onSaved = onSaved;
 	}
