@@ -18,7 +18,7 @@ export default defineConfig(() => ({
 	},
 	clean: true, // clean dist before build
 	dts: true, // generate dts file for main module
-	format: ['cjs', 'esm', 'iife'], // generate cjs and esm files
+	format: ['cjs', 'esm', 'iife'], // generate cjs, esm and global iife files
 	globalName: 'DirectusVisualEditing', // global variable name for iife
 	minify: env === 'production',
 	watch: env === 'development',
