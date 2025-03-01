@@ -61,10 +61,10 @@ export class EditableElement {
 		const elementsArray = Array.isArray(elements) ? elements : [elements];
 		return elementsArray
 			.filter((element) => element instanceof HTMLElement)
-			.map((element) => {
+			.flatMap((element) => {
 				if (element.dataset[EditableElement.DATASET] !== undefined) return element;
-				const childElement = element.querySelector(`[data-${EditableElement.DATASET}]`);
-				return childElement as HTMLElement;
+				const childrenElements = Array.from(element.querySelectorAll(`[data-${EditableElement.DATASET}]`));
+				return childrenElements as HTMLElement[];
 			})
 			.filter((element) => element !== null);
 	}
