@@ -93,6 +93,6 @@ export class OverlayElement {
 	}
 
 	remove() {
-		this.element.remove();
+		this.container.remove();
 	}
 }
