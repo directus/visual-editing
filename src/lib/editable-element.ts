@@ -5,9 +5,11 @@ import { OverlayElement } from './overlay-element.ts';
 export type EditConfig = {
 	collection: string;
 	item: string | number | null;
-	fields?: string[];
+	fields?: string[] | string;
 	mode?: 'drawer' | 'modal' | 'popover';
 };
+
+type EditConfigStrict = EditConfig & { fields?: string[] };
 
 type RectObserver = {
 	observe(): void;
@@ -27,7 +29,7 @@ export class EditableElement {
 
 	readonly element: HTMLElement;
 	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
-	readonly editConfig: EditConfig;
+	readonly editConfig: EditConfigStrict;
 	readonly rectObserver: RectObserver;
 	readonly overlayElement: OverlayElement;
 
@@ -105,7 +107,7 @@ export class EditableElement {
 			result[key] = value.trim();
 		});
 
-		return result as EditConfig;
+		return result as EditConfigStrict;
 	}
 
 	private static validEditConfigKey(key: keyof EditConfig) {
