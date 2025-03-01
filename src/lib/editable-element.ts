@@ -54,9 +54,8 @@ export class EditableElement {
 		this.rectObserver.observe();
 	}
 
-	static query(elements: HTMLElement | HTMLElement[] | undefined) {
-		if (elements === undefined)
-			return Array.from(document.querySelectorAll(`[data-${EditableElement.DATASET}]`)) as HTMLElement[];
+	static query(elements: HTMLElement | HTMLElement[] | undefined | null) {
+		if (!elements) return Array.from(document.querySelectorAll(`[data-${EditableElement.DATASET}]`)) as HTMLElement[];
 
 		const elementsArray = Array.isArray(elements) ? elements : [elements];
 		return elementsArray

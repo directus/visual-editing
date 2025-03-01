@@ -12,7 +12,7 @@ export async function scan({
 	onSaved = undefined,
 }: {
 	directusUrl: string;
-	elements?: HTMLElement | HTMLElement[];
+	elements?: HTMLElement | HTMLElement[] | null;
 } & EditableElementOptions) {
 	const conntected = directusFrame.connect(directusUrl);
 	if (!conntected) return;
@@ -29,7 +29,7 @@ export async function scan({
 		const existingItem = EditableStore.getItem(element);
 		const item = existingItem ?? new EditableElement(element);
 
-		item.applyOptions({ customClass, onSaved }, elements !== undefined);
+		item.applyOptions({ customClass, onSaved }, !elements);
 
 		scopedItems.push(item);
 		if (!existingItem) EditableStore.addItem(item);
