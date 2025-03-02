@@ -25,7 +25,7 @@
 	"scripts": {
 		"dev": "NODE_ENV=development tsup",
 		"build": "NODE_ENV=production tsup && pnpm rename-global-iife",
-		"rename-global-iife": "mv dist/index.global.js dist/visual-editing.js && mv dist/index.global.js.map dist/visual-editing.js.map",
+		"rename-global-iife": "mv dist/index.global.js dist/visual-editing.js",
 		"test": "vitest --typecheck --watch=false"
 	},
 	"dependencies": {
