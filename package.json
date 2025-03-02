@@ -5,8 +5,7 @@
 	"homepage": "https://directus.io",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/directus/directus.git",
-		"directory": "visual-editing"
+		"url": "https://github.com/directus/visual-editing.git"
 	},
 	"funding": "https://github.com/directus/directus?sponsor=1",
 	"license": "MIT",
