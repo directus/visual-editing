@@ -5,7 +5,7 @@ import { defineConfig } from 'tsup';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const { version } = JSON.parse(await readFile(join(__dirname, '../directus/package.json'), 'utf8'));
+const { version } = JSON.parse(await readFile(join(__dirname, './package.json'), 'utf8'));
 
 const env = process.env.NODE_ENV;
 
