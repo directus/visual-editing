@@ -1,0 +1,14 @@
+{
+  "author": "@directus-labs",
+  "description": "Based on Simple Website CMS (https://github.com/directus-labs/directus-templates)",
+  "directusTemplate": true,
+  "files": [
+    "src"
+  ],
+  "name": "directus-template-simple-website-cms-ve",
+  "templateName": "Simple Website CMS VE",
+  "version": "1.0.0-ve",
+  "scripts": {
+    "setup-directus": "source ../simple-cms/nuxt/.env && npx directus-template-cli@latest apply -p --directusUrl=$DIRECTUS_URL --templateLocation='.' --templateType='local' --directusToken=$DIRECTUS_SERVER_TOKEN"
+  }
+}
