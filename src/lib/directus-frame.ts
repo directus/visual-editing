@@ -1,16 +1,5 @@
 import { EditableStore } from './editable-store.ts';
-import type { EditConfig } from './editable-element.ts';
-
-type SendAction = 'connect' | 'edit';
-type ReceiveAction = 'confirm' | 'showEditableElements' | 'saved';
-type ReceiveData = { action: ReceiveAction | null; data: unknown };
-
-export type SavedData = {
-	key: string;
-	collection: EditConfig['collection'];
-	item: EditConfig['item'];
-	payload: Record<string, any>;
-};
+import type { SendAction, ReceiveData, SavedData } from './types/index.ts';
 
 /**
  * *Singleton* class to handle communication with Directus in parent frame.

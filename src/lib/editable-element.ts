@@ -1,25 +1,7 @@
 import observeRect from '@reach/observe-rect';
-import { DirectusFrame, type SavedData } from './directus-frame.ts';
+import { DirectusFrame } from './directus-frame.ts';
 import { OverlayElement } from './overlay-element.ts';
-
-export type EditConfig = {
-	collection: string;
-	item: string | number | null;
-	fields?: string[] | string;
-	mode?: 'drawer' | 'modal' | 'popover';
-};
-
-type EditConfigStrict = EditConfig & { fields?: string[] };
-
-type RectObserver = {
-	observe(): void;
-	unobserve(): void;
-};
-
-export type EditableElementOptions = {
-	customClass?: string | undefined;
-	onSaved?: ((data: Omit<SavedData, 'key'>) => void) | undefined;
-};
+import type { EditConfig, EditConfigStrict, EditableElementOptions } from './types/index.ts';
 
 export class EditableElement {
 	private static readonly DATASET = 'directus';
@@ -30,7 +12,7 @@ export class EditableElement {
 	readonly element: HTMLElement;
 	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
 	readonly editConfig: EditConfigStrict;
-	readonly rectObserver: RectObserver;
+	readonly rectObserver: { observe(): void; unobserve(): void };
 	readonly overlayElement: OverlayElement;
 
 	rect: DOMRect;

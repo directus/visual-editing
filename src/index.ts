@@ -1,7 +1,8 @@
 import { DirectusFrame } from './lib/directus-frame.ts';
-import { EditableElement, type EditableElementOptions, type EditConfig } from './lib/editable-element.ts';
+import { EditableElement } from './lib/editable-element.ts';
 import { EditableStore } from './lib/editable-store.ts';
 import { OverlayManager } from './lib/overlay-manager.ts';
+import type { EditConfig, EditableElementOptions } from './lib/types/index.ts';
 
 const directusFrame = new DirectusFrame();
 
