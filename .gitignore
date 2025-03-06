@@ -1,0 +1,40 @@
+# User preferences
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Builds / Caches
+*.tsbuildinfo
+**/.vitepress/cache/
+**/.vitepress/.temp/
+.eslintcache
+
+# Dotenv configs
+.env
+.env.*
+
+# Logs
+npm-debug.log
+debug
+.clinic
+
+# IDEs / Editors
+.devcontainer/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.code-workspace
+*.sublime-settings
+.*.swp
+
+# Environments / Workspaces
+.gitpod.yml
+.netlify
+
+# Temporary files
+TODO
+
+# Ignore dist folder but include the global IIFE
+dist/*
+!dist/visual-editing.js

@@ -1,0 +1,5 @@
+dist/
+pnpm-lock.yaml
+**/.vitepress/cache/
+/.changeset/pre.json
+/.changeset/*.md
