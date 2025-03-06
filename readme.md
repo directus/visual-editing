@@ -13,6 +13,10 @@
 - Add `data-directus` attributes to your elements and then call the `scan()` method to make them interactive
   - the `data-directus` content follows this syntax `collection:posts;item:12` or
     `collection:posts;item:12;fields:title,description;mode:drawer` … described in detail below
+  - It is recommended to render only the `data-directus` attributes when using in Visual Editor. This can be done in
+    several ways. This could be by adding query parameters like `?visual-editing=true&token=123` or something else that
+    you would implement on your website. The reason is that it could expose data like primary keys that you might not
+    want to show to the public.
 - Call the `scan()` method to add all the `data-directus` elements
   ```ts
   scan({ directusUrl: 'http://localhost:8000' });
@@ -46,6 +50,9 @@
       - `elements`: Optional `HTMLElement | HTMLElement[]`. Could have one or more elements. If the elements themselves
         don’t contain a `data-directus` attribute, their children will be selected.
         - Once you specify elements, the options can’t be overwritten anymore.
+        - You can use `elements` to scope a section of your page and apply different options than you might have applied
+          to a global scan that already includes those elements. The returned object could then also be used to
+          `disable`/`enable` or `remove` these scoped elements separately from the other elements.
       - `customClass`: Optional `string`. Adds a class to Overlay Elements (the rects, that are displayed above the
         website)
       - `onSaved`: Optional callback function `(data) => void`. Will be called after the fields are saved in Directus.

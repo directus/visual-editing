@@ -14,7 +14,8 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 
 - Visual Editing Package (Part 1)
 
-  1. Clone the separate visual-editing package repo and open it in (a separate window in) VS Code
+  1. Clone the separate visual-editing package repo, open it in (a separate window in) VS Code and checkout the `init`
+     branch.
   2. Add the env vars to `test-website/simple-cms/nuxt/.env` and make sure to provide `<your-token>` and the correct
      `DIRECTUS_URL`
 
@@ -47,20 +48,28 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 - Visual Editing Package (Part 2)
 
   1. Switch to the local visual-editing package repo
-  2. Build the package: `pnpm build`
-  3. Then install the test-website dependencies: `cd test-website/simple-cms/nuxt/ && pnpm i`
-  4. And run it with `cd test-website/simple-cms/nuxt/ && pnpm visual-editing:ssr--refresh`
+  2. Install the package: `pnpm i`
+  3. Build the package: `pnpm build`
+  4. Then install the test-website dependencies: `cd test-website/simple-cms/nuxt/ && pnpm i`
+  5. And run it with `cd test-website/simple-cms/nuxt/ && pnpm visual-editing:ssr--refresh`
 
      > [!NOTE]  
      > See the description of the different “Test Modes” below
 
 - Directus Studio
+
   1. Switch to Directus Studio
   2. Enable the Visual Editor module in the settings and move it to the second position
   3. Add the following URLs to the Visual Editor settings (on the settings page)
+
      - `http://localhost:3000`
      - `http://localhost:3000/blog`
      - `http://localhost:3000/blog/why-steampunk-rabbits-are-the-future-of-work`
+
+       > [!NOTE]  
+       > The last two URLs are for testing purposes only. You do not need to add every page URL of your website to
+       > access them with the Visual Editor.
+
   4. Open the Visual Editor Module
 
 ## Test Modes
@@ -79,16 +88,16 @@ pnpm visual-editing:monolith
 pnpm visual-editing:ssr
 pnpm visual-editing:ssr--refresh-all
 pnpm visual-editing:ssr--refresh
-pnpm visual-editing:ssr--refresh-customized
-pnpm visual-editing:ssr--methods
+pnpm visual-editing:ssr--refresh-customized # http://localhost:3000/blog
+pnpm visual-editing:ssr--methods # http://localhost:3000
 
 pnpm visual-editing:dev
 pnpm visual-editing:dev--refresh-all
 pnpm visual-editing:dev--refresh
-pnpm visual-editing:dev--refresh-customized
-pnpm visual-editing:dev--methods
+pnpm visual-editing:dev--refresh-customized # http://localhost:3000/blog
+pnpm visual-editing:dev--methods # http://localhost:3000
 
-pnpm visual-editing:ssg
+pnpm visual-editing:ssg # http://localhost:3000/blog/why-steampunk-rabbits-are-the-future-of-work
 ```
 
 ### Rendering modes:
@@ -118,15 +127,19 @@ pnpm visual-editing:ssg
   - Rendering modes: `dev` || `ssr`
   - Search for `testCase === 'refresh'`
 - `refresh-customized`
+  - The best way to see this on the test website is to open this page in the Visual Editor: http://localhost:3000/blog
   - Exactly the same as `refresh` above, except that custom classes are attached to some editable elements to
     demonstrate customizability.
   - Rendering modes: `dev` || `ssr`
   - Search for `testCase === 'refresh-customized'`
 - `refresh-methods`
+  - The best way to see this on the test website is to open this page in the Visual Editor: http://localhost:3000
   - Exactly the same as `basic` above, except that there are buttons to test some useful functions/methods
   - Rendering modes: `dev` || `ssr`
   - Search for `testCase === 'refresh-methods'`
 - `refresh-ssg`
+  - The best way to see this on the test website is to open this page in the Visual Editor:
+    http://localhost:3000/blog/why-steampunk-rabbits-are-the-future-of-work
   - Exactly the same as `refresh` above, except that it is only available for SSG and on a blog page `/blog/[slug]`
   - Rendering modes: `ssg`
   - Search for `testCase === 'refresh-ssg’`
