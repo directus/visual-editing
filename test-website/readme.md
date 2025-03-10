@@ -6,7 +6,8 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 
 - Directus (Part 1)
 
-  1.  Open your local Directus Repo, but stay on the `main` branch
+  1.  Open your local Directus Repo, but stay on the `main` branch. Make sure you have the dependencies installed
+      (`pnpm i`) and build everything (`pnpm build`).
   2.  Create a new database (sqlite is recommended) and add the env config for it
   3.  Run `pnpm --filter api cli bootstrap` to set up the db
   4.  Run the dev servers as usual: `pnpm --filter api dev` and `pnpm --filter app dev`
