@@ -74,8 +74,10 @@
   - `disable` … disable all elements (i.e. they are temporarily not editable)
     - Returns: `{ enable }`
       - `enable()` … will enable all elements previously _disabled_
-- If you have CSP configured be sure to add `'frame-ancestors': ["'self'", process.env.DIRECTUS_URL],` … in other words:
-  make it available for use inside an iframe in Directus.
+- If you have CSP configured, be sure to add `'frame-ancestors': ["'self'", process.env.DIRECTUS_URL],` to your policy —
+  in other words, make your site available for use inside an iframe in Directus. If you're unsure where your CSP is
+  defined, check your web server configuration files, your site's build configuration, or your hosting platform's
+  security settings.
 
 ## Usage for Non-JS environments
 

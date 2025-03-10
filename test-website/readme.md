@@ -132,11 +132,11 @@ pnpm visual-editing:ssg # http://localhost:3000/blog/why-steampunk-rabbits-are-t
     demonstrate customizability.
   - Rendering modes: `dev` || `ssr`
   - Search for `testCase === 'refresh-customized'`
-- `refresh-methods`
+- `methods`
   - The best way to see this on the test website is to open this page in the Visual Editor: http://localhost:3000
   - Exactly the same as `basic` above, except that there are buttons to test some useful functions/methods
   - Rendering modes: `dev` || `ssr`
-  - Search for `testCase === 'refresh-methods'`
+  - Search for `testCase === 'methods'`
 - `refresh-ssg`
   - The best way to see this on the test website is to open this page in the Visual Editor:
     http://localhost:3000/blog/why-steampunk-rabbits-are-the-future-of-work
