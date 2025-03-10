@@ -1,0 +1,12 @@
+[
+
+  {
+    "headline": "Headless but not brainless",
+    "id": "d81ab264-b2be-4077-84e7-b1406e74d9c3",
+    "image": "ea743e20-e6e9-4be8-a949-3771cd182810",
+    "button_group": "4cd6d4ca-82ea-4daf-ae79-a4c4265bfb27",
+    "description": "Directus gives you a backend that is perfect for Headless CMS use cases but also everything beyond. Authentication, user permissions.",
+    "tagline": "Backend + CMS",
+    "layout": "image_right"
+  }
+]
