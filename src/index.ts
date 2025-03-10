@@ -15,8 +15,8 @@ export async function scan({
 	directusUrl: string;
 	elements?: HTMLElement | HTMLElement[] | null;
 } & EditableElementOptions) {
-	const conntected = directusFrame.connect(directusUrl);
-	if (!conntected) return;
+	const connected = directusFrame.connect(directusUrl);
+	if (!connected) return;
 
 	const confirmed = await directusFrame.receiveConfirm();
 	if (!confirmed) return;
