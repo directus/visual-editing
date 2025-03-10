@@ -2,7 +2,7 @@ import { EditableStore } from './editable-store.ts';
 import { OverlayManager } from './overlay-manager.ts';
 
 export class OverlayElement {
-	private noDimensions: boolean = false;
+	private hasNoDimensions: boolean = false;
 	private element: HTMLElement;
 	private container: HTMLElement;
 
@@ -51,14 +51,14 @@ export class OverlayElement {
 	updateRect(rect: DOMRect) {
 		const hasDimensions = rect.width !== 0 && rect.height !== 0;
 
-		if (!this.noDimensions && !hasDimensions) {
-			this.noDimensions = true;
+		if (!this.hasNoDimensions && !hasDimensions) {
+			this.hasNoDimensions = true;
 			this.disable();
 			return;
 		}
 
-		if (this.noDimensions && hasDimensions) {
-			this.noDimensions = false;
+		if (this.hasNoDimensions && hasDimensions) {
+			this.hasNoDimensions = false;
 			this.enable();
 		}
 
