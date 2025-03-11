@@ -7,7 +7,7 @@ import type {
 
 export type EditConfigStrict = DirectusEditConfig;
 
-export type EditConfig = EditConfigStrict & { fields?: string[] | string };
+export type EditConfig = Omit<EditConfigStrict, 'fields'> & { fields?: EditConfigStrict['fields'] | string };
 
 export type SendAction = DirectusReceiveAction;
 export type ReceiveAction = DirectusSendAction;
