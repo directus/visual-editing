@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { apply, toEditAttr } from '@directus/visual-editing';
+import { apply, setAttr } from '@directus/visual-editing';
 import { computed } from 'vue';
 
 export interface SocialLink {
@@ -91,7 +91,7 @@ const descriptionEl = useTemplateRef('description');
 						ref="description"
 						class="text-description mt-2"
 						:data-directus="
-							toEditAttr({
+							setAttr({
 								collection: 'globals',
 								item: globals.id,
 								fields: 'description',

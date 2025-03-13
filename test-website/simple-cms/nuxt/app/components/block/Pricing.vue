@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toEditAttr } from '@directus/visual-editing';
+import { setAttr } from '@directus/visual-editing';
 
 interface PricingProps {
 	data: {
@@ -32,7 +32,7 @@ defineProps<PricingProps>();
 		<div
 			v-if="data.tagline || data.headline"
 			:data-directus="
-				toEditAttr({ collection: 'block_pricing', item: data.id, fields: ['tagline', 'headline'], mode: 'popover' })
+				setAttr({ collection: 'block_pricing', item: data.id, fields: ['tagline', 'headline'], mode: 'popover' })
 			"
 		>
 			<Tagline v-if="data.tagline" :tagline="data.tagline" />

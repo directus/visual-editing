@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Text from '~/components/base/Text.vue';
 import DirectusImage from '~/components/shared/DirectusImage.vue';
-import { toEditAttr, apply, remove, disable } from '@directus/visual-editing';
+import { setAttr, apply, remove, disable } from '@directus/visual-editing';
 
 interface HeroProps {
 	data: {
@@ -90,7 +90,7 @@ function useVisualEditingTest() {
 				'md:flex-row-reverse items-center': data.layout === 'image_left',
 				'md:flex-row items-center': data.layout !== 'image_center' && data.layout !== 'image_left',
 			}"
-			:data-directus="toEditAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'] })"
+			:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: ['image', 'layout'] })"
 		>
 			<div
 				class="flex flex-col gap-4 w-full"
@@ -101,27 +101,23 @@ function useVisualEditingTest() {
 			>
 				<Tagline
 					:tagline="data.tagline"
-					:data-directus="toEditAttr({ collection: 'block_hero', item: data.id, fields: 'tagline', mode: 'popover' })"
+					:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: 'tagline', mode: 'popover' })"
 				/>
 				<Headline
 					:headline="data.headline"
-					:data-directus="toEditAttr({ collection: 'block_hero', item: data.id, fields: 'headline', mode: 'popover' })"
+					:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: 'headline', mode: 'popover' })"
 				/>
 				<Text
 					v-if="data.description"
 					:content="data.description"
-					:data-directus="
-						toEditAttr({ collection: 'block_hero', item: data.id, fields: 'description', mode: 'popover' })
-					"
+					:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: 'description', mode: 'popover' })"
 				/>
 
 				<div
 					v-if="data.button_group?.buttons?.length"
 					class="mt-6"
 					:class="{ 'flex justify-center': data.layout === 'image_center' }"
-					:data-directus="
-						toEditAttr({ collection: 'block_hero', item: data.id, fields: 'button_group', mode: 'popover' })
-					"
+					:data-directus="setAttr({ collection: 'block_hero', item: data.id, fields: 'button_group', mode: 'popover' })"
 				>
 					<ButtonGroup :buttons="data.button_group.buttons" />
 				</div>

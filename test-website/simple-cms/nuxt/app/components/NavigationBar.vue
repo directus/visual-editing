@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useRuntimeConfig } from '#app';
 import { Menu, ChevronDown } from 'lucide-vue-next';
 import SearchModal from '~/components/base/SearchModel.vue';
-import { apply, toEditAttr } from '@directus/visual-editing';
+import { apply, setAttr } from '@directus/visual-editing';
 
 interface NavigationItem {
 	id: string;
@@ -99,7 +99,7 @@ const headerEl = useTemplateRef('header');
 				to="/"
 				class="flex-shrink-0"
 				:data-directus="
-					toEditAttr({
+					setAttr({
 						collection: 'globals',
 						item: globals.id,
 						fields: ['logo', 'logo_dark_mode'],

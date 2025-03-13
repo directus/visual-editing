@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toEditAttr } from '@directus/visual-editing';
+import { setAttr } from '@directus/visual-editing';
 import { CheckCircle2 } from 'lucide-vue-next';
 import Button from '../base/BaseButton.vue';
 
@@ -30,7 +30,7 @@ defineProps<PricingCardProps>();
 			'flex flex-col max-w-[600px] md:min-h-[424px] border rounded-lg p-6',
 			card.is_highlighted ? 'border-accent' : 'border-input',
 		]"
-		:data-directus="toEditAttr({ collection: 'block_pricing_cards', item: card.id })"
+		:data-directus="setAttr({ collection: 'block_pricing_cards', item: card.id })"
 	>
 		<div class="flex justify-between items-start gap-2 mb-4">
 			<h3 class="text-xl font-heading text-foreground">

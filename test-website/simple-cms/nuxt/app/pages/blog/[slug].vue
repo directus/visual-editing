@@ -4,7 +4,7 @@ import { useRoute, useRuntimeConfig } from '#app';
 import DirectusImage from '~/components/shared/DirectusImage.vue';
 import Separator from '~/components/ui/separator/Separator.vue';
 import { readItems } from '@directus/sdk';
-import { apply, remove, toEditAttr } from '@directus/visual-editing';
+import { apply, remove, setAttr } from '@directus/visual-editing';
 
 const route = useRoute();
 const slug = route.params.slug as string;
@@ -144,7 +144,7 @@ useHead({
 				<div
 					class="relative w-full h-[400px] md:h-[500px] overflow-hidden"
 					:data-directus="
-						toEditAttr({ collection: 'posts', item: post.id, fields: ['image', 'header-gebh3-'], mode: 'modal' })
+						setAttr({ collection: 'posts', item: post.id, fields: ['image', 'header-gebh3-'], mode: 'modal' })
 					"
 				>
 					<DirectusImage
@@ -161,7 +161,7 @@ useHead({
 				:headline="post.title"
 				as="h2"
 				class="!text-accent mb-4"
-				:data-directus="toEditAttr({ collection: 'posts', item: post.id, fields: 'title', mode: 'popover' })"
+				:data-directus="setAttr({ collection: 'posts', item: post.id, fields: 'title', mode: 'popover' })"
 			/>
 			<div class="w-full">
 				<Separator class="h-[1px] bg-gray-300 my-8" />
@@ -171,7 +171,7 @@ useHead({
 				<main class="text-left">
 					<Text
 						:content="post.content || ''"
-						:data-directus="toEditAttr({ collection: 'posts', item: post.id, fields: 'content' })"
+						:data-directus="setAttr({ collection: 'posts', item: post.id, fields: 'content' })"
 					/>
 				</main>
 
@@ -180,7 +180,7 @@ useHead({
 						v-if="author"
 						class="flex items-center space-x-4"
 						:data-directus="
-							toEditAttr({
+							setAttr({
 								collection: 'directus_users',
 								item: String(post.author),
 								fields: ['first_name', 'last_name'],
@@ -204,7 +204,7 @@ useHead({
 					<p
 						v-if="post.description"
 						:data-directus="
-							toEditAttr({
+							setAttr({
 								collection: 'posts',
 								item: post.id,
 								fields: 'description',
@@ -218,7 +218,7 @@ useHead({
 					<div
 						class="flex justify-start"
 						:data-directus="
-							toEditAttr({
+							setAttr({
 								collection: 'posts',
 								item: post.id,
 								fields: 'slug',

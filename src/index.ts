@@ -62,6 +62,6 @@ export function disable() {
 	};
 }
 
-export function toEditAttr(editConfig: EditConfig) {
+export function setAttr(editConfig: EditConfig) {
 	return EditableElement.objectToEditAttr(editConfig);
 }

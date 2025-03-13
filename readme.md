@@ -8,7 +8,7 @@
 - Install the package: `pnpm i @directus/visual-editing`
 - Usage
   ```ts
-  import { apply, remove, disable, toEditAttr } from '@directus/visual-editing';
+  import { apply, remove, disable, setAttr } from '@directus/visual-editing';
   ```
 - Add `data-directus` attributes to your elements and then call the `apply()` method to make them interactive
   - the `data-directus` content follows this syntax `collection:posts;item:12` or
@@ -26,11 +26,11 @@
   apply({ directusUrl: 'http://localhost:8000', elements: header, customClass: 'my-class' });
   ```
 - Methods
-  - `toEditAttr(options)` … a helper function to generate the value for the `data-directus` attributes
+  - `setAttr(options)` … a helper function to generate the value for the `data-directus` attributes
     - Example Vue
       ```vue
       <template>
-      	<h1 :data-directus="toEditAttr({ collection: 'posts', item: post.id, fields: 'title', mode: 'popover' })">
+      	<h1 :data-directus="setAttr({ collection: 'posts', item: post.id, fields: 'title', mode: 'popover' })">
       		{{ post.title }}
       	</h1>
       </template>

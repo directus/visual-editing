@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toEditAttr } from '@directus/visual-editing';
+import { setAttr } from '@directus/visual-editing';
 
 interface RichTextProps {
 	data: {
@@ -32,7 +32,7 @@ const props = withDefaults(defineProps<RichTextProps>(), {
 			props.data.className,
 		]"
 		:data-directus="
-			toEditAttr({
+			setAttr({
 				collection: 'block_richtext',
 				item: data.id,
 				fields: ['tagline', 'headline', 'content', 'alignment'],

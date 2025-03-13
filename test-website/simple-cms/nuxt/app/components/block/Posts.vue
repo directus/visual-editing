@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useRoute, useRouter, useAsyncData } from 'nuxt/app';
 import { ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from 'lucide-vue-next';
-import { apply, toEditAttr } from '@directus/visual-editing';
+import { apply, setAttr } from '@directus/visual-editing';
 
 interface Post {
 	id: string;
@@ -121,7 +121,7 @@ const postsRef = useTemplateRef('posts');
 					:to="`/blog/${post.slug}`"
 					class="group block overflow-hidden rounded-lg p-2"
 					:data-directus="
-						toEditAttr({
+						setAttr({
 							collection: 'posts',
 							item: post.id,
 							fields: ['image', 'title', 'description'],
@@ -131,7 +131,7 @@ const postsRef = useTemplateRef('posts');
 					<div
 						class="relative w-full h-[256px] overflow-hidden rounded-lg"
 						:data-directus="
-							toEditAttr({
+							setAttr({
 								collection: 'posts',
 								item: post.id,
 								fields: 'image',
@@ -150,7 +150,7 @@ const postsRef = useTemplateRef('posts');
 					<div class="py-4">
 						<h3
 							:data-directus="
-								toEditAttr({
+								setAttr({
 									collection: 'posts',
 									item: post.id,
 									fields: 'title',

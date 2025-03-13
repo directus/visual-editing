@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { ZoomIn, ArrowLeft, ArrowRight, X } from 'lucide-vue-next';
-import { disable, toEditAttr } from '@directus/visual-editing';
+import { disable, setAttr } from '@directus/visual-editing';
 
 interface GalleryItem {
 	id: string;
@@ -101,7 +101,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<section class="relative" :data-directus="toEditAttr({ collection: 'block_gallery', item: data.id })">
+	<section class="relative" :data-directus="setAttr({ collection: 'block_gallery', item: data.id })">
 		<Tagline v-if="props.data.tagline" :tagline="props.data.tagline" />
 		<Headline v-if="props.data.headline" :headline="props.data.headline" />
 
