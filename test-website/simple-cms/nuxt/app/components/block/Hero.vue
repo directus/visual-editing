@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Text from '~/components/base/Text.vue';
 import DirectusImage from '~/components/shared/DirectusImage.vue';
-import { toEditAttr, scan, remove, disable } from '@directus/visual-editing';
+import { toEditAttr, apply, remove, disable } from '@directus/visual-editing';
 
 interface HeroProps {
 	data: {
@@ -43,7 +43,7 @@ function useVisualEditingTest() {
 		useRuntimeHook('page:finish', async () => {
 			if (!import.meta.client) return;
 
-			editables.value = await scan({
+			editables.value = await apply({
 				directusUrl,
 				elements: heroRef.value,
 				customClass: 'method-scope',

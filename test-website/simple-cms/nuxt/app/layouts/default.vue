@@ -2,7 +2,7 @@
 import { useAsyncData } from '#app';
 import { computed, watch } from 'vue';
 import { readItem, readSingleton } from '@directus/sdk';
-import { scan, remove } from '@directus/visual-editing';
+import { apply, remove } from '@directus/visual-editing';
 
 const {
 	data: siteData,
@@ -140,12 +140,12 @@ provide('refreshSiteData', refresh);
 
 	if (testCase === 'refresh-all') {
 		useRuntimeHook('page:start', remove);
-		useRuntimeHook('page:finish', () => scan({ directusUrl, onSaved: () => refreshNuxtData() }));
+		useRuntimeHook('page:finish', () => apply({ directusUrl, onSaved: () => refreshNuxtData() }));
 	}
 
 	if (testCase === 'basic' || testCase === 'methods') {
 		useRuntimeHook('page:start', remove);
-		useRuntimeHook('page:finish', () => scan({ directusUrl }));
+		useRuntimeHook('page:finish', () => apply({ directusUrl }));
 	}
 })();
 </script>

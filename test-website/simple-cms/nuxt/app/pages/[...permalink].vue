@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAsyncData, useRoute } from '#app';
 import PageBuilder from '~/components/PageBuilder.vue';
-import { scan } from '@directus/visual-editing';
+import { apply } from '@directus/visual-editing';
 
 const route = useRoute();
 const permalink = `/${(route.params.permalink || []).join('/')}`;
@@ -43,7 +43,7 @@ watchEffect(() => {
 
 	if (testCase === 'refresh' || testCase === 'refresh-customized') {
 		onMounted(() => {
-			scan({ directusUrl, onSaved: () => refresh() });
+			apply({ directusUrl, onSaved: () => refresh() });
 		});
 	}
 })();

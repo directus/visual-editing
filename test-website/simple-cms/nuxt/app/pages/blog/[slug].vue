@@ -4,7 +4,7 @@ import { useRoute, useRuntimeConfig } from '#app';
 import DirectusImage from '~/components/shared/DirectusImage.vue';
 import Separator from '~/components/ui/separator/Separator.vue';
 import { readItems } from '@directus/sdk';
-import { scan, remove, toEditAttr } from '@directus/visual-editing';
+import { apply, remove, toEditAttr } from '@directus/visual-editing';
 
 const route = useRoute();
 const slug = route.params.slug as string;
@@ -119,14 +119,14 @@ useHead({
 	if (testCase === 'refresh-ssg') {
 		onMounted(() => {
 			if (enabled) refreshData();
-			scan({ directusUrl, onSaved: () => refreshData() });
+			apply({ directusUrl, onSaved: () => refreshData() });
 		});
 		onUnmounted(() => remove());
 	}
 
 	if (testCase === 'refresh' || testCase === 'refresh-customized') {
 		onMounted(() => {
-			scan({ directusUrl, onSaved: () => refreshData() });
+			apply({ directusUrl, onSaved: () => refreshData() });
 		});
 	}
 

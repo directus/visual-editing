@@ -8,22 +8,22 @@
 - Install the package: `pnpm i @directus/visual-editing`
 - Usage
   ```ts
-  import { scan, remove, disable, toEditAttr } from '@directus/visual-editing';
+  import { apply, remove, disable, toEditAttr } from '@directus/visual-editing';
   ```
-- Add `data-directus` attributes to your elements and then call the `scan()` method to make them interactive
+- Add `data-directus` attributes to your elements and then call the `apply()` method to make them interactive
   - the `data-directus` content follows this syntax `collection:posts;item:12` or
     `collection:posts;item:12;fields:title,description;mode:drawer` … described in detail below
   - It is recommended to render only the `data-directus` attributes when using in Visual Editor. This can be done in
     several ways. This could be by adding query parameters like `?visual-editing=true&token=123` or something else that
     you would implement on your website. The reason is that it could expose data like primary keys that you might not
     want to show to the public.
-- Call the `scan()` method to add all the `data-directus` elements
+- Call the `apply()` method to add all the `data-directus` elements
   ```ts
-  scan({ directusUrl: 'http://localhost:8000' });
+  apply({ directusUrl: 'http://localhost:8000' });
   // or
-  scan({ directusUrl: 'http://localhost:8000', elements: titleEl, onSaved: () => refresh() });
+  apply({ directusUrl: 'http://localhost:8000', elements: titleEl, onSaved: () => refresh() });
   // or
-  scan({ directusUrl: 'http://localhost:8000', elements: header, customClass: 'my-class' });
+  apply({ directusUrl: 'http://localhost:8000', elements: header, customClass: 'my-class' });
   ```
 - Methods
   - `toEditAttr(options)` … a helper function to generate the value for the `data-directus` attributes
@@ -41,7 +41,7 @@
       - `fields`: optional `string[] | string` … specify which field(s) to edit. If nothing is specified, all fields
         will be included.
       - `mode`: optional `'drawer' | 'modal' | 'popover'` … default is `drawer`
-  - `scan(options)` … will find all elements with a `data-directus` attribute. It will also connect to your Directus
+  - `apply(options)` … will find all elements with a `data-directus` attribute. It will also connect to your Directus
     instance and make sure it is used inside the Visual Editor. If you call this method multiple times on your page, the
     options will be overwritten unless you specify the `elements` parameter. Be sure to call this method after the
     `data-directus` attributes are rendered, otherwise they won’t be found.
@@ -51,7 +51,7 @@
         don’t contain a `data-directus` attribute, their children will be selected.
         - Once you specify elements, the options can’t be overwritten anymore.
         - You can use `elements` to scope a section of your page and apply different options than you might have applied
-          to a global scan that already includes those elements. The returned object could then also be used to
+          to a global selection that already includes those elements. The returned object could then also be used to
           `disable`/`enable` or `remove` these scoped elements separately from the other elements.
       - `customClass`: Optional `string`. Adds a class to Overlay Elements (the rects, that are displayed above the
         website)
@@ -64,10 +64,10 @@
     - Returns: `{ remove, enable, disable }` … for all selected elements you can use these methods
       - Make sure to `await` them
         ```ts
-        const { remove, enable, disable } = await scan({ directusUrl });
+        const { remove, enable, disable } = await apply({ directusUrl });
         ```
-        - `remove()` … remove the previously scanned elements
-        - `disable()` … disable the previously scanned elements
+        - `remove()` … remove the previously selected elements
+        - `disable()` … disable the previously selected elements
         - `enable()` enable the previously _disabled_ elements
   - `remove` … removes all elements
     - Before leaving the page on client-side navigation, be sure to call the `remove` method
@@ -92,7 +92,7 @@ For server-only rendered websites (like PHP)
   ```html
   <script type="text/javascript">
   	document.addEventListener('DOMContentLoaded', function () {
-  		DirectusVisualEditing.scan({ directusUrl: 'http://localhost:8000' });
+  		DirectusVisualEditing.apply({ directusUrl: 'http://localhost:8000' });
   	});
   </script>
   ```
@@ -155,7 +155,7 @@ For server-only rendered websites (like PHP)
     }
     ```
   - Custom Classes
-    - Can be added to all or to a subset of elements defined by the `scan({ customClass: 'my-class' })` function. This
+    - Can be added to all or to a subset of elements defined by the `apply({ customClass: 'my-class' })` function. This
       class will be applied to the `div.directus-visual-editing-overlay` Example:
       ```css
       .my-class {

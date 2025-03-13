@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useRoute, useRouter, useAsyncData } from 'nuxt/app';
 import { ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from 'lucide-vue-next';
-import { scan, toEditAttr } from '@directus/visual-editing';
+import { apply, toEditAttr } from '@directus/visual-editing';
 
 interface Post {
 	id: string;
@@ -79,7 +79,7 @@ const postsRef = useTemplateRef('posts');
 
 	if (testCase === 'refresh') {
 		onMounted(() => {
-			scan({
+			apply({
 				directusUrl,
 				elements: postsRef.value,
 				onSaved: () => {
@@ -92,7 +92,7 @@ const postsRef = useTemplateRef('posts');
 
 	if (testCase === 'refresh-customized') {
 		onMounted(() => {
-			scan({
+			apply({
 				directusUrl,
 				elements: postsRef.value,
 				onSaved: () => {

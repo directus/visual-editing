@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { scan, toEditAttr } from '@directus/visual-editing';
+import { apply, toEditAttr } from '@directus/visual-editing';
 import { computed } from 'vue';
 
 export interface SocialLink {
@@ -54,13 +54,13 @@ const descriptionEl = useTemplateRef('description');
 
 	if (testCase === 'refresh') {
 		useRuntimeHook('page:finish', () => {
-			scan({ directusUrl, elements: descriptionEl.value, onSaved: refresh });
+			apply({ directusUrl, elements: descriptionEl.value, onSaved: refresh });
 		});
 	}
 
 	if (testCase === 'refresh-customized') {
 		useRuntimeHook('page:finish', () => {
-			scan({ directusUrl, elements: descriptionEl.value, onSaved: refresh, customClass: 'my-custom-description' });
+			apply({ directusUrl, elements: descriptionEl.value, onSaved: refresh, customClass: 'my-custom-description' });
 		});
 	}
 })();

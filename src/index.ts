@@ -6,7 +6,7 @@ import type { EditConfig, EditableElementOptions } from './lib/types/index.ts';
 
 const directusFrame = new DirectusFrame();
 
-export async function scan({
+export async function apply({
 	directusUrl,
 	elements = undefined,
 	customClass = undefined,

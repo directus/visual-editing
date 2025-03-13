@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useRuntimeConfig } from '#app';
 import { Menu, ChevronDown } from 'lucide-vue-next';
 import SearchModal from '~/components/base/SearchModel.vue';
-import { scan, toEditAttr } from '@directus/visual-editing';
+import { apply, toEditAttr } from '@directus/visual-editing';
 
 interface NavigationItem {
 	id: string;
@@ -59,7 +59,7 @@ const headerEl = useTemplateRef('header');
 
 	if (testCase === 'basic' || testCase === 'methods') {
 		useRuntimeHook('page:finish', () => {
-			scan({
+			apply({
 				directusUrl,
 				elements: headerEl.value,
 				customClass,
@@ -69,7 +69,7 @@ const headerEl = useTemplateRef('header');
 
 	if (testCase === 'refresh-all') {
 		useRuntimeHook('page:finish', () => {
-			scan({
+			apply({
 				directusUrl,
 				elements: headerEl.value,
 				customClass,
@@ -80,13 +80,13 @@ const headerEl = useTemplateRef('header');
 
 	if (testCase === 'refresh') {
 		useRuntimeHook('page:finish', () => {
-			scan({ directusUrl, elements: headerEl.value, customClass, onSaved: refresh });
+			apply({ directusUrl, elements: headerEl.value, customClass, onSaved: refresh });
 		});
 	}
 
 	if (testCase === 'refresh-customized') {
 		useRuntimeHook('page:finish', () => {
-			scan({ directusUrl, elements: headerEl.value, onSaved: refresh, customClass: 'my-custom-header' });
+			apply({ directusUrl, elements: headerEl.value, onSaved: refresh, customClass: 'my-custom-header' });
 		});
 	}
 })();

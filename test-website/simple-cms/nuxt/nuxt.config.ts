@@ -112,7 +112,7 @@ export default defineNuxtConfig({
 						{ src: '/visual-editing.js', type: 'text/javascript' },
 						{
 							innerHTML: `document.addEventListener('DOMContentLoaded', function () {
-								DirectusVisualEditing.scan({ directusUrl: '${process.env.DIRECTUS_URL}' });
+								DirectusVisualEditing.apply({ directusUrl: '${process.env.DIRECTUS_URL}' });
 							});`,
 							type: 'text/javascript',
 							crossorigin: 'anonymous',
