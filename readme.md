@@ -11,12 +11,12 @@
   import { apply, remove, disable, setAttr } from '@directus/visual-editing';
   ```
 - Add `data-directus` attributes to your elements and then call the `apply()` method to make them interactive
-  - the `data-directus` content follows this syntax `collection:posts;item:12` or
-    `collection:posts;item:12;fields:title,description;mode:drawer` … described in detail below
+  - the `data-directus` content follows this syntax `collection:<collection_name>;item:<primary_key>` or
+    `collection:<collection_name>;item:<primary_key>;fields:title,description;mode:drawer` … described in detail below
   - It is recommended to render only the `data-directus` attributes when using in Visual Editor. This can be done in
-    several ways. This could be by adding query parameters like `?visual-editing=true&token=123` or something else that
-    you would implement on your website. The reason is that it could expose data like primary keys that you might not
-    want to show to the public.
+    several ways. This could be by adding query parameters to your website URL when opening in Visual Editor like
+    `?visual-editing=true&token=123` or something else that you would implement on your website. The reason is that it
+    could expose data like primary keys that you might not want to show to the public.
 - Call the `apply()` method to add all the `data-directus` elements
   ```ts
   apply({ directusUrl: 'http://localhost:8000' });
