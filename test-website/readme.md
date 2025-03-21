@@ -1,77 +1,73 @@
+> Please Note: The following test website and guide are intended to be used or testing and development purposes, not for
+> production use!
+
 # Test Website
 
 This test website is based on the Simple CMS Starter Template of [@directus-labs](https://github.com/directus-labs/).
 
 ## Setup Instructions
 
-- Directus (Part 1)
+### Set up your Directus Dev Instance
 
-  1.  Open your local Directus Repo, but stay on the `main` branch. Make sure you have the dependencies installed
-      (`pnpm i`) and build everything (`pnpm build`).
-  2.  Create a new database (sqlite is recommended) and add the env config for it
-  3.  Run `pnpm --filter api cli bootstrap` to set up the db
-  4.  Run the dev servers as usual: `pnpm --filter api dev` and `pnpm --filter app dev`
-  5.  Login to Directus Studio, create a token for your user and have it ready
+1.  Open your local Directus Repo, make sure you are on `main` branch and have pulled the latest changes. Make sure you
+    have the dependencies installed (`pnpm i`) and build everything (`pnpm build`)
+2.  Create a new database (sqlite is recommended for development) and add the env config for it
+3.  Make sure the CSP env var is set, like this:
 
-- Visual Editing Package (Part 1)
-
-  1. Clone the separate visual-editing package repo, open it in (a separate window in) VS Code and checkout the `init`
-     branch.
-  2. Add the env vars to `test-website/simple-cms/nuxt/.env` and make sure to provide `<your-token>` and the correct
-     `DIRECTUS_URL`
-
-     ```sh
-     DIRECTUS_URL=http://localhost:8080
-     DIRECTUS_FORM_TOKEN=<your-token>
-     DIRECTUS_SERVER_TOKEN=<your-token>
-     NUXT_PUBLIC_SITE_URL=http://localhost:3000
-     ```
-
-  3. Now, install the Directus template
-
-     ```sh
-     cd test-website/template && npm run setup-directus
-     ```
-
-- Directus (Part 2)
-
-  1. Switch to your local Directus Repo and checkout the branch `florian/web-548-directus-studio-changes`
-  2. Run the migration: `pnpm --filter api cli database migrate:latest`
-  3. Run the build: `pnpm build`
-  4. Make sure the CSP env var is set, like this:
-
-     ```sh
+    ```sh
      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC=http://localhost:3000
-     ```
+    ```
 
-  5. Run the dev servers as usual: `pnpm --filter api dev` and `pnpm --filter app dev`
+4.  Run `pnpm --filter api cli bootstrap` to set up the db
+5.  Run the dev servers: `pnpm --filter api dev` and `pnpm --filter app dev`
+6.  Login to Directus Studio, create a token for your user and have it ready
 
-- Visual Editing Package (Part 2)
+### Set up the test website
 
-  1. Switch to the local visual-editing package repo
-  2. Install the package: `pnpm i`
-  3. Build the package: `pnpm build`
-  4. Then install the test-website dependencies: `cd test-website/simple-cms/nuxt/ && pnpm i`
-  5. And run it with `cd test-website/simple-cms/nuxt/ && pnpm visual-editing:ssr--refresh`
+1. Clone the separate
+   [visual-editing library repo](https://github.com/directus/visual-editing/blob/main/dist/visual-editing.js), open it
+   in a separate window in your code editor on the `main` branch
+2. Add the env vars to `test-website/simple-cms/nuxt/.env` and make sure to provide `<your-token>` and the correct.
+   `DIRECTUS_URL`
+
+   ```sh
+   DIRECTUS_URL=http://localhost:8080
+   DIRECTUS_FORM_TOKEN=<your-token>
+   DIRECTUS_SERVER_TOKEN=<your-token>
+   NUXT_PUBLIC_SITE_URL=http://localhost:3000
+   ```
+
+3. Now, install the Directus template
+
+   ```sh
+   cd test-website/template && npm run setup-directus
+   ```
+
+### Set up the library
+
+1. Install the package: `pnpm i` from the root of the visual-editing library repo
+2. Build the package: `pnpm build`
+3. Then install the test-website dependencies: `cd test-website/simple-cms/nuxt/ && pnpm i`
+4. And run it with `cd test-website/simple-cms/nuxt/ && pnpm visual-editing:ssr--refresh`
+
+   > [!NOTE]  
+   > See the description of the different “Test Modes” below
+
+### Set up Directus Visual Editor module
+
+1. Switch to Directus Studio
+2. Enable the Visual Editor module in settings
+3. Add the following URLs to the Visual Editor settings (on the settings page)
+
+   - `http://localhost:3000`
+   - `http://localhost:3000/blog`
+   - `http://localhost:3000/blog/why-steampunk-rabbits-are-the-future-of-work`
 
      > [!NOTE]  
-     > See the description of the different “Test Modes” below
+     > The last two URLs are for testing purposes only. You do not need to add every page URL of your website to access
+     > them with the Visual Editor.
 
-- Directus Studio
-
-  1. Switch to Directus Studio
-  2. Enable the Visual Editor module in the settings and move it to the second position
-  3. Add the following URLs to the Visual Editor settings (on the settings page)
-
-     - `http://localhost:3000`
-     - `http://localhost:3000/blog`
-     - `http://localhost:3000/blog/why-steampunk-rabbits-are-the-future-of-work`
-
-       > [!NOTE]  
-       > The last two URLs are for testing purposes only. You do not need to add every page URL of your website to
-       > access them with the Visual Editor.
-
-  4. Open the Visual Editor Module
+4. Open the Visual Editor Module
 
 ## Test Modes
 
