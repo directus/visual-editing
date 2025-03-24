@@ -37,7 +37,7 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
      `<your-token>` with the token you generated earlier.
 
      ```sh
-     cd test-website/template && npx directus-template-cli@latest apply -p --directusUrl=<directus-url> --templateLocation='.' --templateType='local' --directusToken=<your-token>
+     cd test-website/template && npx directus-template-cli@latest apply -p --directusUrl=<directus-url> --templateLocation=. --templateType=local --directusToken=<your-token>
      ```
 
 - Directus (Part 2)
@@ -59,7 +59,7 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
   2. Install the package: `pnpm i`
   3. Build the package: `pnpm build`
   4. Then install the test-website dependencies: `cd test-website/simple-cms/nuxt/ && pnpm i`
-  5. And run it with `cd test-website/simple-cms/nuxt/ && pnpm visual-editing:ssr--refresh`
+  5. And from that folder (test-website/simple-cms/nuxt) run it with `pnpm visual-editing:ssr--refresh`
 
      > [!NOTE]  
      > See the description of the different “Test Modes” below
