@@ -3,7 +3,7 @@
 This library works together with a Directus instance to enable Visual Editing functionality from within the Directus
 Studio Visual Editor module.
 
-Developers must make use of this library to ensure communication between client HTML elements and their Directus
+Web developers must make use of this library to ensure communication between their website’s HTML elements and their Directus
 instance. This is done through data attributes and helper functions built into the library and imported into your
 website.
 
