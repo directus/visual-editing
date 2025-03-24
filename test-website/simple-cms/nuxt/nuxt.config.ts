@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 export default defineNuxtConfig({
 	components: [
 		{ path: '~/components', pathPrefix: false },
@@ -104,7 +107,13 @@ export default defineNuxtConfig({
 				'pages:extend'(pages) {
 					pages.forEach((page) => (page.mode = 'server'));
 				},
+				'nitro:build:public-assets'() {
+					const sourceFile = path.join(__dirname, 'node_modules/@directus/visual-editing/dist', 'visual-editing.js');
+					const destFile = path.join(__dirname, '.output/public', 'visual-editing.js');
+					fs.copyFile(sourceFile, destFile, () => {});
+				},
 			},
+
 			// add global script
 			app: {
 				head: {
