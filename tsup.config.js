@@ -11,11 +11,6 @@ const env = process.env.NODE_ENV;
 
 export default defineConfig(() => ({
 	sourcemap: env === 'production', // source map is only available in prod
-	esbuildOptions(options) {
-		// fetch source from GitHub
-		options.sourceRoot = `https://raw.githubusercontent.com/directus/visual-editing/v${version}/dist/`;
-		options.sourcesContent = false;
-	},
 	clean: true, // clean dist before build
 	dts: true, // generate dts file for main module
 	format: ['cjs', 'esm', 'iife'], // generate cjs, esm and global iife files
@@ -25,4 +20,15 @@ export default defineConfig(() => ({
 	bundle: true,
 	target: 'es2022',
 	entry: ['src/index.ts'],
+	esbuildOptions(options) {
+		// fetch source from GitHub
+		options.sourceRoot = `https://raw.githubusercontent.com/directus/visual-editing/v${version}/dist/`;
+		options.sourcesContent = false;
+
+		// rename global script
+		if (options.format === 'iife') {
+			options.entryPoints = { 'visual-editing': 'src/index.ts' };
+			options.outExtension = { '.js': '.js' };
+		}
+	},
 }));

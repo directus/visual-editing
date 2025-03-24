@@ -27,7 +27,7 @@
 		"visual-editing:ssr--refresh-customized": "NUXT_PUBLIC_TEST_CASE=refresh-customized pnpm visual-editing:ssr",
 		"visual-editing:ssr--methods": "NUXT_PUBLIC_TEST_CASE=methods pnpm visual-editing:ssr",
 		"visual-editing:ssg": "nuxt generate --envName visual-editing:ssg && npx serve .output/public",
-		"visual-editing:monolith": "cp node_modules/@directus/visual-editing/dist/visual-editing.js public/visual-editing.js && nuxt build --envName visual-editing:monolith && rm public/visual-editing.js && nuxt start"
+		"visual-editing:monolith": "nuxt build --envName visual-editing:monolith && nuxt start"
 	},
 	"devDependencies": {
 		"@directus/types": "13.0.0",

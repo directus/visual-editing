@@ -43,12 +43,19 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
    cd test-website/template && npm run setup-directus
    ```
 
+   On Windows, use the following command and make sure to replace `<directus-url>` with your Directus URL and
+   `<your-token>` with the token you generated earlier.
+
+   ```sh
+   cd test-website/template && npx directus-template-cli@latest apply -p --directusUrl=<directus-url> --templateLocation=. --templateType=local --directusToken=<your-token>
+   ```
+
 ### Set up the library
 
 1. Install the package: `pnpm i` from the root of the visual-editing library repo
 2. Build the package: `pnpm build`
 3. Then install the test-website dependencies: `cd test-website/simple-cms/nuxt/ && pnpm i`
-4. And run it with `cd test-website/simple-cms/nuxt/ && pnpm visual-editing:ssr--refresh`
+4. And from that folder (test-website/simple-cms/nuxt) run it with `pnpm visual-editing:ssr--refresh`
 
    > [!NOTE]  
    > See the description of the different “Test Modes” below
