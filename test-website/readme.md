@@ -33,6 +33,13 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
      cd test-website/template && npm run setup-directus
      ```
 
+     On Windows, use the following command and make sure to replace `<directus-url>` with your Directus URL and
+     `<your-token>` with the token you generated earlier.
+
+     ```sh
+     cd test-website/template && npx directus-template-cli@latest apply -p --directusUrl=<directus-url> --templateLocation='.' --templateType='local' --directusToken=<your-token>
+     ```
+
 - Directus (Part 2)
 
   1. Switch to your local Directus Repo and checkout the branch `florian/web-548-directus-studio-changes`
