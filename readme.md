@@ -9,7 +9,7 @@ website.
 
 ## Documentation
 
-Documentation covering the set up and functionality for both the client library and the studio module can be found in
+Documentation covering the setup and functionality for both the frontend library and the studio module can be found in
 the [Directus documentation](https://directus.io/docs/guides/content/visual-editor).
 
 ## Test Website
