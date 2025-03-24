@@ -14,7 +14,7 @@ the [Directus documentation](https://directus.io/docs/guides/content/visual-edit
 
 ## Test Website
 
-A test website pre-configured to work with the Directus Visual Editor module has been included is included in the
+A test website pre-configured to work with the Directus Visual Editor module is included in the
 library's repository. This can be used for example purposes and to make it easy to set up an environment for testing or
 contributing.
 
