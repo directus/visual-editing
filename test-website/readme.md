@@ -1,5 +1,7 @@
-> Please Note: The following test website and guide are intended to be used or testing and development purposes, not for
-> production use!
+> [!NOTE]
+>
+> The following test website and guide are intended to be used or testing and development purposes, not for production
+> use!
 
 # Test Website
 
@@ -7,15 +9,40 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 
 ## Setup Instructions
 
+While you can also set up the Visual Editing test website with a Directus instance running in a docker container, this
+guide describes setting up a development environment using the official Directus repository.
+
 ### Set up your Directus Dev Instance
 
-1.  Open your local Directus Repo, make sure you are on `main` branch and have pulled the latest changes. Make sure you
-    have the dependencies installed (`pnpm i`) and build everything (`pnpm build`)
-2.  Create a new database (sqlite is recommended for development) and add the env config for it
-3.  Make sure the CSP env var is set, like this:
+1.  Clone the official [Directus GitHub repository](https://github.com/directus/directus) and make sure you have the
+    dependencies installed (`pnpm i`) and build everything (`pnpm build`)!
+2.  Create a new database (sqlite is recommended for development) and add the env config in `api/.env`
+
+    <details><summary>Example .env file</summary>
+
+    ```sh
+    PUBLIC_URL=http://localhost:8080
+    KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    SECRET="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    ADMIN_EMAIL=admin@directus.io
+    ADMIN_PASSWORD=secret
+    CACHE_ENABLED=true
+    CACHE_AUTO_PURGE=true
+    CACHE_TTL=1d
+    CORS_ENABLED=true
+    CORS_ORIGIN=http://localhost:3000
+    CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC=http://localhost:3000
+    DB_CLIENT=sqlite3
+    DB_FILENAME=db.sqlite3
+    ```
+
+    </details>
+
+3.  Double check that the following env vars are set:
 
     ```sh
      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC=http://localhost:3000
+     CACHE_AUTO_PURGE=true
     ```
 
 4.  Run `pnpm --filter api cli bootstrap` to set up the db
@@ -25,8 +52,8 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 ### Set up the test website
 
 1. Clone the separate
-   [visual-editing library repo](https://github.com/directus/visual-editing/blob/main/dist/visual-editing.js), open it
-   in a separate window in your code editor on the `main` branch
+   [Visual Editing library repository](https://github.com/directus/visual-editing/blob/main/dist/visual-editing.js),
+   open it in a separate window in your code editor on the `main` branch
 2. Add the env vars to `test-website/simple-cms/nuxt/.env` and make sure to provide `<your-token>` and the correct.
    `DIRECTUS_URL`
 
@@ -52,13 +79,13 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 
 ### Set up the library
 
-1. Install the package: `pnpm i` from the root of the visual-editing library repo
+1. Install the package: `pnpm i` from the root of the Visual Editing library repository
 2. Build the package: `pnpm build`
 3. Then install the test-website dependencies: `cd test-website/simple-cms/nuxt/ && pnpm i`
 4. And from that folder (test-website/simple-cms/nuxt) run it with `pnpm visual-editing:ssr--refresh`
 
-   > [!NOTE]  
-   > See the description of the different “Test Modes” below
+> [!NOTE]  
+> See the description of the different “Test Modes” below
 
 ### Set up Directus Visual Editor module
 
