@@ -1,4 +1,4 @@
-# Directus Visual Editing library
+# Visual Editing Frontend Library by Directus
 
 This library works together with a Directus instance to enable Visual Editing functionality from within the Directus
 Studio Visual Editor module.
