@@ -1,11 +1,11 @@
 # Visual Editing Frontend Library by Directus
 
-This library works together with a Directus instance to enable Visual Editing functionality from within the Directus
-Studio Visual Editor module.
+This library works together with a Directus instance to enable Visual Editing functionality from within the Visual
+Editor module in Directus Studio.
 
-Web developers must make use of this library to ensure communication between their website’s HTML elements and their Directus
-instance. This is done through data attributes and helper functions built into the library and imported into your
-website.
+Web developers must make use of this library to ensure communication between their website’s HTML elements and their
+Directus instance. This is done through data attributes and helper functions built into the library and imported into
+your website.
 
 ## Documentation
 
@@ -14,9 +14,8 @@ the [Directus documentation](https://directus.io/docs/guides/content/visual-edit
 
 ## Test Website
 
-A test website pre-configured to work with the Directus Visual Editor module is included in the
-library’s repository. This can be used for example purposes and to make it easy to set up an environment for testing or
-contributing.
+A test website pre-configured to work with the Directus Visual Editor module is included in the library’s repository.
+This can be used for example purposes and to make it easy to set up an environment for testing or contributing.
 
 For detailed instructions on setting up the test environment see the
 [test website's readme.md](https://github.com/directus/visual-editing/blob/main/test-website/readme.md).
