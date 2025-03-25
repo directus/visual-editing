@@ -53,7 +53,7 @@ guide describes setting up a development environment using the official Directus
 
 1. Clone the separate
    [Visual Editing library repository](https://github.com/directus/visual-editing/blob/main/dist/visual-editing.js),
-   open it in a separate window in your code editor on the `main` branch
+   open it in a new window in your code editor on the `main` branch
 2. Add the env vars to `test-website/simple-cms/nuxt/.env` and make sure to provide `<your-token>` and the correct.
    `DIRECTUS_URL`
 
