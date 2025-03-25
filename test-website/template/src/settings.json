@@ -1,126 +1,126 @@
 {
-    "id": 1,
-    "project_name": "Simple Website CMS",
-    "project_url": null,
-    "project_color": "#0757FF",
-    "project_logo": null,
-    "public_foreground": null,
-    "public_background": null,
-    "public_note": null,
-    "auth_login_attempts": 25,
-    "auth_password_policy": "/^.{8,}$/",
-    "storage_asset_transform": "all",
-    "storage_asset_presets": [
-        {
-            "key": "800w",
-            "fit": "inside",
-            "width": 800,
-            "quality": 90,
-            "withoutEnlargement": true,
-            "format": "webp",
-            "transforms": [],
-            "height": null
-        },
-        {
-            "key": "1200w",
-            "fit": "inside",
-            "width": 1200,
-            "quality": 90,
-            "withoutEnlargement": true,
-            "format": "webp",
-            "transforms": []
-        }
-    ],
-    "custom_css": null,
-    "storage_default_folder": null,
-    "basemaps": null,
-    "mapbox_key": null,
-    "module_bar": [
-        {
-            "type": "module",
-            "id": "content",
-            "enabled": true
-        },
-        {
-            "type": "module",
-            "id": "users",
-            "enabled": true
-        },
-        {
-            "type": "module",
-            "id": "files",
-            "enabled": true
-        },
-        {
-            "type": "module",
-            "id": "insights",
-            "enabled": true
-        },
-        {
-            "type": "link",
-            "id": "docs",
-            "name": "Directus Docs",
-            "url": "https://docs.directus.io",
-            "icon": "help_outline",
-            "enabled": true
-        },
-        {
-            "type": "module",
-            "id": "settings",
-            "enabled": true,
-            "locked": true
-        },
-        {
-            "type": "module",
-            "id": "global-search",
-            "enabled": true
-        }
-    ],
-    "project_descriptor": null,
-    "default_language": "en-US",
-    "custom_aspect_ratios": null,
-    "public_favicon": null,
-    "default_appearance": "auto",
-    "default_theme_light": "Directus Default",
-    "theme_light_overrides": null,
-    "default_theme_dark": null,
-    "theme_dark_overrides": {},
-    "report_error_url": null,
-    "report_bug_url": null,
-    "report_feature_url": null,
-    "public_registration": false,
-    "public_registration_verify_email": true,
-    "public_registration_role": null,
-    "public_registration_email_filter": null,
-    "command_palette_settings": {
-        "searchMode": "as_you_type",
-        "collections": [
-            {
-                "collection": "pages",
-                "displayTemplate": "{{title}}",
-                "descriptionField": "permalink",
-                "fields": ["title", "permalink"],
-                "limit": 10,
-                "availableGlobally": false
-            },
-            {
-                "collection": "posts",
-                "displayTemplate": "{{title}}",
-                "descriptionField": "description",
-                "fields": ["title", "description"],
-                "limit": 10,
-                "availableGlobally": true
-            },
-            {
-                "collection": "forms",
-                "displayTemplate": "{{title}}",
-                "descriptionField": null,
-                "fields": ["values.field_name", "title"],
-                "limit": 10,
-                "availableGlobally": false
-            }
-        ],
-        "triggerRate": 250,
-        "commandPaletteEnabled": true
-    }
+	"id": 1,
+	"project_name": "Simple Website CMS",
+	"project_url": null,
+	"project_color": "#0757FF",
+	"project_logo": null,
+	"public_foreground": null,
+	"public_background": null,
+	"public_note": null,
+	"auth_login_attempts": 25,
+	"auth_password_policy": "/^.{8,}$/",
+	"storage_asset_transform": "all",
+	"storage_asset_presets": [
+		{
+			"key": "800w",
+			"fit": "inside",
+			"width": 800,
+			"quality": 90,
+			"withoutEnlargement": true,
+			"format": "webp",
+			"transforms": [],
+			"height": null
+		},
+		{
+			"key": "1200w",
+			"fit": "inside",
+			"width": 1200,
+			"quality": 90,
+			"withoutEnlargement": true,
+			"format": "webp",
+			"transforms": []
+		}
+	],
+	"custom_css": null,
+	"storage_default_folder": null,
+	"basemaps": null,
+	"mapbox_key": null,
+	"module_bar": [
+		{
+			"type": "module",
+			"id": "content",
+			"enabled": true
+		},
+		{
+			"type": "module",
+			"id": "visual",
+			"enabled": true
+		},
+		{
+			"type": "module",
+			"id": "users",
+			"enabled": true
+		},
+		{
+			"type": "module",
+			"id": "files",
+			"enabled": true
+		},
+		{
+			"type": "module",
+			"id": "insights",
+			"enabled": true
+		},
+		{
+			"type": "link",
+			"id": "docs",
+			"name": "Directus Docs",
+			"url": "https://docs.directus.io",
+			"icon": "help_outline",
+			"enabled": true
+		},
+		{
+			"type": "module",
+			"id": "settings",
+			"enabled": true,
+			"locked": true
+		}
+	],
+	"project_descriptor": null,
+	"default_language": "en-US",
+	"custom_aspect_ratios": null,
+	"public_favicon": null,
+	"default_appearance": "auto",
+	"default_theme_light": "Directus Default",
+	"theme_light_overrides": null,
+	"default_theme_dark": null,
+	"theme_dark_overrides": {},
+	"report_error_url": null,
+	"report_bug_url": null,
+	"report_feature_url": null,
+	"public_registration": false,
+	"public_registration_verify_email": true,
+	"public_registration_role": null,
+	"public_registration_email_filter": null,
+	"command_palette_settings": {
+		"searchMode": "as_you_type",
+		"collections": [
+			{
+				"collection": "pages",
+				"displayTemplate": "{{title}}",
+				"descriptionField": "permalink",
+				"fields": ["title", "permalink"],
+				"limit": 10,
+				"availableGlobally": false
+			},
+			{
+				"collection": "posts",
+				"displayTemplate": "{{title}}",
+				"descriptionField": "description",
+				"fields": ["title", "description"],
+				"limit": 10,
+				"availableGlobally": true
+			},
+			{
+				"collection": "forms",
+				"displayTemplate": "{{title}}",
+				"descriptionField": null,
+				"fields": ["values.field_name", "title"],
+				"limit": 10,
+				"availableGlobally": false
+			}
+		],
+		"triggerRate": 250,
+		"commandPaletteEnabled": true
+	}
 }
