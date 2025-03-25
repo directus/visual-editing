@@ -9,8 +9,9 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 
 ## Setup Instructions
 
-While you can also set up the Visual Editing test website with a Directus instance running in a docker container, this
-guide describes setting up a development environment using the official Directus repository.
+While you can also set up the Visual Editing test website with a Directus instance running in a
+[Docker](https://directus.io/docs/getting-started/create-a-project#docker-installation) container, this guide describes
+setting up a development environment using the official Directus repository.
 
 ### Set up your Directus Dev Instance
 
