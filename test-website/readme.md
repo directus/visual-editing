@@ -133,7 +133,7 @@ pnpm visual-editing:ssg # http://localhost:3000/blog/why-steampunk-rabbits-are-t
 
 ### Rendering modes:
 
-- Monolith / server only rendering: use as with php
+- Monolith / server only rendering: use as with PHP
 - SSG: live data only on hydration
 - SSR: always with live data
 - Dev mode: if you want to play around
