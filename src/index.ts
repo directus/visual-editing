@@ -4,8 +4,6 @@ import { EditableStore } from './lib/editable-store.ts';
 import { OverlayManager } from './lib/overlay-manager.ts';
 import type { EditConfig, EditableElementOptions } from './lib/types/index.ts';
 
-const directusFrame = new DirectusFrame();
-
 export async function apply({
 	directusUrl,
 	elements = undefined,
@@ -15,6 +13,7 @@ export async function apply({
 	directusUrl: string;
 	elements?: HTMLElement | HTMLElement[] | null;
 } & EditableElementOptions) {
+	const directusFrame = new DirectusFrame();
 	const connected = directusFrame.connect(directusUrl);
 	if (!connected) return;
 
