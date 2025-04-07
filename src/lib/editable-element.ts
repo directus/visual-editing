@@ -1,5 +1,6 @@
 import observeRect from '@reach/observe-rect';
 import { DirectusFrame } from './directus-frame.ts';
+import { EditableStore } from './editable-store.ts';
 import { OverlayElement } from './overlay-element.ts';
 import type { EditConfig, EditConfigStrict, EditableElementOptions } from './types/index.ts';
 
@@ -122,8 +123,21 @@ export class EditableElement {
 
 	private toggleItemHover(hover: boolean, event: MouseEvent) {
 		if (this.element !== event.currentTarget || this.hover === hover) return;
+
 		this.hover = hover;
+		this.setParentsHover();
 		this.overlayElement.toggleHover(hover);
+	}
+
+	private setParentsHover() {
+		const hoveredItems = EditableStore.getHoveredItems();
+
+		hoveredItems.forEach((element) => {
+			const otherElements = hoveredItems.filter((item) => item.element !== element.element);
+			const isParentElement = otherElements.some((el) => element.element.contains(el.element));
+
+			element.overlayElement.toggleParentHover(isParentElement);
+		});
 	}
 
 	private onObserveRect(rect: DOMRect) {
