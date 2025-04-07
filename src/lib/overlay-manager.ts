@@ -4,6 +4,7 @@ export class OverlayManager {
 	private static readonly CSS_VAR_BORDER_WIDTH = '--directus-visual-editing--rect--border-width';
 	private static readonly CSS_VAR_BORDER_COLOR = '--directus-visual-editing--rect--border-color';
 	private static readonly CSS_VAR_BORDER_RADIUS = '--directus-visual-editing--rect--border-radius';
+	private static readonly CSS_VAR_HOVER_OPACITY = '--directus-visual-editing--rect-hover--opacity';
 	private static readonly CSS_VAR_HIGHLIGHT_OPACITY = '--directus-visual-editing--rect-highlight--opacity';
 	private static readonly CSS_VAR_BUTTON_WIDTH = '--directus-visual-editing--edit-btn--width';
 	private static readonly CSS_VAR_BUTTON_HEIGHT = '--directus-visual-editing--edit-btn--height';
@@ -21,6 +22,7 @@ export class OverlayManager {
 	static readonly CONTAINER_RECT_CLASS_NAME = 'directus-visual-editing-overlay';
 	static readonly RECT_CLASS_NAME = 'directus-visual-editing-rect';
 	static readonly RECT_HIGHLIGHT_CLASS_NAME = 'directus-visual-editing-rect-highlight';
+	static readonly RECT_PARENT_HOVER_CLASS_NAME = 'directus-visual-editing-rect-parent-hover';
 	static readonly RECT_HOVER_CLASS_NAME = 'directus-visual-editing-rect-hover';
 	static readonly RECT_INNER_CLASS_NAME = 'directus-visual-editing-rect-inner';
 	static readonly RECT_EDIT_BUTTON_CLASS_NAME = 'directus-visual-editing-edit-button';
@@ -75,11 +77,18 @@ export class OverlayManager {
 					border-radius: var(${OverlayManager.CSS_VAR_BORDER_RADIUS}, 6px);
 					opacity: 0;
 				}
+				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
+					--hover-opacity: var(${OverlayManager.CSS_VAR_HOVER_OPACITY}, 0.333);
+					opacity: var(--hover-opacity);
+				}
+				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
+					opacity: calc(var(--hover-opacity) / 3);
+				}
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} {
 					pointer-events: all;
 					cursor: pointer;
 				}
-				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
+				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME}  {
 					opacity: var(${OverlayManager.CSS_VAR_HIGHLIGHT_OPACITY}, 0.333);
 				}
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:visited,
@@ -106,7 +115,7 @@ export class OverlayManager {
 					opacity: 0;
 				}
 				.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover,
-				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME} .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME},
+				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME}:not(.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME}) .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME},
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
 					opacity: 1;
 				}

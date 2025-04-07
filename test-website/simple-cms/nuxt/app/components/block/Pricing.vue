@@ -29,14 +29,17 @@ defineProps<PricingProps>();
 
 <template>
 	<section>
-		<div
-			v-if="data.tagline || data.headline"
-			:data-directus="
-				setAttr({ collection: 'block_pricing', item: data.id, fields: ['tagline', 'headline'], mode: 'popover' })
-			"
-		>
-			<Tagline v-if="data.tagline" :tagline="data.tagline" />
-			<Headline v-if="data.headline" :headline="data.headline" />
+		<div v-if="data.tagline || data.headline">
+			<Tagline
+				v-if="data.tagline"
+				:tagline="data.tagline"
+				:data-directus="setAttr({ collection: 'block_pricing', item: data.id, fields: 'tagline', mode: 'popover' })"
+			/>
+			<Headline
+				v-if="data.headline"
+				:headline="data.headline"
+				:data-directus="setAttr({ collection: 'block_pricing', item: data.id, fields: 'headline', mode: 'popover' })"
+			/>
 		</div>
 
 		<div

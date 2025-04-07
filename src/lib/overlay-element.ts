@@ -79,6 +79,11 @@ export class OverlayElement {
 		else this.element.classList.remove(OverlayManager.RECT_HOVER_CLASS_NAME);
 	}
 
+	toggleParentHover(hover: boolean) {
+		if (hover) this.element.classList.add(OverlayManager.RECT_PARENT_HOVER_CLASS_NAME);
+		else this.element.classList.remove(OverlayManager.RECT_PARENT_HOVER_CLASS_NAME);
+	}
+
 	toggleHighlight(show: boolean) {
 		if (show) this.element.classList.add(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME);
 		else this.element.classList.remove(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME);
