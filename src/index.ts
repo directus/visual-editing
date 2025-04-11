@@ -2,6 +2,7 @@ import { DirectusFrame } from './lib/directus-frame.ts';
 import { EditableElement } from './lib/editable-element.ts';
 import { EditableStore } from './lib/editable-store.ts';
 import { OverlayManager } from './lib/overlay-manager.ts';
+import { PageManager } from './lib/page-manager.ts';
 import type { EditConfig, EditableElementOptions } from './lib/types/index.ts';
 
 export async function apply({
@@ -20,6 +21,7 @@ export async function apply({
 	const confirmed = await directusFrame.receiveConfirm();
 	if (!confirmed) return;
 
+	PageManager.onNavigation((data) => directusFrame.send('navigation', data));
 	OverlayManager.addStyles();
 
 	const editableElements = EditableElement.query(elements);

@@ -18,6 +18,6 @@ export type SavedData = {
 	payload: Record<string, any>;
 };
 
-export type ReceiveAction = 'connect' | 'edit';
+export type ReceiveAction = 'connect' | 'edit' | 'navigation';
 
 export type SendAction = 'confirm' | 'showEditableElements' | 'saved';
