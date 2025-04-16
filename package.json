@@ -2,13 +2,35 @@
 	"name": "@directus/visual-editing",
 	"version": "1.0.1",
 	"description": "Visual editing library to enable in-place editing of your website’s frontend from within the Visual Editor in Directus",
-	"homepage": "https://directus.io",
+	"homepage": "https://directus.io/docs/guides/content/visual-editor",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/directus/visual-editing.git"
 	},
 	"funding": "https://github.com/directus/directus?sponsor=1",
 	"license": "MIT",
+	"keywords": [
+		"visual-editing",
+		"visual-editor",
+		"content-editing-experience",
+		"in-place-editing",
+		"in-place-editor",
+		"frontend-editing",
+		"frontend-editor",
+		"content-editing",
+		"content-editor",
+		"live-editing",
+		"live-editor",
+		"directus",
+		"in-place",
+		"frontend",
+		"overlays",
+		"preview",
+		"editing",
+		"editor",
+		"iframe",
+		"cms"
+	],
 	"type": "module",
 	"exports": {
 		".": {
