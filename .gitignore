@@ -35,6 +35,5 @@ debug
 # Temporary files
 TODO
 
-# Ignore dist folder but include the global IIFE
-dist/*
-!dist/visual-editing.js
+# dist folder
+dist/

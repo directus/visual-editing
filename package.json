@@ -13,7 +13,8 @@
 	"exports": {
 		".": {
 			"import": "./dist/index.js",
-			"require": "./dist/index.cjs"
+			"require": "./dist/index.cjs",
+			"default": "./dist/visual-editing.js"
 		},
 		"./package.json": "./package.json"
 	},
