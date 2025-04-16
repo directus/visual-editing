@@ -1,0 +1,18 @@
+name: Feature Request
+description: Create a feature request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hi, thank you for taking the time to create a feature request! Before you get started, please ensure the following are correct:
+
+        - I'm using the [latest version of the Visual Editing library](https://github.com/directus/visual-editing/releases)
+        - I'm using the [latest version of Directus](https://github.com/directus/directus/releases)
+        - There's [no other issue](https://github.com/directus/visual-editing/issues?q=is%3Aissue) that already describes the feature.
+
+  - type: textarea
+    attributes:
+      label: Describe the Feature
+      description: A clear and concise description of what the feature is.
+    validations:
+      required: true
