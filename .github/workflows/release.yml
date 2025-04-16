@@ -1,0 +1,111 @@
+# Based on https://github.com/directus/eslint-config/blob/main/.github/workflows/release.yml
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: SemVer for the release, for example "1.0.0"
+        required: true
+        type: string
+
+jobs:
+  check-version:
+    name: Check Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.release }}
+      is-prerelease: ${{ steps.version.outputs.prerelease && true || false }}
+    steps:
+      - name: Check version
+        uses: madhead/semver-utils@v4
+        id: version
+        with:
+          version: ${{ inputs.version }}
+          lenient: false
+
+  create-version:
+    name: Create Version
+    needs: check-version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup env
+        uses: ./.github/actions/setup
+
+      - name: Bump version
+        run: pnpm version --no-git-tag-version '${{ needs.check-version.outputs.version }}'
+
+      - name: Create version commit & tag
+        run: |
+          author='${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>'
+          version='v${{ needs.check-version.outputs.version }}'
+          branch='${{ github.ref }}'
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git commit --all --author "$author" --message "$version"
+
+          git tag --annotate "$version" --message "$version"
+
+          git push --atomic origin "$branch" "refs/tags/${version}"
+
+  create-release:
+    name: Create Release
+    needs:
+      - check-version
+      - create-version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create \
+            'v${{ needs.check-version.outputs.version }}' \
+            --verify-tag \
+            --generate-notes \
+            ${{ needs.check-version.outputs.is-prerelease == 'true' && '--prerelease' || '' }}
+
+  publish-npm:
+    name: Publish to NPM
+    needs:
+      - check-version
+      - create-version
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/v${{ needs.check-version.outputs.version }}
+
+      - name: Setup env
+        uses: ./.github/actions/setup
+        with:
+          registry: https://registry.npmjs.org
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          pnpm publish \
+            --access=public \
+            --no-git-checks \
+            --tag ${{ needs.check-version.outputs.is-prerelease == 'true' && 'canary'  || 'latest' }}
