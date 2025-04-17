@@ -25,11 +25,18 @@
 					border-radius: var(${t.CSS_VAR_BORDER_RADIUS}, 6px);
 					opacity: 0;
 				}
+				.${t.RECT_CLASS_NAME}.${t.RECT_HOVER_CLASS_NAME} .${t.RECT_INNER_CLASS_NAME} {
+					--hover-opacity: var(${t.CSS_VAR_HOVER_OPACITY}, 0.333);
+					opacity: var(--hover-opacity);
+				}
+				.${t.RECT_CLASS_NAME}.${t.RECT_PARENT_HOVER_CLASS_NAME} .${t.RECT_INNER_CLASS_NAME} {
+					opacity: calc(var(--hover-opacity) / 3);
+				}
 				.${t.RECT_HIGHLIGHT_CLASS_NAME} {
 					pointer-events: all;
 					cursor: pointer;
 				}
-				.${t.RECT_HIGHLIGHT_CLASS_NAME} .${t.RECT_INNER_CLASS_NAME} {
+				.${t.RECT_HIGHLIGHT_CLASS_NAME} .${t.RECT_INNER_CLASS_NAME}  {
 					opacity: var(${t.CSS_VAR_HIGHLIGHT_OPACITY}, 0.333);
 				}
 				.${t.RECT_EDIT_BUTTON_CLASS_NAME}:visited,
@@ -45,8 +52,8 @@
 					top: calc(-1 * ${r} + ${s} / 2);
 					left: calc(-1 * ${r} + ${s} / 2);
 					transform: translate(-50%, -50%);
-					width: var(${t.CSS_VAR_BUTTON_WIDTH}, ${n}px);
-					height: var(${t.CSS_VAR_BUTTON_HEIGHT}, ${n}px);
+					width: var(${t.CSS_VAR_BUTTON_WIDTH}, ${r}px);
+					height: var(${t.CSS_VAR_BUTTON_HEIGHT}, ${r}px);
 					border-radius: var(${t.CSS_VAR_BUTTON_RADIUS}, 50%);
 					background-color: var(${t.CSS_VAR_BUTTON_BG_COLOR}, #6644ff);
 					background-image: var(${t.CSS_VAR_BUTTON_ICON_BG_IMAGE}, ${t.ICON_EDIT});
@@ -56,7 +63,7 @@
 					opacity: 0;
 				}
 				.${t.RECT_EDIT_BUTTON_CLASS_NAME}:hover,
-				.${t.RECT_CLASS_NAME}.${t.RECT_HOVER_CLASS_NAME} .${t.RECT_EDIT_BUTTON_CLASS_NAME},
+				.${t.RECT_CLASS_NAME}.${t.RECT_HOVER_CLASS_NAME}:not(.${t.RECT_PARENT_HOVER_CLASS_NAME}) .${t.RECT_EDIT_BUTTON_CLASS_NAME},
 				.${t.RECT_HIGHLIGHT_CLASS_NAME}:hover .${t.RECT_EDIT_BUTTON_CLASS_NAME} {
 					opacity: 1;
 				}
