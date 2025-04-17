@@ -132,11 +132,11 @@ export class EditableElement {
 	private setParentsHover() {
 		const hoveredItems = EditableStore.getHoveredItems();
 
-		hoveredItems.forEach((element) => {
-			const otherElements = hoveredItems.filter((item) => item.element !== element.element);
-			const isParentElement = otherElements.some((el) => element.element.contains(el.element));
+		hoveredItems.forEach((hoveredItem) => {
+			const otherElements = hoveredItems.filter((item) => item.element !== hoveredItem.element);
+			const isParentElement = otherElements.some((el) => hoveredItem.element.contains(el.element));
 
-			element.overlayElement.toggleParentHover(isParentElement);
+			hoveredItem.overlayElement.toggleParentHover(isParentElement);
 		});
 	}
 
