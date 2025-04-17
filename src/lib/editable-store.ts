@@ -12,6 +12,10 @@ export class EditableStore {
 		return EditableStore.items.find((item) => item.key === key);
 	}
 
+	static getHoveredItems() {
+		return EditableStore.items.filter((item) => item.hover);
+	}
+
 	static addItem(item: EditableElement) {
 		EditableStore.items.push(item);
 	}
