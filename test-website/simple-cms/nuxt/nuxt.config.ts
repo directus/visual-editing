@@ -31,11 +31,11 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		public: {
-			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-			directusUrl: process.env.DIRECTUS_URL,
-			dontDoThisInProductionToken: process.env.DIRECTUS_SERVER_TOKEN,
+			siteUrl: import.meta.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+			directusUrl: import.meta.env.DIRECTUS_URL,
+			dontDoThisInProductionToken: import.meta.env.DIRECTUS_SERVER_TOKEN,
 		},
-		directusServerToken: process.env.DIRECTUS_SERVER_TOKEN,
+		directusServerToken: import.meta.env.DIRECTUS_SERVER_TOKEN,
 	},
 
 	shadcn: {
@@ -54,9 +54,9 @@ export default defineNuxtConfig({
 		headers: {
 			contentSecurityPolicy: {
 				'img-src': ["'self'", 'data:', '*'],
-				'script-src': ["'self'", "'unsafe-inline'", '*'],
-				'connect-src': ["'self'", process.env.DIRECTUS_URL!],
-				'frame-ancestors': ["'self'", process.env.DIRECTUS_URL!],
+				'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", '*'],
+				'connect-src': ["'self'", import.meta.env.DIRECTUS_URL],
+				'frame-ancestors': ["'self'", import.meta.env.DIRECTUS_URL],
 			},
 		},
 	},

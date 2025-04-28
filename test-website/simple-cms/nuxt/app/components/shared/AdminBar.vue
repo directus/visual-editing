@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { useRuntimeConfig } from '#app';
+import { useRuntimeConfig, useNuxtApp } from '#app';
+import { readMe } from '@directus/sdk';
 import directusLogo from '~/assets/images/directus-logo-white.svg';
 
 const props = defineProps({
@@ -29,10 +30,12 @@ const editUrl = computed(() =>
 const newUrl = computed(() => `${directusUrl}/admin/content/${props.type === 'post' ? 'posts' : 'pages'}/+`);
 
 const isAuthenticated = ref(false);
-const authError = ref(false);
+const authError = ref(false); // Re-add authError ref
 const isDirectusPreview = ref(false);
 
 onMounted(async () => {
+	const { $directus } = useNuxtApp();
+
 	try {
 		const urlParams = new URLSearchParams(window.location.search);
 
@@ -41,10 +44,13 @@ onMounted(async () => {
 			return;
 		}
 
-		const { isAuthenticated: authStatus } = await $fetch('/api/users/authenticated-user');
-		isAuthenticated.value = authStatus;
+		// Attempt to fetch minimal user data to check authentication
+		await $directus.request(readMe({ fields: ['id', 'role'] }));
+		isAuthenticated.value = true;
 	} catch {
-		authError.value = true;
+		// If readMe fails, the user is likely not authenticated via the SDK token
+		isAuthenticated.value = false;
+		authError.value = true; // Set authError to true on failure
 	}
 });
 </script>

@@ -1,15 +1,10 @@
 <script setup>
-import { useAsyncData } from '#app';
+import { useAsyncData, refreshNuxtData } from '#app';
 import { computed, watch } from 'vue';
 import { readItem, readSingleton } from '@directus/sdk';
 import { apply, remove } from '@directus/visual-editing';
 
-const {
-	data: siteData,
-	error: siteError,
-	status,
-	refresh,
-} = await useAsyncData('site-data', async () => {
+const { data: siteData, refresh } = await useAsyncData('site-data', async () => {
 	const { $directus } = useNuxtApp();
 
 	try {
@@ -77,7 +72,7 @@ const {
 
 		return { globals, headerNavigation, footerNavigation };
 	} catch {
-		throw createError({ statusCode: 500, statusMessage: 'Internal Server Error' });
+		throw createError({ statusCode: 500, statusMessage: 'Internal Server Error. Cannot load site-data.' });
 	}
 });
 
@@ -96,13 +91,18 @@ const fallbackSiteData = {
 
 const finalSiteData = computed(() => siteData.value || fallbackSiteData);
 
+const runtimeConfig = useRuntimeConfig();
+const directusUrl = runtimeConfig.public.directusUrl;
+
 const headerNavigation = computed(() => finalSiteData.value?.headerNavigation || { items: [] });
 const footerNavigation = computed(() => finalSiteData.value?.footerNavigation || { items: [] });
 const globals = computed(() => finalSiteData.value?.globals || fallbackSiteData.globals);
 
 const siteTitle = computed(() => globals.value?.title || 'Simple CMS');
 const siteDescription = computed(() => globals.value?.description || '');
-const faviconURL = computed(() => (globals.value?.favicon ? `/assets/${globals.value.favicon}` : '/favicon.ico'));
+const faviconURL = computed(() =>
+	globals.value?.favicon ? `${directusUrl}/assets/${globals.value.favicon}` : '/favicon.ico',
+);
 
 const updateAccentColor = () => {
 	if (import.meta.client) {
@@ -152,19 +152,9 @@ provide('refreshSiteData', refresh);
 
 <template>
 	<div>
-		<div v-if="siteError">
-			<p>Failed to load site data. Please try again later.</p>
-		</div>
-
-		<div v-else-if="status === 'pending'">
-			<p>Loading...</p>
-		</div>
-
-		<div v-else>
-			<NavigationBar v-if="headerNavigation" :navigation="headerNavigation" :globals="globals" />
-			<NuxtPage />
-			<Footer v-if="footerNavigation" :navigation="footerNavigation" :globals="globals" />
-		</div>
+		<NavigationBar v-if="headerNavigation" :navigation="headerNavigation" :globals="globals" />
+		<NuxtPage />
+		<Footer v-if="footerNavigation" :navigation="footerNavigation" :globals="globals" />
 	</div>
 </template>
 

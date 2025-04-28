@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
+import { useNuxtApp } from '#app';
 import { useDebounceFn } from '@vueuse/core';
 import { Search } from 'lucide-vue-next';
+import { readItems } from '@directus/sdk';
+import type { Page, Post } from '~~/shared/types/schema'; // Assuming types are here
 
 type SearchResult = {
 	id: string;
@@ -18,6 +21,7 @@ const results = ref<SearchResult[]>([]);
 const loading = ref(false);
 const searched = ref(false);
 const router = useRouter();
+const { $directus } = useNuxtApp();
 
 const fetchResults = async (search: string) => {
 	if (search.length < 3) {
@@ -30,13 +34,63 @@ const fetchResults = async (search: string) => {
 	searched.value = true;
 
 	try {
-		const data = await $fetch<SearchResult[]>('/api/search', {
-			params: { search },
-		});
+		// Explicitly type the results from Promise.all
+		const [pages, posts] = (await Promise.all([
+			$directus.request(
+				readItems('pages', {
+					filter: {
+						_or: [
+							{ title: { _contains: search } },
+							{ description: { _contains: search } },
+							{ permalink: { _contains: search } },
+						],
+					},
+					fields: ['id', 'title', 'description', 'permalink'],
+				}),
+			),
+			$directus.request(
+				readItems('posts', {
+					filter: {
+						_and: [
+							{ status: { _eq: 'published' } }, // Ensure only published posts are searched client-side
+							{
+								_or: [
+									{ title: { _contains: search } },
+									{ description: { _contains: search } },
+									{ slug: { _contains: search } },
+									{ content: { _contains: search } },
+								],
+							},
+						],
+					},
+					fields: ['id', 'title', 'description', 'slug', 'content', 'status'],
+				}),
+			),
+		])) as [Page[], Post[]]; // Assert the types here
 
-		results.value = [...data];
+		const combinedResults: SearchResult[] = [
+			...pages.map((page) => ({
+				id: page.id,
+				title: page.title ?? '',
+				description: page.description ?? '',
+				type: 'Page',
+				link: `/${page.permalink?.replace(/^\/+/, '') ?? ''}`,
+				content: '', // Pages don't have searchable content field here
+			})),
+			...posts.map((post) => ({
+				id: post.id,
+				title: post.title ?? '',
+				description: post.description ?? '',
+				type: 'Post',
+				link: `/blog/${post.slug ?? ''}`,
+				content: post.content ?? '',
+			})),
+		];
+
+		results.value = combinedResults;
 		await nextTick();
-	} catch {
+	} catch (error) {
+		console.error('Search failed:', error); // Log error for debugging
 		results.value = [];
 	} finally {
 		loading.value = false;

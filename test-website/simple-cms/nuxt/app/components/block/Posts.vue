@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useRoute, useRouter, useAsyncData } from 'nuxt/app';
+import { useRoute, useRouter, useAsyncData, useNuxtApp } from 'nuxt/app';
 import { ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { apply, setAttr } from '@directus/visual-editing';
+import { readItems } from '@directus/sdk';
 
 interface Post {
 	id: string;
@@ -25,22 +26,49 @@ const props = defineProps<PostsProps>();
 
 const route = useRoute();
 const router = useRouter();
+const { $directus } = useNuxtApp();
 
 const perPage = props.data.limit || 6;
 const currentPage = ref(Number(route.query.page) || 1);
 
-const { data: totalPagesData, refresh: totalPagesRefresh } = await useAsyncData('posts-total-pages', () =>
-	$fetch<{ total: number }>('/api/posts/count'),
-);
+const { data: totalPagesData, refresh: totalPagesRefresh } = await useAsyncData('posts-total-pages', async () => {
+	try {
+		const response = await $directus.request(
+			readItems('posts', {
+				aggregate: { count: '*' },
+				filter: { status: { _eq: 'published' } },
+			}),
+		);
+		return { total: Number(response[0]?.count) || 0 };
+	} catch (err) {
+		// console.error('Failed to fetch total post count:', err);
+		throw createError({ statusCode: 500, message: 'Failed to fetch total post count' + err });
+	}
+});
 const totalPages = computed(() => Math.ceil((totalPagesData.value?.total || 0) / perPage));
 
 const {
 	data: paginatedPosts,
 	error: fetchError,
 	refresh: postsRefresh,
-} = await useAsyncData(
+} = await useAsyncData<Post[]>(
 	'paginated-posts',
-	() => $fetch<Post[]>('/api/posts', { query: { page: currentPage.value, limit: perPage } }),
+	async () => {
+		try {
+			return await $directus.request<Post[]>(
+				readItems('posts', {
+					limit: perPage,
+					page: currentPage.value,
+					sort: ['-published_at'],
+					fields: ['id', 'title', 'description', 'slug', 'image'],
+					filter: { status: { _eq: 'published' } },
+				}),
+			);
+		} catch (err) {
+			// console.error('Failed to fetch paginated posts:', err);
+			throw createError({ statusCode: 500, message: 'Failed to fetch paginated posts' + err });
+		}
+	},
 	{ watch: [currentPage] },
 );
 

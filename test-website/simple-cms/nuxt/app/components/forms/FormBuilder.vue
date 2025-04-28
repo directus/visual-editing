@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useNuxtApp } from '#app';
+import { uploadFiles, createItem } from '@directus/sdk';
 import DynamicForm from './DynamicForm.vue';
 import type { FormField } from '@@/shared/types/schema';
 import { CheckCircle } from 'lucide-vue-next';
+
+interface SubmissionValue {
+	field: string;
+	value?: string;
+	file?: string;
+}
 
 interface CustomFormData {
 	id: string;
@@ -26,37 +34,72 @@ const error = ref<string | null>(null);
 
 const handleSubmit = async (data: Record<string, any>) => {
 	error.value = null;
+	const { $directus } = useNuxtApp();
+
 	try {
-		const fieldsWithNames = props.form.fields.map((field) => ({
-			id: field.id,
-			name: field.name || '',
-			type: field.type || '',
-		}));
+		const uploadedFileIds: Record<string, string> = {};
+		const submissionValues: SubmissionValue[] = [];
 
-		const formData = new FormData();
-		formData.append('formId', props.form.id);
-		formData.append('fields', JSON.stringify(fieldsWithNames));
-
+		// 1. Upload files first
 		for (const key in data) {
 			if (data[key] instanceof File) {
-				formData.append(key, data[key]);
-			} else {
-				formData.append(key, data[key]?.toString() || '');
+				const file = data[key] as File;
+				const fileFormData = new FormData();
+				fileFormData.append('file', file);
+
+				try {
+					const uploadedFile = await $directus.request(uploadFiles(fileFormData));
+
+					if (uploadedFile?.id) {
+						uploadedFileIds[key] = uploadedFile.id;
+					} else {
+						throw new Error(`Failed to upload file for field: ${key}`);
+					}
+				} catch (uploadError: any) {
+					throw new Error(`Failed to upload file for field: ${key}. Please try again.` + uploadError.message);
+				}
 			}
 		}
 
-		await $fetch('/api/forms/submit', {
-			method: 'POST',
-			body: formData,
-		});
+		// 2. Prepare submission values payload
+		for (const fieldDef of props.form.fields) {
+			const fieldName = fieldDef.name;
+			const fieldId = fieldDef.id;
 
+			if (!fieldName || !fieldId) continue; // Skip if name or id is missing
+
+			if (uploadedFileIds[fieldName]) {
+				// If it was an uploaded file
+				submissionValues.push({
+					field: fieldId,
+					file: uploadedFileIds[fieldName],
+				});
+			} else if (data[fieldName] !== undefined && data[fieldName] !== null) {
+				// If it's a regular value
+				submissionValues.push({
+					field: fieldId,
+					value: data[fieldName]?.toString(),
+				});
+			}
+			// Ignore fields not present in the data (e.g., might be conditional)
+		}
+
+		// 3. Create the submission item
+		const payload = {
+			form: props.form.id,
+			values: submissionValues,
+		};
+
+		await $directus.request(createItem('form_submissions', payload));
+
+		// 4. Handle success action
 		if (props.form.on_success === 'redirect' && props.form.success_redirect_url) {
 			window.location.href = props.form.success_redirect_url;
 		} else {
 			isSubmitted.value = true;
 		}
-	} catch {
-		error.value = 'Failed to submit the form. Please try again later.';
+	} catch (submissionError: any) {
+		error.value = submissionError?.message || 'Failed to submit the form. Please try again later.';
 	}
 };
 </script>
