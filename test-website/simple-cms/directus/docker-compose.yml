@@ -1,0 +1,34 @@
+services:
+  directus:
+    image: directus/directus:latest
+    ports:
+      - 8080:8055
+    volumes:
+      - ./database:/directus/database
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+      - ./templates:/directus/templates
+    environment:
+      SECRET: "replace-with-secure-random-value"
+      ADMIN_EMAIL: "admin@example.com"
+      ADMIN_PASSWORD: "d1r3ctu5"
+      
+      DB_CLIENT: "sqlite3"
+      DB_FILENAME: "/directus/database/data.db"
+      WEBSOCKETS_ENABLED: "true"
+
+      # Required for Visual Editor
+      CONTENT_SECURITY_POLICY_DIRECTIVES__FRAME_SRC: "http://localhost:*"
+      CACHE_ENABLED: true
+      CACHE_AUTO_PURGE: true
+      CACHE_TTL: 1d
+      CORS_ENABLED: true
+      CORS_ORIGIN: http://localhost:3000
+
+      # Make sure to set this in production
+      # (see https://docs.directus.io/self-hosted/config-options#general)
+      # PUBLIC_URL: "https://directus.example.com"
+
+    # Environment variables can also be defined in a file (for example `.env`):
+    # env_file:
+    #	  - .env

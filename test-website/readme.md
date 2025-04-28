@@ -10,10 +10,20 @@ This test website is based on the Simple CMS Starter Template of [@directus-labs
 ## Setup Instructions
 
 While you can also set up the Visual Editing test website with a Directus instance running in a
-[Docker](https://directus.io/docs/getting-started/create-a-project#docker-installation) container, this guide describes
-setting up a development environment using the official Directus repository.
+[Docker](https://directus.io/docs/getting-started/create-a-project#docker-installation) container, this guide describes setting up a development environment using the official Directus repository.
 
-### Set up your Directus Dev Instance
+### Set up Directus using docker compose
+1. Create the folders needed for the Docker container:
+   ```sh
+   cd ./test-website/simple-cms/directus
+   mkdir database/ extensions/ templates/ uploads/
+   ```
+2. Run `docker compose up` to start the Directus container.
+3. Login to Directus Studio [http://localhost:8080](http://localhost:8080) with the admin email and password ing `./simple-cms/directus/docker-compose.yml`, create a token for your user and have it ready to add to your `.env` file.
+
+> Note the file [`/simple-cms/directus/docker-compose.yml`](./simple-cms/directus/docker-compose.yml) contains the configuration described below.
+
+### Set up your Directus Dev Instance (if you are not using Docker)
 
 1.  Clone the official [Directus GitHub repository](https://github.com/directus/directus) and make sure you have the
     dependencies installed (`pnpm i`) and build everything (`pnpm build`)!
@@ -70,8 +80,7 @@ setting up a development environment using the official Directus repository.
    cd test-website/template && npm run setup-directus
    ```
 
-   On Windows, use the following command and make sure to replace `<directus-url>` with your Directus URL and
-   `<your-token>` with the token you generated earlier.
+   If the command above fails, or on Windows, use the following command and make sure to replace `<directus-url>` with your Directus URL and `<your-token>` with the token you generated earlier.
 
    ```sh
    cd test-website/template && npx directus-template-cli@latest apply -p --directusUrl=<directus-url> --templateLocation=. --templateType=local --directusToken=<your-token>
