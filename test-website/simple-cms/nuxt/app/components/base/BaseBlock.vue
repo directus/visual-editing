@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import Hero from '~/components/block/Hero.vue';
-import RichText from '~/components/block/RichText.vue';
-import Gallery from '~/components/block/Gallery.vue';
-import Pricing from '~/components/block/Pricing.vue';
-import Posts from '~/components/block/Posts.vue';
-import Form from '~/components/block/FormBlock.vue';
+import { defineAsyncComponent } from 'vue';
+
+// import using `defineAsyncComponent` to load components only when needed
+const Hero = defineAsyncComponent(() => import('~/components/block/Hero.vue'));
+const RichText = defineAsyncComponent(() => import('~/components/block/RichText.vue'));
+const Gallery = defineAsyncComponent(() => import('~/components/block/Gallery.vue'));
+const Pricing = defineAsyncComponent(() => import('~/components/block/Pricing.vue'));
+const Posts = defineAsyncComponent(() => import('~/components/block/Posts.vue'));
+const Form = defineAsyncComponent(() => import('~/components/block/FormBlock.vue'));
 
 interface BaseBlockProps {
 	block: {

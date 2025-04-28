@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
-import Input from '~/components/ui/input/Input.vue';
-import { Textarea } from '~/components/ui/textarea';
-import CheckboxField from './fields/CheckboxField.vue';
-import CheckboxGroupField from './fields/CheckboxGroupField.vue';
-import RadioGroupField from './fields/RadioGroupField.vue';
-import SelectField from './fields/SelectField.vue';
-import FileUploadField from './fields/FileUploadField.vue';
 import { Info } from 'lucide-vue-next';
 import type { FormField } from '../../../shared/types/schema';
+
+const Input = defineAsyncComponent(() => import('~/components/ui/input/Input.vue'));
+const Textarea = defineAsyncComponent(() => import('~/components/ui/textarea/Textarea.vue'));
+const CheckboxField = defineAsyncComponent(() => import('./fields/CheckboxField.vue'));
+const CheckboxGroupField = defineAsyncComponent(() => import('./fields/CheckboxGroupField.vue'));
+const RadioGroupField = defineAsyncComponent(() => import('./fields/RadioGroupField.vue'));
+const SelectField = defineAsyncComponent(() => import('./fields/SelectField.vue'));
+const FileUploadField = defineAsyncComponent(() => import('./fields/FileUploadField.vue'));
 
 const props = defineProps<{ field: FormField }>();
 const { value, errorMessage } = useField(props.field.name ?? '');
