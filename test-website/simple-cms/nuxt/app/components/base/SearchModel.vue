@@ -90,7 +90,6 @@ const fetchResults = async (search: string) => {
 		results.value = combinedResults;
 		await nextTick();
 	} catch (error) {
-		console.error('Search failed:', error); // Log error for debugging
 		results.value = [];
 	} finally {
 		loading.value = false;

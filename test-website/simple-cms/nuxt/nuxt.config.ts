@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { getSitemapUrls } from './shared/getSitemapUrls';
 
 export default defineNuxtConfig({
 	components: [
@@ -91,8 +92,26 @@ export default defineNuxtConfig({
 		propsDestructure: true,
 	},
 
-	sitemap: {
-		sources: ['/api/sitemap'],
+	// Add hooks for dynamic route generation
+	hooks: {
+		async 'nitro:config'(nitroConfig) {
+			// Ensure prerender routes array exists
+			nitroConfig.prerender = nitroConfig.prerender || {};
+			nitroConfig.prerender.routes = nitroConfig.prerender.routes || [];
+
+			// Fetch slugs from Directus only if generating static site
+			if (nitroConfig.static) {
+				const sitemap = await getSitemapUrls();
+				const routes = sitemap.map((entry) => entry.loc);
+				nitroConfig.prerender.routes.push(...routes);
+			}
+		},
+	},
+	// Do not crawl links in prerendered pages
+	nitro: {
+		prerender: {
+			crawlLinks: false,
+		},
 	},
 
 	compatibilityDate: '2025-01-16',
