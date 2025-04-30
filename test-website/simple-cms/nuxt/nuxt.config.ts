@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { getSitemapUrls } from './shared/getSitemapUrls';
 
 export default defineNuxtConfig({
 	components: [
@@ -31,11 +32,11 @@ export default defineNuxtConfig({
 
 	runtimeConfig: {
 		public: {
-			siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-			directusUrl: process.env.DIRECTUS_URL,
-			dontDoThisInProductionToken: process.env.DIRECTUS_SERVER_TOKEN,
+			siteUrl: import.meta.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+			directusUrl: import.meta.env.DIRECTUS_URL,
+			dontDoThisInProductionToken: import.meta.env.DIRECTUS_SERVER_TOKEN,
 		},
-		directusServerToken: process.env.DIRECTUS_SERVER_TOKEN,
+		directusServerToken: import.meta.env.DIRECTUS_SERVER_TOKEN,
 	},
 
 	shadcn: {
@@ -54,9 +55,9 @@ export default defineNuxtConfig({
 		headers: {
 			contentSecurityPolicy: {
 				'img-src': ["'self'", 'data:', '*'],
-				'script-src': ["'self'", "'unsafe-inline'", '*'],
-				'connect-src': ["'self'", process.env.DIRECTUS_URL!],
-				'frame-ancestors': ["'self'", process.env.DIRECTUS_URL!],
+				'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'", '*'],
+				'connect-src': ["'self'", import.meta.env.DIRECTUS_URL],
+				'frame-ancestors': ["'self'", import.meta.env.DIRECTUS_URL],
 			},
 		},
 	},
@@ -91,8 +92,26 @@ export default defineNuxtConfig({
 		propsDestructure: true,
 	},
 
-	sitemap: {
-		sources: ['/api/sitemap'],
+	// Add hooks for dynamic route generation
+	hooks: {
+		async 'nitro:config'(nitroConfig) {
+			// Ensure prerender routes array exists
+			nitroConfig.prerender = nitroConfig.prerender || {};
+			nitroConfig.prerender.routes = nitroConfig.prerender.routes || [];
+
+			// Fetch slugs from Directus only if generating static site
+			if (nitroConfig.static) {
+				const sitemap = await getSitemapUrls();
+				const routes = sitemap.map((entry) => entry.loc);
+				nitroConfig.prerender.routes.push(...routes);
+			}
+		},
+	},
+	// Do not crawl links in prerendered pages
+	nitro: {
+		prerender: {
+			crawlLinks: false,
+		},
 	},
 
 	compatibilityDate: '2025-01-16',

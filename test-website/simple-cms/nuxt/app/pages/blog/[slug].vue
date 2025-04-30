@@ -11,7 +11,7 @@ const slug = route.params.slug as string;
 
 const runtimeConfig = useRuntimeConfig();
 
-const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}`, async () => {
+const { data: post, refresh: refreshPost } = await useAsyncData<Post>(`posts-${slug}`, async () => {
 	try {
 		const { $directus } = useNuxtApp();
 
@@ -53,7 +53,7 @@ const { data: relatedPosts, refresh: relatedPostsRefresh } = await useAsyncData<
 );
 
 const authorId = computed(() => post.value?.author || null);
-const { data: author } = await useAsyncData<DirectusUser | null>(
+const { data: author, refresh: refreshAuthor } = await useAsyncData<DirectusUser | null>(
 	`posts-author-${authorId.value}`,
 	async () => {
 		const { $directus } = useNuxtApp();
@@ -130,9 +130,8 @@ useHead({
 		});
 	}
 
-	function refreshData() {
-		refresh();
-		relatedPostsRefresh();
+	async function refreshData() {
+		await Promise.all([refreshPost(), relatedPostsRefresh(), refreshAuthor()]);
 	}
 })();
 </script>

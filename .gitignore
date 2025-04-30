@@ -37,3 +37,9 @@ TODO
 
 # dist folder
 dist/
+
+# Directus Docker data directories
+test-website/simple-cms/directus/database
+test-website/simple-cms/directus/extensions
+test-website/simple-cms/directus/templates
+test-website/simple-cms/directus/uploads
