@@ -13,6 +13,20 @@ export class EditableStore {
 		return EditableStore.items.find((item) => item.key === key);
 	}
 
+	static getItemByEditConfig(collection: string, item: string | number, fields?: string[]) {
+		return EditableStore.items.find((i) => {
+			if (i.editConfig.collection !== collection) return false;
+			if (String(i.editConfig.item) !== String(item)) return false;
+
+			const itemFields = i.editConfig.fields ?? [];
+			const targetFields = fields ?? [];
+
+			if (itemFields.length !== targetFields.length) return false;
+
+			return itemFields.every((f) => targetFields.includes(f));
+		});
+	}
+
 	static getHoveredItems() {
 		return EditableStore.items.filter((item) => item.hover);
 	}
@@ -66,15 +80,31 @@ export class EditableStore {
 		});
 	}
 
-	static highlightElement(key: string | null) {
+	static highlightElement(
+		identifier: { key: string } | { collection: string; item: string | number; fields?: string[] } | null,
+	) {
 		if (this.highlightedKey !== null) {
 			EditableStore.getItemByKey(this.highlightedKey)?.overlayElement.toggleAiContext(false);
 		}
 
-		this.highlightedKey = key;
+		if (identifier === null) {
+			this.highlightedKey = null;
+			return;
+		}
 
-		if (key !== null) {
-			EditableStore.getItemByKey(key)?.overlayElement.toggleAiContext(true);
+		let element: EditableElement | undefined;
+
+		if ('key' in identifier) {
+			element = EditableStore.getItemByKey(identifier.key);
+		} else {
+			element = EditableStore.getItemByEditConfig(identifier.collection, identifier.item, identifier.fields);
+		}
+
+		if (element) {
+			this.highlightedKey = element.key;
+			element.overlayElement.toggleAiContext(true);
+		} else {
+			this.highlightedKey = null;
 		}
 	}
 

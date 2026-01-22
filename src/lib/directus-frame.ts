@@ -106,9 +106,19 @@ export class DirectusFrame {
 	}
 
 	private receiveHighlightElement(data: unknown) {
-		if (!data || typeof data !== 'object') return;
-		const { key } = data as HighlightElementData;
-		if (key !== null && typeof key !== 'string') return;
-		EditableStore.highlightElement(key);
+		if (!data || typeof data !== 'object') {
+			EditableStore.highlightElement(null);
+			return;
+		}
+
+		const { key, collection, item, fields } = data as HighlightElementData;
+
+		if (key === null) {
+			EditableStore.highlightElement(null);
+		} else if (collection && item !== undefined) {
+			EditableStore.highlightElement(fields ? { collection, item, fields } : { collection, item });
+		} else if (typeof key === 'string') {
+			EditableStore.highlightElement({ key });
+		}
 	}
 }
