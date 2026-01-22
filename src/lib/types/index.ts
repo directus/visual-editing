@@ -5,6 +5,7 @@ import type {
 	SavedData as DirectusSavedData,
 	AddToContextData as DirectusAddToContextData,
 	HighlightElementData as DirectusHighlightElementData,
+	ConfirmData as DirectusConfirmData,
 	Rect as DirectusRect,
 } from './directus.ts';
 
@@ -20,6 +21,7 @@ export type ReceiveData = { action: ReceiveAction | null; data: unknown };
 export type SavedData = DirectusSavedData;
 export type AddToContextData = DirectusAddToContextData;
 export type HighlightElementData = DirectusHighlightElementData;
+export type ConfirmData = DirectusConfirmData;
 export type Rect = DirectusRect;
 
 export type EditableElementOptions = {

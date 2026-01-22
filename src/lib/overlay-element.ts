@@ -1,19 +1,23 @@
 import { EditableStore } from './editable-store.ts';
 import { OverlayManager } from './overlay-manager.ts';
 
+export type OverlayElementOptions = {
+	aiEnabled?: boolean;
+};
+
 export class OverlayElement {
 	private hasNoDimensions: boolean = false;
 	private element: HTMLElement;
 	private container: HTMLElement;
 
 	readonly editButton: HTMLButtonElement;
-	readonly aiButton: HTMLButtonElement;
+	readonly aiButton: HTMLButtonElement | null;
 
-	constructor() {
+	constructor(options?: OverlayElementOptions) {
 		this.container = this.createContainer();
 		this.element = this.createElement();
 		this.editButton = this.createEditButton();
-		this.aiButton = this.createAiButton();
+		this.aiButton = options?.aiEnabled !== false ? this.createAiButton() : null;
 		this.createRectElement();
 
 		OverlayManager.getGlobalOverlay().appendChild(this.container);
