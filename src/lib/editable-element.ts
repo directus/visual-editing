@@ -2,7 +2,7 @@ import observeRect from '@reach/observe-rect';
 import { DirectusFrame } from './directus-frame.ts';
 import { EditableStore } from './editable-store.ts';
 import { OverlayElement } from './overlay-element.ts';
-import type { EditConfig, EditConfigStrict, EditableElementOptions } from './types/index.ts';
+import type { EditConfig, EditConfigStrict, EditableElementOptions, Rect } from './types/index.ts';
 
 export class EditableElement {
 	private static readonly DATASET = 'directus';
@@ -21,10 +21,15 @@ export class EditableElement {
 	disabled = false;
 	onSaved: EditableElementOptions['onSaved'] = undefined;
 
+	private boundMouseenter: (e: MouseEvent) => void;
+	private boundMouseleave: (e: MouseEvent) => void;
+
 	constructor(element: HTMLElement) {
 		this.element = element;
-		this.element.addEventListener('mouseover', this.onMouseenter.bind(this));
-		this.element.addEventListener('mouseleave', this.onMouseleave.bind(this));
+		this.boundMouseenter = this.onMouseenter.bind(this);
+		this.boundMouseleave = this.onMouseleave.bind(this);
+		this.element.addEventListener('mouseenter', this.boundMouseenter);
+		this.element.addEventListener('mouseleave', this.boundMouseleave);
 
 		this.key = crypto.randomUUID();
 		this.editConfig = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
@@ -33,6 +38,7 @@ export class EditableElement {
 		this.overlayElement = new OverlayElement();
 		this.overlayElement.updateRect(this.rect);
 		this.overlayElement.editButton.addEventListener('click', this.onClickEdit.bind(this));
+		this.overlayElement.aiButton.addEventListener('click', this.onClickAddToContext.bind(this));
 
 		// @ts-expect-error
 		this.rectObserver = observeRect(this.element, this.onObserveRect.bind(this));
@@ -105,12 +111,33 @@ export class EditableElement {
 	}
 
 	removeHoverListener() {
-		this.element.removeEventListener('mouseenter', this.onMouseenter.bind(this));
-		this.element.removeEventListener('mouseleave', this.onMouseleave.bind(this));
+		this.element.removeEventListener('mouseenter', this.boundMouseenter);
+		this.element.removeEventListener('mouseleave', this.boundMouseleave);
 	}
 
 	private onClickEdit() {
 		new DirectusFrame().send('edit', { key: this.key, editConfig: this.editConfig, rect: this.rect });
+	}
+
+	private onClickAddToContext(event: MouseEvent) {
+		event.stopPropagation();
+
+		const textContent = this.element.textContent?.trim().slice(0, 50) || '';
+		const displayValue = textContent || `${this.editConfig.collection} #${this.editConfig.item}`;
+
+		const rect: Rect = {
+			top: this.rect.top,
+			left: this.rect.left,
+			width: this.rect.width,
+			height: this.rect.height,
+		};
+
+		new DirectusFrame().send('add-to-context', {
+			key: this.key,
+			editConfig: this.editConfig,
+			displayValue,
+			rect,
+		});
 	}
 
 	private onMouseenter(event: MouseEvent) {

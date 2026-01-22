@@ -1,5 +1,5 @@
 import { EditableStore } from './editable-store.ts';
-import type { SendAction, ReceiveData, SavedData } from './types/index.ts';
+import type { SendAction, ReceiveData, SavedData, HighlightElementData } from './types/index.ts';
 
 /**
  * *Singleton* class to handle communication with Directus in parent frame.
@@ -44,13 +44,16 @@ export class DirectusFrame {
 	}
 
 	receive(event: MessageEvent) {
-		if (!this.origin || !this.sameOrigin(event.origin, this.origin)) return;
+		if (!this.origin || !this.sameOrigin(event.origin, this.origin)) {
+			return;
+		}
 
 		const { action, data }: ReceiveData = event.data;
 
 		if (action === 'confirm') this.confirmed = true;
 		if (action === 'showEditableElements') this.receiveShowEditableElements(data);
 		if (action === 'saved') this.receiveSaved(data);
+		if (action === 'highlight-element') this.receiveHighlightElement(data);
 	}
 
 	receiveConfirm() {
@@ -87,5 +90,12 @@ export class DirectusFrame {
 		}
 
 		window.location.reload();
+	}
+
+	private receiveHighlightElement(data: unknown) {
+		if (!data || typeof data !== 'object') return;
+		const { key } = data as HighlightElementData;
+		if (key !== null && typeof key !== 'string') return;
+		EditableStore.highlightElement(key);
 	}
 }

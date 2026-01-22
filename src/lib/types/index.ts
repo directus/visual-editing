@@ -3,6 +3,9 @@ import type {
 	ReceiveAction as DirectusReceiveAction,
 	SendAction as DirectusSendAction,
 	SavedData as DirectusSavedData,
+	AddToContextData as DirectusAddToContextData,
+	HighlightElementData as DirectusHighlightElementData,
+	Rect as DirectusRect,
 } from './directus.ts';
 
 export type EditConfigStrict = DirectusEditConfig;
@@ -15,6 +18,9 @@ export type ReceiveAction = DirectusSendAction;
 export type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
 export type SavedData = DirectusSavedData;
+export type AddToContextData = DirectusAddToContextData;
+export type HighlightElementData = DirectusHighlightElementData;
+export type Rect = DirectusRect;
 
 export type EditableElementOptions = {
 	customClass?: string | undefined;

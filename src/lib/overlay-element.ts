@@ -7,11 +7,13 @@ export class OverlayElement {
 	private container: HTMLElement;
 
 	readonly editButton: HTMLButtonElement;
+	readonly aiButton: HTMLButtonElement;
 
 	constructor() {
 		this.container = this.createContainer();
 		this.element = this.createElement();
 		this.editButton = this.createEditButton();
+		this.aiButton = this.createAiButton();
 		this.createRectElement();
 
 		OverlayManager.getGlobalOverlay().appendChild(this.container);
@@ -43,9 +45,19 @@ export class OverlayElement {
 	private createEditButton() {
 		const editButton = document.createElement('button');
 		editButton.type = 'button';
+		editButton.classList.add(OverlayManager.RECT_BUTTON_CLASS_NAME);
 		editButton.classList.add(OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME);
 		this.element.appendChild(editButton);
 		return editButton;
+	}
+
+	private createAiButton() {
+		const aiButton = document.createElement('button');
+		aiButton.type = 'button';
+		aiButton.classList.add(OverlayManager.RECT_BUTTON_CLASS_NAME);
+		aiButton.classList.add(OverlayManager.RECT_AI_BUTTON_CLASS_NAME);
+		this.element.appendChild(aiButton);
+		return aiButton;
 	}
 
 	updateRect(rect: DOMRect) {
@@ -75,18 +87,19 @@ export class OverlayElement {
 	}
 
 	toggleHover(hover: boolean) {
-		if (hover) this.element.classList.add(OverlayManager.RECT_HOVER_CLASS_NAME);
-		else this.element.classList.remove(OverlayManager.RECT_HOVER_CLASS_NAME);
+		this.element.classList.toggle(OverlayManager.RECT_HOVER_CLASS_NAME, hover);
 	}
 
 	toggleParentHover(hover: boolean) {
-		if (hover) this.element.classList.add(OverlayManager.RECT_PARENT_HOVER_CLASS_NAME);
-		else this.element.classList.remove(OverlayManager.RECT_PARENT_HOVER_CLASS_NAME);
+		this.element.classList.toggle(OverlayManager.RECT_PARENT_HOVER_CLASS_NAME, hover);
 	}
 
 	toggleHighlight(show: boolean) {
-		if (show) this.element.classList.add(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME);
-		else this.element.classList.remove(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME);
+		this.element.classList.toggle(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME, show);
+	}
+
+	toggleAiContext(show: boolean) {
+		this.element.classList.toggle(OverlayManager.RECT_AI_CONTEXT_CLASS_NAME, show);
 	}
 
 	disable() {

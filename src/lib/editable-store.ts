@@ -3,6 +3,7 @@ import { EditableElement } from './editable-element.ts';
 export class EditableStore {
 	private static items: EditableElement[] = [];
 	static highlightOverlayElements = false;
+	private static highlightedKey: string | null = null;
 
 	static getItem(element: Element) {
 		return EditableStore.items.find((item) => item.element === element);
@@ -63,5 +64,21 @@ export class EditableStore {
 		EditableStore.items.forEach((item) => {
 			item.overlayElement.toggleHighlight(show);
 		});
+	}
+
+	static highlightElement(key: string | null) {
+		if (this.highlightedKey !== null) {
+			EditableStore.getItemByKey(this.highlightedKey)?.overlayElement.toggleAiContext(false);
+		}
+
+		this.highlightedKey = key;
+
+		if (key !== null) {
+			EditableStore.getItemByKey(key)?.overlayElement.toggleAiContext(true);
+		}
+	}
+
+	static setElementInAiContext(key: string, inContext: boolean) {
+		EditableStore.getItemByKey(key)?.overlayElement.toggleAiContext(inContext);
 	}
 }
