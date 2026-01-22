@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface BlockButton {
 	/** @required */
 	id: string;
@@ -160,6 +159,29 @@ export interface FormField {
 	required?: boolean | null;
 }
 
+export interface FormSubmissionValue {
+	/** @required */
+	id: string;
+	/** @description Parent form submission for this value. */
+	form_submission?: FormSubmission | string | null;
+	field?: FormField | string | null;
+	/** @description The data entered by the user for this specific field in the form submission. */
+	value?: string | null;
+	sort?: number | null;
+	file?: DirectusFile | string | null;
+}
+
+export interface FormSubmission {
+	/** @description Unique ID for this specific form submission @required */
+	id: string;
+	/** @description Form submission date and time. */
+	timestamp?: string | null;
+	/** @description Associated form for this submission. */
+	form?: Form | string | null;
+	/** @description Submitted field responses */
+	values?: FormSubmissionValue[] | string[];
+}
+
 export interface Form {
 	/** @required */
 	id: string;
@@ -184,35 +206,13 @@ export interface Form {
 	submissions?: FormSubmission[] | string[];
 }
 
-export interface FormSubmission {
-	/** @description Unique ID for this specific form submission @required */
-	id: string;
-	/** @description Form submission date and time. */
-	timestamp?: string | null;
-	/** @description Associated form for this submission. */
-	form?: Form | string | null;
-	/** @description Submitted field responses */
-	values?: FormSubmissionValue[] | string[];
-}
-
-export interface FormSubmissionValue {
-	id?: string;
-	/** @description Parent form submission for this value. */
-	form_submission?: FormSubmission | string | null;
-	field?: FormField | string | null;
-	/** @description The data entered by the user for this specific field in the form submission. */
-	value?: string | null;
-	sort?: number | null;
-	file?: DirectusFile | string | null;
-}
-
 export interface Globals {
 	/** @description Site summary for search results. */
 	description?: string | null;
 	/** @required */
 	id: string;
 	/** @description Social media profile URLs */
-	social_links?: any | null;
+	social_links?: Array<{ service: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'vimeo' | 'youtube' | 'github' | 'discord' | 'docker'; url: string }> | null;
 	/** @description Short phrase describing the site. */
 	tagline?: string | null;
 	/** @description Main site title */
@@ -227,10 +227,10 @@ export interface Globals {
 	openai_api_key?: string | null;
 	/** @description The public URL for this Directus instance. Used in Flows. */
 	directus_url?: string | null;
-	/** @description Accent color for the website (used on buttons, links, etc). */
-	accent_color?: string | null;
 	/** @description Main logo shown on the site (for dark mode). */
 	logo_dark_mode?: DirectusFile | string | null;
+	/** @description Accent color for the website (used on buttons, links, etc). */
+	accent_color?: string | null;
 }
 
 export interface Navigation {
@@ -286,16 +286,16 @@ export interface Page {
 	/** @required */
 	id: string;
 	sort?: number | null;
-	/** @description The title of this page. @required */
+	/** @description Page title (visible to visitors and used in SEO). @required */
 	title: string;
 	/** @description Unique URL for this page (start with `/`, can have multiple segments `/about/me`)). @required */
 	permalink: string;
+	/** @description Short summary of what's on the page. Also used for SEO meta description. */
+	description?: string | null;
 	/** @description Is this page published? */
 	status?: 'draft' | 'in_review' | 'published';
 	/** @description Publish now or schedule for later. */
 	published_at?: string | null;
-	seo?: any | null;
-	description?: string | null;
 	/** @description Create and arrange different content blocks (like text, images, or videos) to build your page. */
 	blocks?: PageBlock[] | string[];
 }
@@ -320,7 +320,6 @@ export interface Post {
 	author?: DirectusUser | string | null;
 	/** @description Publish now or schedule for later. */
 	published_at?: string | null;
-	seo?: any | null;
 }
 
 export interface DirectusAccess {
@@ -403,6 +402,7 @@ export interface DirectusField {
 	group?: DirectusField | string | null;
 	validation?: any | null;
 	validation_message?: string | null;
+	searchable?: boolean;
 }
 
 export interface DirectusFile {
@@ -556,31 +556,12 @@ export interface DirectusSettings {
 	public_background?: DirectusFile | string | null;
 	public_note?: string | null;
 	auth_login_attempts?: number | null;
-	auth_password_policy?:
-		| null
-		| `/^.{8,}$/`
-		| `/(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{\';\'?>.<,])(?!.*\\s).*$/`
-		| null;
+	auth_password_policy?: null | `/^.{8,}$/` | `/(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{\';\'?>.<,])(?!.*\\s).*$/` | null;
 	storage_asset_transform?: 'all' | 'none' | 'presets' | null;
-	storage_asset_presets?: Array<{
-		key: string;
-		fit: 'contain' | 'cover' | 'inside' | 'outside';
-		width: number;
-		height: number;
-		quality: number;
-		withoutEnlargement: boolean;
-		format: 'auto' | 'jpeg' | 'png' | 'webp' | 'tiff' | 'avif';
-		transforms: any;
-	}> | null;
+	storage_asset_presets?: Array<{ key: string; fit: 'contain' | 'cover' | 'inside' | 'outside'; width: number; height: number; quality: number; withoutEnlargement: boolean; format: 'auto' | 'jpeg' | 'png' | 'webp' | 'tiff' | 'avif'; transforms: any }> | null;
 	custom_css?: string | null;
 	storage_default_folder?: DirectusFolder | string | null;
-	basemaps?: Array<{
-		name: string;
-		type: 'raster' | 'tile' | 'style';
-		url: string;
-		tileSize: number;
-		attribution: string;
-	}> | null;
+	basemaps?: Array<{ name: string; type: 'raster' | 'tile' | 'style'; url: string; tileSize: number; attribution: string }> | null;
 	mapbox_key?: string | null;
 	module_bar?: any | null;
 	project_descriptor?: string | null;
@@ -599,6 +580,21 @@ export interface DirectusSettings {
 	public_registration_verify_email?: boolean;
 	public_registration_role?: DirectusRole | string | null;
 	public_registration_email_filter?: any | null;
+	visual_editor_urls?: Array<{ url: string }> | null;
+	project_id?: string | null;
+	mcp_enabled?: boolean;
+	mcp_allow_deletes?: boolean;
+	mcp_prompts_collection?: string | null;
+	mcp_system_prompt_enabled?: boolean;
+	mcp_system_prompt?: string | null;
+	project_owner?: string | null;
+	project_usage?: string | null;
+	org_name?: string | null;
+	product_updates?: boolean | null;
+	project_status?: string | null;
+	ai_openai_api_key?: string | null;
+	ai_anthropic_api_key?: string | null;
+	ai_system_prompt?: string | null;
 	/** @description Settings for the Command Palette Module. */
 	command_palette_settings?: Record<string, any> | null;
 }
@@ -631,6 +627,7 @@ export interface DirectusUser {
 	theme_light?: string | null;
 	theme_light_overrides?: any | null;
 	theme_dark_overrides?: any | null;
+	text_direction?: 'auto' | 'ltr' | 'rtl';
 	/** @description Blog posts this user has authored. */
 	posts?: Post[] | string[];
 	policies?: DirectusAccess[] | string[];
@@ -791,9 +788,9 @@ export interface Schema {
 	block_pricing_cards: BlockPricingCard[];
 	block_richtext: BlockRichtext[];
 	form_fields: FormField[];
-	forms: Form[];
-	form_submissions: FormSubmission[];
 	form_submission_values: FormSubmissionValue[];
+	form_submissions: FormSubmission[];
+	forms: Form[];
 	globals: Globals;
 	navigation: Navigation[];
 	navigation_items: NavigationItem[];
@@ -827,4 +824,54 @@ export interface Schema {
 	directus_translations: DirectusTranslation[];
 	directus_versions: DirectusVersion[];
 	directus_extensions: DirectusExtension[];
+}
+
+export enum CollectionNames {
+	block_button = 'block_button',
+	block_button_group = 'block_button_group',
+	block_form = 'block_form',
+	block_gallery = 'block_gallery',
+	block_gallery_items = 'block_gallery_items',
+	block_hero = 'block_hero',
+	block_posts = 'block_posts',
+	block_pricing = 'block_pricing',
+	block_pricing_cards = 'block_pricing_cards',
+	block_richtext = 'block_richtext',
+	form_fields = 'form_fields',
+	form_submission_values = 'form_submission_values',
+	form_submissions = 'form_submissions',
+	forms = 'forms',
+	globals = 'globals',
+	navigation = 'navigation',
+	navigation_items = 'navigation_items',
+	page_blocks = 'page_blocks',
+	pages = 'pages',
+	posts = 'posts',
+	directus_access = 'directus_access',
+	directus_activity = 'directus_activity',
+	directus_collections = 'directus_collections',
+	directus_comments = 'directus_comments',
+	directus_fields = 'directus_fields',
+	directus_files = 'directus_files',
+	directus_folders = 'directus_folders',
+	directus_migrations = 'directus_migrations',
+	directus_permissions = 'directus_permissions',
+	directus_policies = 'directus_policies',
+	directus_presets = 'directus_presets',
+	directus_relations = 'directus_relations',
+	directus_revisions = 'directus_revisions',
+	directus_roles = 'directus_roles',
+	directus_sessions = 'directus_sessions',
+	directus_settings = 'directus_settings',
+	directus_users = 'directus_users',
+	directus_webhooks = 'directus_webhooks',
+	directus_dashboards = 'directus_dashboards',
+	directus_panels = 'directus_panels',
+	directus_notifications = 'directus_notifications',
+	directus_shares = 'directus_shares',
+	directus_flows = 'directus_flows',
+	directus_operations = 'directus_operations',
+	directus_translations = 'directus_translations',
+	directus_versions = 'directus_versions',
+	directus_extensions = 'directus_extensions'
 }
