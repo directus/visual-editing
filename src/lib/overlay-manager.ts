@@ -6,6 +6,7 @@ export class OverlayManager {
 	private static readonly CSS_VAR_BORDER_RADIUS = '--directus-visual-editing--rect--border-radius';
 	private static readonly CSS_VAR_HOVER_OPACITY = '--directus-visual-editing--rect-hover--opacity';
 	private static readonly CSS_VAR_HIGHLIGHT_OPACITY = '--directus-visual-editing--rect-highlight--opacity';
+	private static readonly CSS_VAR_ACTIONS_GAP = '--directus-visual-editing--actions--gap';
 	private static readonly CSS_VAR_BUTTON_WIDTH = '--directus-visual-editing--edit-btn--width';
 	private static readonly CSS_VAR_BUTTON_HEIGHT = '--directus-visual-editing--edit-btn--height';
 	private static readonly CSS_VAR_BUTTON_RADIUS = '--directus-visual-editing--edit-btn--radius';
@@ -52,8 +53,10 @@ export class OverlayManager {
 		const style = document.createElement('style');
 		style.id = OverlayManager.STYLE_ID;
 
-		const buttonWidth = 28;
-		const borderSpacing = `var(${OverlayManager.CSS_VAR_BORDER_SPACING}, ${Math.round(buttonWidth * 0.333)}px)`;
+		const buttonSize = 28;
+		const buttonWidth = `var(${OverlayManager.CSS_VAR_BUTTON_WIDTH}, ${buttonSize}px)`;
+		const buttonGap = 4;
+		const borderSpacing = `var(${OverlayManager.CSS_VAR_BORDER_SPACING}, ${Math.round(buttonSize * 0.333)}px)`;
 		const borderWidth = `var(${OverlayManager.CSS_VAR_BORDER_WIDTH}, 2px)`;
 
 		style.appendChild(
@@ -110,8 +113,8 @@ export class OverlayManager {
 					z-index: 1;
 					top: calc(-1 * ${borderSpacing} + ${borderWidth} / 2);
 					transform: translate(-50%, -50%);
-					width: var(${OverlayManager.CSS_VAR_BUTTON_WIDTH}, ${buttonWidth}px);
-					height: var(${OverlayManager.CSS_VAR_BUTTON_HEIGHT}, ${buttonWidth}px);
+					width: ${buttonWidth};
+					height: var(${OverlayManager.CSS_VAR_BUTTON_HEIGHT}, ${buttonSize}px);
 					border-radius: var(${OverlayManager.CSS_VAR_BUTTON_RADIUS}, 50%);
 					background-position: center;
 					background-repeat: no-repeat;
@@ -127,7 +130,7 @@ export class OverlayManager {
 					background-size: var(${OverlayManager.CSS_VAR_EDIT_BUTTON_ICON_BG_SIZE}, 66.6%);
 				}
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME}.${OverlayManager.RECT_AI_BUTTON_CLASS_NAME} {
-					left: calc(-1 * ${borderSpacing} + ${borderWidth} / 2 + var(${OverlayManager.CSS_VAR_BUTTON_WIDTH}, ${buttonWidth}px) + 8px);
+					left: calc(-1 * ${borderSpacing} + ${borderWidth} / 2 + ${buttonWidth} + var(${OverlayManager.CSS_VAR_ACTIONS_GAP}, ${buttonGap}px));
 					background-color: var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff));
 					background-image: var(${OverlayManager.CSS_VAR_AI_BUTTON_ICON_BG_IMAGE}, ${OverlayManager.ICON_AI});
 					background-size: var(${OverlayManager.CSS_VAR_AI_BUTTON_ICON_BG_SIZE}, 66.6%);
