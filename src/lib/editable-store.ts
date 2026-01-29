@@ -84,7 +84,7 @@ export class EditableStore {
 		identifier: { key: string } | { collection: string; item: string | number; fields?: string[] } | null,
 	) {
 		if (this.highlightedKey !== null) {
-			EditableStore.getItemByKey(this.highlightedKey)?.overlayElement.toggleAiContext(false);
+			EditableStore.getItemByKey(this.highlightedKey)?.overlayElement.toggleHighlightActive(false);
 		}
 
 		if (identifier === null) {
@@ -102,13 +102,13 @@ export class EditableStore {
 
 		if (element) {
 			this.highlightedKey = element.key;
-			element.overlayElement.toggleAiContext(true);
+			element.overlayElement.toggleHighlightActive(true);
 		} else {
 			this.highlightedKey = null;
 		}
 	}
 
 	static setElementInAiContext(key: string, inContext: boolean) {
-		EditableStore.getItemByKey(key)?.overlayElement.toggleAiContext(inContext);
+		EditableStore.getItemByKey(key)?.overlayElement.toggleHighlightActive(inContext);
 	}
 }

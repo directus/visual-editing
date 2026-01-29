@@ -102,8 +102,8 @@ export class OverlayElement {
 		this.element.classList.toggle(OverlayManager.RECT_HIGHLIGHT_CLASS_NAME, show);
 	}
 
-	toggleAiContext(show: boolean) {
-		this.element.classList.toggle(OverlayManager.RECT_AI_CONTEXT_CLASS_NAME, show);
+	toggleHighlightActive(show: boolean) {
+		this.element.classList.toggle(OverlayManager.RECT_HIGHLIGHT_ACTIVE_CLASS_NAME, show);
 	}
 
 	disable() {
