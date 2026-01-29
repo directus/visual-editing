@@ -56,6 +56,9 @@ export class OverlayManager {
 		const buttonSize = 28;
 		const buttonWidth = `var(${OverlayManager.CSS_VAR_BUTTON_WIDTH}, ${buttonSize}px)`;
 		const buttonGap = 4;
+		const editButtonBgColor = `var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff)`;
+		const aiButtonBgColor = `var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, ${editButtonBgColor})`;
+		const buttonBgColorMix = '#2e3C43 25%';
 		const borderSpacing = `var(${OverlayManager.CSS_VAR_BORDER_SPACING}, ${Math.round(buttonSize * 0.333)}px)`;
 		const borderWidth = `var(${OverlayManager.CSS_VAR_BORDER_WIDTH}, 2px)`;
 
@@ -120,48 +123,32 @@ export class OverlayManager {
 					background-repeat: no-repeat;
 					opacity: 0;
 				}
-				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:hover {
-					opacity: 1;
-				}
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME}.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
 					left: calc(-1 * ${borderSpacing} + ${borderWidth} / 2);
-					background-color: var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff);
+					background-color: ${editButtonBgColor};
 					background-image: var(${OverlayManager.CSS_VAR_EDIT_BUTTON_ICON_BG_IMAGE}, ${OverlayManager.ICON_EDIT});
 					background-size: var(${OverlayManager.CSS_VAR_EDIT_BUTTON_ICON_BG_SIZE}, 66.6%);
 				}
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME}.${OverlayManager.RECT_AI_BUTTON_CLASS_NAME} {
 					left: calc(-1 * ${borderSpacing} + ${borderWidth} / 2 + ${buttonWidth} + var(${OverlayManager.CSS_VAR_ACTIONS_GAP}, ${buttonGap}px));
-					background-color: var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff));
+					background-color: ${aiButtonBgColor};
 					background-image: var(${OverlayManager.CSS_VAR_AI_BUTTON_ICON_BG_IMAGE}, ${OverlayManager.ICON_AI});
 					background-size: var(${OverlayManager.CSS_VAR_AI_BUTTON_ICON_BG_SIZE}, 66.6%);
 				}
 				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME}:not(.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME}) .${OverlayManager.RECT_BUTTON_CLASS_NAME},
-				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_BUTTON_CLASS_NAME} {
-					opacity: 1;
-				}
-				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME}:not(.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME}) .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME},
-				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff) 85%, white);
-				}
-				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME}:not(.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME}) .${OverlayManager.RECT_AI_BUTTON_CLASS_NAME},
-				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_AI_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff)) 85%, white);
-				}
+				.${OverlayManager.RECT_HIGHLIGHT_ACTIVE_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME},
+				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_BUTTON_CLASS_NAME},
+				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:hover,
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:hover ~ .${OverlayManager.RECT_INNER_CLASS_NAME},
-				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_INNER_CLASS_NAME} {
+				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_INNER_CLASS_NAME},
+				.${OverlayManager.RECT_CLASS_NAME}:has(.${OverlayManager.RECT_BUTTON_CLASS_NAME}:hover) .${OverlayManager.RECT_BUTTON_CLASS_NAME}  {
 					opacity: 1;
 				}
-				.${OverlayManager.RECT_CLASS_NAME}:has(.${OverlayManager.RECT_BUTTON_CLASS_NAME}:hover) .${OverlayManager.RECT_BUTTON_CLASS_NAME} {
-					opacity: 1;
+				.${OverlayManager.RECT_BUTTON_CLASS_NAME}.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover {
+					background-color: color-mix(in srgb, ${editButtonBgColor}, ${buttonBgColorMix});
 				}
-				.${OverlayManager.RECT_CLASS_NAME}:has(.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover) .${OverlayManager.RECT_AI_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff)) 85%, white);
-				}
-				.${OverlayManager.RECT_CLASS_NAME}:has(.${OverlayManager.RECT_AI_BUTTON_CLASS_NAME}:hover) .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff) 85%, white);
-				}
-				.${OverlayManager.RECT_HIGHLIGHT_ACTIVE_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
-					opacity: 1;
+				.${OverlayManager.RECT_BUTTON_CLASS_NAME}.${OverlayManager.RECT_AI_BUTTON_CLASS_NAME}:hover {
+					background-color: color-mix(in srgb, ${aiButtonBgColor}, ${buttonBgColorMix});
 				}
 			`),
 		);
