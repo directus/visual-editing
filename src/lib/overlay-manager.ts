@@ -97,6 +97,10 @@ export class OverlayManager {
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME}  {
 					opacity: var(${OverlayManager.CSS_VAR_HIGHLIGHT_OPACITY}, 0.333);
 				}
+				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:visited,
+				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:active,
+				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:hover,
+				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:focus,
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME} {
 					all: initial;
 					pointer-events: all;
