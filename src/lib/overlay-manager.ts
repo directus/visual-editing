@@ -9,9 +9,9 @@ export class OverlayManager {
 	private static readonly CSS_VAR_BUTTON_WIDTH = '--directus-visual-editing--edit-btn--width';
 	private static readonly CSS_VAR_BUTTON_HEIGHT = '--directus-visual-editing--edit-btn--height';
 	private static readonly CSS_VAR_BUTTON_RADIUS = '--directus-visual-editing--edit-btn--radius';
-	private static readonly CSS_VAR_BUTTON_BG_COLOR = '--directus-visual-editing--edit-btn--bg-color';
-	private static readonly CSS_VAR_BUTTON_ICON_BG_IMAGE = '--directus-visual-editing--edit-btn--icon-bg-image';
-	private static readonly CSS_VAR_BUTTON_ICON_BG_SIZE = '--directus-visual-editing--edit-btn--icon-bg-size';
+	private static readonly CSS_VAR_EDIT_BUTTON_BG_COLOR = '--directus-visual-editing--edit-btn--bg-color';
+	private static readonly CSS_VAR_EDIT_BUTTON_ICON_BG_IMAGE = '--directus-visual-editing--edit-btn--icon-bg-image';
+	private static readonly CSS_VAR_EDIT_BUTTON_ICON_BG_SIZE = '--directus-visual-editing--edit-btn--icon-bg-size';
 	private static readonly CSS_VAR_AI_BUTTON_BG_COLOR = '--directus-visual-editing--ai-btn--bg-color';
 	private static readonly CSS_VAR_AI_BUTTON_ICON_BG_IMAGE = '--directus-visual-editing--ai-btn--icon-bg-image';
 	private static readonly CSS_VAR_AI_CONTEXT_BORDER_COLOR = '--directus-visual-editing--ai-context--border-color';
@@ -109,7 +109,7 @@ export class OverlayManager {
 					width: var(${OverlayManager.CSS_VAR_BUTTON_WIDTH}, ${buttonWidth}px);
 					height: var(${OverlayManager.CSS_VAR_BUTTON_HEIGHT}, ${buttonWidth}px);
 					border-radius: var(${OverlayManager.CSS_VAR_BUTTON_RADIUS}, 50%);
-					background-size: var(${OverlayManager.CSS_VAR_BUTTON_ICON_BG_SIZE}, 66.6%);
+					background-size: var(${OverlayManager.CSS_VAR_EDIT_BUTTON_ICON_BG_SIZE}, 66.6%);
 					background-position: center;
 					background-repeat: no-repeat;
 					opacity: 0;
@@ -119,12 +119,12 @@ export class OverlayManager {
 				}
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME}.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
 					left: calc(-1 * ${borderSpacing} + ${borderWidth} / 2);
-					background-color: var(${OverlayManager.CSS_VAR_BUTTON_BG_COLOR}, #6644ff);
-					background-image: var(${OverlayManager.CSS_VAR_BUTTON_ICON_BG_IMAGE}, ${OverlayManager.ICON_EDIT});
+					background-color: var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff);
+					background-image: var(${OverlayManager.CSS_VAR_EDIT_BUTTON_ICON_BG_IMAGE}, ${OverlayManager.ICON_EDIT});
 				}
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME}.${OverlayManager.RECT_AI_BUTTON_CLASS_NAME} {
 					left: calc(-1 * ${borderSpacing} + ${borderWidth} / 2 + var(${OverlayManager.CSS_VAR_BUTTON_WIDTH}, ${buttonWidth}px) + 8px);
-					background-color: var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_BUTTON_BG_COLOR}, #6644ff));
+					background-color: var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff));
 					background-image: var(${OverlayManager.CSS_VAR_AI_BUTTON_ICON_BG_IMAGE}, ${OverlayManager.ICON_AI});
 				}
 				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME}:not(.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME}) .${OverlayManager.RECT_BUTTON_CLASS_NAME},
@@ -133,11 +133,11 @@ export class OverlayManager {
 				}
 				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME}:not(.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME}) .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME},
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_BUTTON_BG_COLOR}, #6644ff) 85%, white);
+					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff) 85%, white);
 				}
 				.${OverlayManager.RECT_CLASS_NAME}.${OverlayManager.RECT_HOVER_CLASS_NAME}:not(.${OverlayManager.RECT_PARENT_HOVER_CLASS_NAME}) .${OverlayManager.RECT_AI_BUTTON_CLASS_NAME},
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_AI_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_BUTTON_BG_COLOR}, #6644ff)) 85%, white);
+					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff)) 85%, white);
 				}
 				.${OverlayManager.RECT_BUTTON_CLASS_NAME}:hover ~ .${OverlayManager.RECT_INNER_CLASS_NAME},
 				.${OverlayManager.RECT_HIGHLIGHT_CLASS_NAME}:hover .${OverlayManager.RECT_INNER_CLASS_NAME} {
@@ -147,10 +147,10 @@ export class OverlayManager {
 					opacity: 1;
 				}
 				.${OverlayManager.RECT_CLASS_NAME}:has(.${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME}:hover) .${OverlayManager.RECT_AI_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_BUTTON_BG_COLOR}, #6644ff)) 85%, white);
+					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_AI_BUTTON_BG_COLOR}, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff)) 85%, white);
 				}
 				.${OverlayManager.RECT_CLASS_NAME}:has(.${OverlayManager.RECT_AI_BUTTON_CLASS_NAME}:hover) .${OverlayManager.RECT_EDIT_BUTTON_CLASS_NAME} {
-					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_BUTTON_BG_COLOR}, #6644ff) 85%, white);
+					background-color: color-mix(in srgb, var(${OverlayManager.CSS_VAR_EDIT_BUTTON_BG_COLOR}, #6644ff) 85%, white);
 				}
 				.${OverlayManager.RECT_AI_CONTEXT_CLASS_NAME} .${OverlayManager.RECT_INNER_CLASS_NAME} {
 					border-color: var(${OverlayManager.CSS_VAR_AI_CONTEXT_BORDER_COLOR}, var(${OverlayManager.CSS_VAR_BORDER_COLOR}, #6644ff));
