@@ -43,6 +43,6 @@ export type ConfirmData = {
 	aiEnabled: boolean;
 };
 
-export type ReceiveAction = 'connect' | 'edit' | 'navigation' | 'add-to-context';
+export type ReceiveAction = 'connect' | 'edit' | 'navigation' | 'addToContext';
 
 export type SendAction = 'confirm' | 'showEditableElements' | 'saved' | 'highlight-element';
