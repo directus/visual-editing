@@ -35,7 +35,7 @@ export class EditableElement {
 		this.editConfig = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
 
 		this.rect = this.element.getBoundingClientRect();
-		this.overlayElement = new OverlayElement({ aiEnabled: new DirectusFrame().isAiEnabled() });
+		this.overlayElement = new OverlayElement();
 		this.overlayElement.updateRect(this.rect);
 		this.overlayElement.editButton.addEventListener('click', this.onClickEdit.bind(this));
 		this.overlayElement.aiButton?.addEventListener('click', this.onClickAddToContext.bind(this));
