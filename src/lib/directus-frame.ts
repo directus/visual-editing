@@ -59,10 +59,7 @@ export class DirectusFrame {
 
 	private receiveConfirmAction(data: unknown) {
 		this.confirmed = true;
-
-		if (data && typeof data === 'object' && 'aiEnabled' in data) {
-			this.aiEnabled = !!(data as ConfirmData).aiEnabled;
-		}
+		this.aiEnabled = !!(data as ConfirmData)?.aiEnabled;
 	}
 
 	isAiEnabled() {
