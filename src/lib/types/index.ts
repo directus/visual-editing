@@ -3,7 +3,6 @@ import type {
 	ReceiveAction as DirectusReceiveAction,
 	SendAction as DirectusSendAction,
 	SavedData as DirectusSavedData,
-	AddToContextData as DirectusAddToContextData,
 	HighlightElementData as DirectusHighlightElementData,
 	ConfirmData as DirectusConfirmData,
 } from './directus.ts';
