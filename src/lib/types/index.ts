@@ -18,7 +18,6 @@ export type ReceiveAction = DirectusSendAction;
 export type ReceiveData = { action: ReceiveAction | null; data: unknown };
 
 export type SavedData = DirectusSavedData;
-export type AddToContextData = DirectusAddToContextData;
 export type HighlightElementData = DirectusHighlightElementData;
 export type ConfirmData = DirectusConfirmData;
 export type Rect = DirectusRect;
