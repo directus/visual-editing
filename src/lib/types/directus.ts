@@ -18,18 +18,10 @@ export type SavedData = {
 	payload: Record<string, unknown>;
 };
 
-export type Rect = {
-	top: number;
-	left: number;
-	width: number;
-	height: number;
-};
-
 export type AddToContextData = {
 	key: string;
 	editConfig: EditConfig;
-	displayValue: string;
-	rect?: Rect;
+	rect?: DOMRect;
 };
 
 export type HighlightElementData = {
@@ -44,5 +36,4 @@ export type ConfirmData = {
 };
 
 export type ReceiveAction = 'connect' | 'edit' | 'navigation' | 'addToContext';
-
 export type SendAction = 'confirm' | 'showEditableElements' | 'saved' | 'highlightElement';

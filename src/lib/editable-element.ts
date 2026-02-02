@@ -2,7 +2,7 @@ import observeRect from '@reach/observe-rect';
 import { DirectusFrame } from './directus-frame.ts';
 import { EditableStore } from './editable-store.ts';
 import { OverlayElement } from './overlay-element.ts';
-import type { EditConfig, EditConfigStrict, EditableElementOptions, Rect } from './types/index.ts';
+import type { EditConfig, EditConfigStrict, EditableElementOptions } from './types/index.ts';
 
 export class EditableElement {
 	private static readonly DATASET = 'directus';
@@ -121,23 +121,7 @@ export class EditableElement {
 
 	private onClickAddToContext(event: MouseEvent) {
 		event.stopPropagation();
-
-		const textContent = this.element.textContent?.trim().slice(0, 50) || '';
-		const displayValue = textContent || `${this.editConfig.collection} #${this.editConfig.item}`;
-
-		const rect: Rect = {
-			top: this.rect.top,
-			left: this.rect.left,
-			width: this.rect.width,
-			height: this.rect.height,
-		};
-
-		new DirectusFrame().send('add-to-context', {
-			key: this.key,
-			editConfig: this.editConfig,
-			displayValue,
-			rect,
-		});
+		new DirectusFrame().send('addToContext', { key: this.key, editConfig: this.editConfig, rect: this.rect });
 	}
 
 	private onMouseenter(event: MouseEvent) {
