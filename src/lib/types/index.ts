@@ -6,7 +6,6 @@ import type {
 	AddToContextData as DirectusAddToContextData,
 	HighlightElementData as DirectusHighlightElementData,
 	ConfirmData as DirectusConfirmData,
-	Rect as DirectusRect,
 } from './directus.ts';
 
 export type EditConfigStrict = DirectusEditConfig;
