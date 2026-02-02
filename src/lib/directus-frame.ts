@@ -10,7 +10,7 @@ export class DirectusFrame {
 
 	private origin: string | null = null;
 	private confirmed = false;
-	private aiEnabled = true;
+	private aiEnabled = false;
 
 	constructor() {
 		if (DirectusFrame.SINGLETON) return DirectusFrame.SINGLETON;
