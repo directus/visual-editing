@@ -45,4 +45,4 @@ export type ConfirmData = {
 
 export type ReceiveAction = 'connect' | 'edit' | 'navigation' | 'addToContext';
 
-export type SendAction = 'confirm' | 'showEditableElements' | 'saved' | 'highlight-element';
+export type SendAction = 'confirm' | 'showEditableElements' | 'saved' | 'highlightElement';
