@@ -107,8 +107,4 @@ export class EditableStore {
 			this.highlightedKey = null;
 		}
 	}
-
-	static setElementInAiContext(key: string, inContext: boolean) {
-		EditableStore.getItemByKey(key)?.overlayElement.toggleHighlightActive(inContext);
-	}
 }
