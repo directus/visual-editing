@@ -13,11 +13,11 @@ export class OverlayElement {
 	readonly editButton: HTMLButtonElement;
 	readonly aiButton: HTMLButtonElement | null;
 
-	constructor(options?: OverlayElementOptions) {
+	constructor() {
 		this.container = this.createContainer();
 		this.element = this.createElement();
 		this.editButton = this.createEditButton();
-		this.aiButton = options?.aiEnabled !== false ? this.createAiButton() : null;
+		this.aiButton = new DirectusFrame().isAiEnabled() ? this.createAiButton() : null;
 		this.createRectElement();
 
 		OverlayManager.getGlobalOverlay().appendChild(this.container);
