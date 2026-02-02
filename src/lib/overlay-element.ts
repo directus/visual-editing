@@ -1,9 +1,6 @@
 import { EditableStore } from './editable-store.ts';
 import { OverlayManager } from './overlay-manager.ts';
-
-export type OverlayElementOptions = {
-	aiEnabled?: boolean;
-};
+import { DirectusFrame } from './directus-frame.ts';
 
 export class OverlayElement {
 	private hasNoDimensions: boolean = false;
