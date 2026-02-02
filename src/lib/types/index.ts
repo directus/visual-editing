@@ -20,7 +20,6 @@ export type ReceiveData = { action: ReceiveAction | null; data: unknown };
 export type SavedData = DirectusSavedData;
 export type HighlightElementData = DirectusHighlightElementData;
 export type ConfirmData = DirectusConfirmData;
-export type Rect = DirectusRect;
 
 export type EditableElementOptions = {
 	customClass?: string | undefined;
