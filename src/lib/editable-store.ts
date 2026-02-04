@@ -3,6 +3,7 @@ import { EditableElement } from './editable-element.ts';
 export class EditableStore {
 	private static items: EditableElement[] = [];
 	static highlightOverlayElements = false;
+	private static highlightedKey: string | null = null;
 
 	static getItem(element: Element) {
 		return EditableStore.items.find((item) => item.element === element);
@@ -10,6 +11,20 @@ export class EditableStore {
 
 	static getItemByKey(key: EditableElement['key']) {
 		return EditableStore.items.find((item) => item.key === key);
+	}
+
+	static getItemByEditConfig(collection: string, item: string | number, fields?: string[]) {
+		return EditableStore.items.find((i) => {
+			if (i.editConfig.collection !== collection) return false;
+			if (String(i.editConfig.item) !== String(item)) return false;
+
+			const itemFields = i.editConfig.fields ?? [];
+			const targetFields = fields ?? [];
+
+			if (itemFields.length !== targetFields.length) return false;
+
+			return itemFields.every((f) => targetFields.includes(f));
+		});
 	}
 
 	static getHoveredItems() {
@@ -63,5 +78,33 @@ export class EditableStore {
 		EditableStore.items.forEach((item) => {
 			item.overlayElement.toggleHighlight(show);
 		});
+	}
+
+	static highlightElement(
+		identifier: { key: string } | { collection: string; item: string | number; fields?: string[] } | null,
+	) {
+		if (this.highlightedKey !== null) {
+			EditableStore.getItemByKey(this.highlightedKey)?.overlayElement.toggleHighlightActive(false);
+		}
+
+		if (identifier === null) {
+			this.highlightedKey = null;
+			return;
+		}
+
+		let element: EditableElement | undefined;
+
+		if ('key' in identifier) {
+			element = EditableStore.getItemByKey(identifier.key);
+		} else {
+			element = EditableStore.getItemByEditConfig(identifier.collection, identifier.item, identifier.fields);
+		}
+
+		if (element) {
+			this.highlightedKey = element.key;
+			element.overlayElement.toggleHighlightActive(true);
+		} else {
+			this.highlightedKey = null;
+		}
 	}
 }

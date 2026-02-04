@@ -1,5 +1,5 @@
 import { EditableStore } from './editable-store.ts';
-import type { SendAction, ReceiveData, SavedData } from './types/index.ts';
+import type { HighlightElementData, ConfirmData, SendAction, ReceiveData, SavedData } from './types/index.ts';
 
 /**
  * *Singleton* class to handle communication with Directus in parent frame.
@@ -10,6 +10,7 @@ export class DirectusFrame {
 
 	private origin: string | null = null;
 	private confirmed = false;
+	private aiEnabled = false;
 
 	constructor() {
 		if (DirectusFrame.SINGLETON) return DirectusFrame.SINGLETON;
@@ -44,13 +45,25 @@ export class DirectusFrame {
 	}
 
 	receive(event: MessageEvent) {
-		if (!this.origin || !this.sameOrigin(event.origin, this.origin)) return;
+		if (!this.origin || !this.sameOrigin(event.origin, this.origin)) {
+			return;
+		}
 
 		const { action, data }: ReceiveData = event.data;
 
-		if (action === 'confirm') this.confirmed = true;
+		if (action === 'confirm') this.receiveConfirmAction(data);
 		if (action === 'showEditableElements') this.receiveShowEditableElements(data);
 		if (action === 'saved') this.receiveSaved(data);
+		if (action === 'highlightElement') this.receiveHighlightElement(data);
+	}
+
+	private receiveConfirmAction(data: unknown) {
+		this.confirmed = true;
+		this.aiEnabled = !!(data as ConfirmData)?.aiEnabled;
+	}
+
+	isAiEnabled() {
+		return this.aiEnabled;
 	}
 
 	receiveConfirm() {
@@ -87,5 +100,26 @@ export class DirectusFrame {
 		}
 
 		window.location.reload();
+	}
+
+	private receiveHighlightElement(data: unknown) {
+		if (!data || typeof data !== 'object') {
+			EditableStore.highlightElement(null);
+			return;
+		}
+
+		const { key, collection, item, fields } = data as HighlightElementData;
+
+		if (key === null) {
+			// Clear highlight (edit overlay closed or AI store emits null)
+			EditableStore.highlightElement(null);
+		} else if (collection && item !== undefined) {
+			// Key absent, collection+item present: AI context panel hover
+			// Looks up via getItemByEditConfig(). fields included for relational/multi-field items
+			EditableStore.highlightElement(fields ? { collection, item, fields } : { collection, item });
+		} else if (typeof key === 'string') {
+			// Key of type string = UUID from editable-element.ts, looks up via getItemByKey()
+			EditableStore.highlightElement({ key });
+		}
 	}
 }

@@ -21,10 +21,15 @@ export class EditableElement {
 	disabled = false;
 	onSaved: EditableElementOptions['onSaved'] = undefined;
 
+	private boundMouseenter: (e: MouseEvent) => void;
+	private boundMouseleave: (e: MouseEvent) => void;
+
 	constructor(element: HTMLElement) {
 		this.element = element;
-		this.element.addEventListener('mouseover', this.onMouseenter.bind(this));
-		this.element.addEventListener('mouseleave', this.onMouseleave.bind(this));
+		this.boundMouseenter = this.onMouseenter.bind(this);
+		this.boundMouseleave = this.onMouseleave.bind(this);
+		this.element.addEventListener('mouseenter', this.boundMouseenter);
+		this.element.addEventListener('mouseleave', this.boundMouseleave);
 
 		this.key = crypto.randomUUID();
 		this.editConfig = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
@@ -33,6 +38,7 @@ export class EditableElement {
 		this.overlayElement = new OverlayElement();
 		this.overlayElement.updateRect(this.rect);
 		this.overlayElement.editButton.addEventListener('click', this.onClickEdit.bind(this));
+		this.overlayElement.aiButton?.addEventListener('click', this.onClickAddToContext.bind(this));
 
 		// @ts-expect-error
 		this.rectObserver = observeRect(this.element, this.onObserveRect.bind(this));
@@ -105,12 +111,17 @@ export class EditableElement {
 	}
 
 	removeHoverListener() {
-		this.element.removeEventListener('mouseenter', this.onMouseenter.bind(this));
-		this.element.removeEventListener('mouseleave', this.onMouseleave.bind(this));
+		this.element.removeEventListener('mouseenter', this.boundMouseenter);
+		this.element.removeEventListener('mouseleave', this.boundMouseleave);
 	}
 
 	private onClickEdit() {
 		new DirectusFrame().send('edit', { key: this.key, editConfig: this.editConfig, rect: this.rect });
+	}
+
+	private onClickAddToContext(event: MouseEvent) {
+		event.stopPropagation();
+		new DirectusFrame().send('addToContext', { key: this.key, editConfig: this.editConfig, rect: this.rect });
 	}
 
 	private onMouseenter(event: MouseEvent) {

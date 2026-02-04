@@ -160,11 +160,17 @@ provide('refreshSiteData', refresh);
 			<p>Loading...</p>
 		</div>
 
-		<div v-else>
-			<NavigationBar v-if="headerNavigation" :navigation="headerNavigation" :globals="globals" />
-			<NuxtPage />
-			<Footer v-if="footerNavigation" :navigation="footerNavigation" :globals="globals" />
-		</div>
+		<NavigationBar
+			v-if="!siteError && status !== 'pending' && headerNavigation"
+			:navigation="headerNavigation"
+			:globals="globals"
+		/>
+		<NuxtPage />
+		<Footer
+			v-if="!siteError && status !== 'pending' && footerNavigation"
+			:navigation="footerNavigation"
+			:globals="globals"
+		/>
 	</div>
 </template>
 
