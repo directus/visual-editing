@@ -1,6 +1,5 @@
 import { EditableStore } from './editable-store.ts';
-import type { HighlightElementData, ConfirmData } from './types/directus.ts';
-import type { SendAction, ReceiveData, SavedData } from './types/index.ts';
+import type { HighlightElementData, ConfirmData, SendAction, ReceiveData, SavedData } from './types/index.ts';
 
 /**
  * *Singleton* class to handle communication with Directus in parent frame.
@@ -112,10 +111,14 @@ export class DirectusFrame {
 		const { key, collection, item, fields } = data as HighlightElementData;
 
 		if (key === null) {
+			// Clear highlight (edit overlay closed or AI store emits null)
 			EditableStore.highlightElement(null);
 		} else if (collection && item !== undefined) {
+			// Key absent, collection+item present: AI context panel hover
+			// Looks up via getItemByEditConfig(). fields included for relational/multi-field items
 			EditableStore.highlightElement(fields ? { collection, item, fields } : { collection, item });
 		} else if (typeof key === 'string') {
+			// Key of type string = UUID from editable-element.ts, looks up via getItemByKey()
 			EditableStore.highlightElement({ key });
 		}
 	}
