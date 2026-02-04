@@ -27,7 +27,7 @@ export type AddToContextData = {
 export type HighlightElementData = {
 	key?: string | null;
 	collection?: string;
-	item?: string | number;
+	item?: PrimaryKey;
 	fields?: string[];
 };
 
@@ -36,4 +36,5 @@ export type ConfirmData = {
 };
 
 export type ReceiveAction = 'connect' | 'edit' | 'navigation' | 'addToContext';
+
 export type SendAction = 'confirm' | 'showEditableElements' | 'saved' | 'highlightElement';
