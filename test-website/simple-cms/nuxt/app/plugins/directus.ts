@@ -24,8 +24,6 @@ export default defineNuxtPlugin(() => {
 		query: Record<string, unknown>,
 		version: string | undefined,
 	) {
-		console.log({ version });
-
 		if (!version || version === 'main') {
 			return await directus.request(readItem(collection, item, query));
 		}

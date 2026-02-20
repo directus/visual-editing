@@ -109,11 +109,11 @@ const authorAvatar = computed(() => {
 });
 
 useHead({
-	title: post.value?.seo?.title || post.value?.title,
+	title: post.value?.title,
 	meta: [
-		{ name: 'description', content: post.value?.seo?.meta_description || post.value?.description },
-		{ property: 'og:title', content: post.value?.seo?.title || post.value?.title },
-		{ property: 'og:description', content: post.value?.seo?.meta_description || post.value?.description },
+		{ name: 'description', content: post.value?.description },
+		{ property: 'og:title', content: post.value?.title },
+		{ property: 'og:description', content: post.value?.description },
 		{ property: 'og:url', content: postUrl.value },
 	],
 });
