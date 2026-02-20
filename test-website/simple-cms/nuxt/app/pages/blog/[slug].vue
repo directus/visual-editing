@@ -85,13 +85,13 @@ const { data: author } = await useAsyncData<DirectusUser | null>(
 			);
 
 			if (!author) {
-				throw createError({ statusCode: 404, message: `Author not found: ${authorId}` });
+				throw createError({ statusCode: 404, message: `Author not found: ${authorId.value}` });
 			}
 
 			return author;
 		} catch (err: unknown) {
 			if (err && typeof err === 'object' && 'statusCode' in err) throw err;
-			throw createError({ statusCode: 500, message: `Failed to fetch author: ${authorId}` });
+			throw createError({ statusCode: 500, message: `Failed to fetch author: ${authorId.value}` });
 		}
 	},
 	{ watch: [post], server: false, transform: (data) => (authorId.value ? data : null) },

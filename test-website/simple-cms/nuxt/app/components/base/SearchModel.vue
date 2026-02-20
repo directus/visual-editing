@@ -80,7 +80,7 @@ watch(open, (isOpen) => {
 				<CommandInput
 					placeholder="Search for pages or posts"
 					class="m-2 p-4 focus:outline-none text-base leading-normal"
-					@input="(e) => debouncedFetchResults(e.target.value)"
+					@input="(e: Event) => debouncedFetchResults((e.target as HTMLInputElement).value)"
 				/>
 
 				<CommandList class="p-2 text-foreground max-h-[500px] overflow-auto">
