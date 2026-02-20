@@ -11,9 +11,6 @@ export default defineNuxtConfig({
 	],
 
 	ssr: true,
-	future: {
-		compatibilityVersion: 4,
-	},
 	modules: [
 		'@nuxt/image',
 		'@nuxtjs/seo',
@@ -24,7 +21,6 @@ export default defineNuxtConfig({
 		'shadcn-nuxt',
 		'@nuxt/icon',
 		'@nuxtjs/color-mode',
-		'@nuxtjs/seo',
 	],
 
 	css: ['~/assets/css/tailwind.css'],

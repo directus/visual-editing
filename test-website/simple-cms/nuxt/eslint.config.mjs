@@ -6,10 +6,18 @@ import vueParser from 'vue-eslint-parser';
 import vuePlugin from 'eslint-plugin-vue';
 import globals from 'globals';
 
+const filteredGlobals = Object.fromEntries(
+	Object.entries({ ...globals.browser, ...globals.node, ...globals.es2021 }).filter(([key]) => key === key.trim()),
+);
+
 export default [
 	{
 		ignores: ['**/node_modules/**', '**/dist/**', '**/.nuxt/**', '**/.output/**', '.eslintrc.js'],
 	},
+	...vuePlugin.configs['flat/recommended'].map((config) => ({
+		...config,
+		files: ['**/*.vue'],
+	})),
 	prettierConfig,
 	{
 		files: ['**/*.{js,jsx,ts,tsx,vue,mjs}'],
@@ -21,11 +29,7 @@ export default [
 				ecmaVersion: 2022,
 				extraFileExtensions: ['.vue'],
 			},
-			globals: {
-				...globals.browser,
-				...globals.node,
-				...globals.es2021,
-			},
+			globals: filteredGlobals,
 		},
 		plugins: {
 			'@typescript-eslint': typescriptEslint,
@@ -47,10 +51,16 @@ export default [
 				},
 			],
 
-			// Vue
+			// Vue — project overrides
 			'vue/multi-word-component-names': 'off',
 			'vue/require-default-prop': 'off',
 			'vue/no-v-html': 'off',
+			// Formatting rules handled by Prettier
+			'vue/html-indent': 'off',
+			'vue/script-indent': 'off',
+			'vue/max-attributes-per-line': 'off',
+			'vue/singleline-html-element-content-newline': 'off',
+			'vue/html-self-closing': 'off',
 
 			// General
 			'no-console': 'error',
@@ -69,12 +79,6 @@ export default [
 		},
 	},
 	{
-		files: ['**/*.vue'],
-		rules: {
-			...vuePlugin.configs['vue3-recommended'].rules,
-		},
-	},
-	{
 		files: ['**/*.ts', '**/*.tsx'],
 		languageOptions: {
 			parser: tsParser,
@@ -84,6 +88,9 @@ export default [
 		},
 		rules: {
 			...typescriptEslint.configs['recommended'].rules,
+			'@typescript-eslint/ban-ts-comment': 'off',
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/no-non-null-assertion': 'off',
 		},
 	},
 ];

@@ -3,23 +3,24 @@ import { computed } from 'vue';
 import { useRoute, useRuntimeConfig } from '#app';
 import DirectusImage from '~/components/shared/DirectusImage.vue';
 import Separator from '~/components/ui/separator/Separator.vue';
-import { readItems } from '@directus/sdk';
+import { readItems, readUser } from '@directus/sdk';
 import { apply, remove, setAttr } from '@directus/visual-editing';
 
 const route = useRoute();
 const slug = route.params.slug as string;
+const version = route.query.version as string | undefined;
 
 const runtimeConfig = useRuntimeConfig();
 
 const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}`, async () => {
 	try {
-		const { $directus } = useNuxtApp();
+		const { $directus, $readItemWithVersionFallbackToMain } = useNuxtApp();
 
 		const posts = await $directus.request(
 			readItems('posts', {
 				filter: { slug: { _eq: slug }, status: { _eq: 'published' } },
 				limit: 1,
-				fields: ['id', 'title', 'content', 'status', 'image', 'description', 'author'],
+				fields: ['id'],
 			}),
 		);
 
@@ -27,8 +28,16 @@ const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}
 			throw createError({ statusCode: 404, message: `Post not found: ${slug}` });
 		}
 
-		return posts[0] as Post;
-	} catch {
+		return (await $readItemWithVersionFallbackToMain(
+			'posts',
+			posts[0]!.id,
+			{
+				fields: ['id', 'title', 'content', 'status', 'image', 'description', 'author'],
+			},
+			version,
+		)) as Post;
+	} catch (err: unknown) {
+		if (err && typeof err === 'object' && 'statusCode' in err) throw err;
 		throw createError({ statusCode: 500, message: `Failed to fetch post: ${slug}` });
 	}
 });
@@ -36,17 +45,23 @@ const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}
 const { data: relatedPosts, refresh: relatedPostsRefresh } = await useAsyncData<Post[]>(
 	`related-posts-${slug}`,
 	async () => {
-		const { $directus } = useNuxtApp();
+		const { $directus, $readItemWithVersionFallbackToMain } = useNuxtApp();
 
 		try {
-			return await $directus.request<Post[]>(
+			const ids = await $directus.request(
 				readItems('posts', {
 					filter: { status: { _eq: 'published' }, slug: { _neq: slug } },
-					fields: ['id', 'title', 'image', 'slug'],
+					fields: ['id'],
 					limit: 2,
 				}),
 			);
-		} catch {
+			return (await Promise.all(
+				ids.map((p) =>
+					$readItemWithVersionFallbackToMain('posts', p.id, { fields: ['id', 'title', 'image', 'slug'] }, version),
+				),
+			)) as unknown as Post[];
+		} catch (err: unknown) {
+			if (err && typeof err === 'object' && 'statusCode' in err) throw err;
 			throw createError({ statusCode: 500, message: 'Failed to fetch related posts' });
 		}
 	},
@@ -70,12 +85,13 @@ const { data: author } = await useAsyncData<DirectusUser | null>(
 			);
 
 			if (!author) {
-				throw createError({ statusCode: 404, message: `Author not found: ${authorId}` });
+				throw createError({ statusCode: 404, message: `Author not found: ${authorId.value}` });
 			}
 
 			return author;
-		} catch {
-			throw createError({ statusCode: 500, message: `Failed to fetch author: ${authorId}` });
+		} catch (err: unknown) {
+			if (err && typeof err === 'object' && 'statusCode' in err) throw err;
+			throw createError({ statusCode: 500, message: `Failed to fetch author: ${authorId.value}` });
 		}
 	},
 	{ watch: [post], server: false, transform: (data) => (authorId.value ? data : null) },
@@ -93,11 +109,11 @@ const authorAvatar = computed(() => {
 });
 
 useHead({
-	title: post.value?.seo?.title || post.value?.title,
+	title: post.value?.title,
 	meta: [
-		{ name: 'description', content: post.value?.seo?.meta_description || post.value?.description },
-		{ property: 'og:title', content: post.value?.seo?.title || post.value?.title },
-		{ property: 'og:description', content: post.value?.seo?.meta_description || post.value?.description },
+		{ name: 'description', content: post.value?.description },
+		{ property: 'og:title', content: post.value?.title },
+		{ property: 'og:description', content: post.value?.description },
 		{ property: 'og:url', content: postUrl.value },
 	],
 });

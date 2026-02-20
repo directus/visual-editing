@@ -1,11 +1,6 @@
 import { defineEventHandler, createError, readMultipartFormData } from 'h3';
 import { uploadFiles, createItem, withToken, directusServer } from '../../utils/directus-server';
-
-interface SubmissionValue {
-	field: string;
-	value?: string;
-	file?: string;
-}
+import type { FormSubmissionValue } from '../../../shared/types/schema';
 
 export default defineEventHandler(async (event) => {
 	const formData = await readMultipartFormData(event);
@@ -27,7 +22,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	try {
-		const submissionValues: SubmissionValue[] = [];
+		const submissionValues: Omit<FormSubmissionValue, 'id'>[] = [];
 		let formId = '';
 		let fields = [];
 
@@ -47,7 +42,7 @@ export default defineEventHandler(async (event) => {
 			if (!matchingField) continue;
 
 			if (field.filename) {
-				const blob = new Blob([field.data], { type: field.type });
+				const blob = new Blob([new Uint8Array(field.data)], { type: field.type });
 
 				const uploadFormData = new FormData();
 				uploadFormData.append('file', blob, field.filename);
@@ -72,7 +67,7 @@ export default defineEventHandler(async (event) => {
 
 		const payload = {
 			form: formId,
-			values: submissionValues,
+			values: submissionValues as FormSubmissionValue[],
 		};
 
 		await directusServer.request(withToken(TOKEN, createItem('form_submissions', payload)));
