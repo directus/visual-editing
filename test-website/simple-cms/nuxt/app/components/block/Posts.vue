@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute, useRouter, useAsyncData } from 'nuxt/app';
+import { readItems } from '@directus/sdk';
 import { ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { apply, setAttr } from '@directus/visual-editing';
 
@@ -28,10 +29,18 @@ const router = useRouter();
 
 const perPage = props.data.limit || 6;
 const currentPage = ref(Number(route.query.page) || 1);
+const version = route.query.version as string | undefined;
 
-const { data: totalPagesData, refresh: totalPagesRefresh } = await useAsyncData('posts-total-pages', () =>
-	$fetch<{ total: number }>('/api/posts/count'),
-);
+const { data: totalPagesData, refresh: totalPagesRefresh } = await useAsyncData('posts-total-pages', async () => {
+	const { $directus } = useNuxtApp();
+	const result = await $directus.request(
+		readItems('posts', {
+			aggregate: { count: '*' },
+			filter: { status: { _eq: 'published' } },
+		}),
+	);
+	return { total: Number((result as Array<{ count: string }>)[0]?.count) || 0 };
+});
 const totalPages = computed(() => Math.ceil((totalPagesData.value?.total || 0) / perPage));
 
 const {
@@ -40,7 +49,34 @@ const {
 	refresh: postsRefresh,
 } = await useAsyncData(
 	'paginated-posts',
-	() => $fetch<Post[]>('/api/posts', { query: { page: currentPage.value, limit: perPage } }),
+	async () => {
+		const { $directus, $readItemWithVersionFallbackToMain } = useNuxtApp();
+
+		const postIds = await $directus.request(
+			readItems('posts', {
+				limit: perPage,
+				page: currentPage.value,
+				sort: ['-published_at'],
+				fields: ['id'],
+				filter: { status: { _eq: 'published' } },
+			}),
+		);
+
+		const posts = (await Promise.all(
+			postIds.map((p) =>
+				$readItemWithVersionFallbackToMain(
+					'posts',
+					p.id,
+					{
+						fields: ['id', 'title', 'description', 'slug', 'image'],
+					},
+					version,
+				),
+			),
+		)) as Post[];
+
+		return posts;
+	},
 	{ watch: [currentPage] },
 );
 

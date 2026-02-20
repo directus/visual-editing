@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useRoute, useRuntimeConfig } from '#app';
 import DirectusImage from '~/components/shared/DirectusImage.vue';
 import Separator from '~/components/ui/separator/Separator.vue';
-import { readItems, readItem } from '@directus/sdk';
+import { readItems, readUser } from '@directus/sdk';
 import { apply, remove, setAttr } from '@directus/visual-editing';
 
 const route = useRoute();
@@ -14,7 +14,7 @@ const runtimeConfig = useRuntimeConfig();
 
 const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}`, async () => {
 	try {
-		const { $directus } = useNuxtApp();
+		const { $directus, $readItemWithVersionFallbackToMain } = useNuxtApp();
 
 		const posts = await $directus.request(
 			readItems('posts', {
@@ -28,19 +28,16 @@ const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}
 			throw createError({ statusCode: 404, message: `Post not found: ${slug}` });
 		}
 
-		const post = await $directus.request(
-			readItem('posts', posts[0]!.id, {
+		return (await $readItemWithVersionFallbackToMain(
+			'posts',
+			posts[0]!.id,
+			{
 				fields: ['id', 'title', 'content', 'status', 'image', 'description', 'author'],
-				version,
-			}),
-		);
-
-		if (!post) {
-			throw createError({ statusCode: 404, message: `Post not found: ${slug}` });
-		}
-
-		return post as Post;
-	} catch {
+			},
+			version,
+		)) as Post;
+	} catch (err: unknown) {
+		if (err && typeof err === 'object' && 'statusCode' in err) throw err;
 		throw createError({ statusCode: 500, message: `Failed to fetch post: ${slug}` });
 	}
 });
@@ -48,28 +45,23 @@ const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}
 const { data: relatedPosts, refresh: relatedPostsRefresh } = await useAsyncData<Post[]>(
 	`related-posts-${slug}`,
 	async () => {
-		const { $directus } = useNuxtApp();
+		const { $directus, $readItemWithVersionFallbackToMain } = useNuxtApp();
 
 		try {
-			const relatedPosts = await $directus.request<Post[]>(
+			const ids = await $directus.request(
 				readItems('posts', {
 					filter: { status: { _eq: 'published' }, slug: { _neq: slug } },
-					fields: ['id', 'title', 'image', 'slug'],
+					fields: ['id'],
 					limit: 2,
 				}),
 			);
-
-			return Promise.all(
-				relatedPosts.map(async (post) => {
-					return await $directus.request<Post>(
-						readItem('posts', post.id, {
-							fields: ['id', 'title', 'image', 'slug'],
-							version,
-						}),
-					);
-				}),
-			);
-		} catch {
+			return (await Promise.all(
+				ids.map((p) =>
+					$readItemWithVersionFallbackToMain('posts', p.id, { fields: ['id', 'title', 'image', 'slug'] }, version),
+				),
+			)) as unknown as Post[];
+		} catch (err: unknown) {
+			if (err && typeof err === 'object' && 'statusCode' in err) throw err;
 			throw createError({ statusCode: 500, message: 'Failed to fetch related posts' });
 		}
 	},
@@ -97,7 +89,8 @@ const { data: author } = await useAsyncData<DirectusUser | null>(
 			}
 
 			return author;
-		} catch {
+		} catch (err: unknown) {
+			if (err && typeof err === 'object' && 'statusCode' in err) throw err;
 			throw createError({ statusCode: 500, message: `Failed to fetch author: ${authorId}` });
 		}
 	},

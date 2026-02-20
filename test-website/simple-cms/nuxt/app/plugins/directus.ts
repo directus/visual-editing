@@ -1,4 +1,4 @@
-import { createDirectus, rest, staticToken } from '@directus/sdk';
+import { createDirectus, rest, staticToken, readItem } from '@directus/sdk';
 
 export default defineNuxtPlugin(() => {
 	const token = useRuntimeConfig().public.dontDoThisInProductionToken || useRuntimeConfig().directusServerToken;
@@ -14,6 +14,31 @@ export default defineNuxtPlugin(() => {
 	return {
 		provide: {
 			directus,
+			readItemWithVersionFallbackToMain,
 		},
 	};
+
+	async function readItemWithVersionFallbackToMain(
+		collection: string,
+		item: string | number,
+		query: Record<string, unknown>,
+		version: string | undefined,
+	) {
+		console.log({ version });
+
+		if (!version || version === 'main') {
+			return await directus.request(readItem(collection, item, query));
+		}
+
+		try {
+			return await directus.request(
+				readItem(collection, item, {
+					...query,
+					version: version,
+				}),
+			);
+		} catch {
+			return await directus.request(readItem(collection, item, query));
+		}
+	}
 });
