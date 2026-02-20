@@ -3,11 +3,12 @@ import { computed } from 'vue';
 import { useRoute, useRuntimeConfig } from '#app';
 import DirectusImage from '~/components/shared/DirectusImage.vue';
 import Separator from '~/components/ui/separator/Separator.vue';
-import { readItems } from '@directus/sdk';
+import { readItems, readItem } from '@directus/sdk';
 import { apply, remove, setAttr } from '@directus/visual-editing';
 
 const route = useRoute();
 const slug = route.params.slug as string;
+const version = route.query.version as string | undefined;
 
 const runtimeConfig = useRuntimeConfig();
 
@@ -19,7 +20,7 @@ const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}
 			readItems('posts', {
 				filter: { slug: { _eq: slug }, status: { _eq: 'published' } },
 				limit: 1,
-				fields: ['id', 'title', 'content', 'status', 'image', 'description', 'author'],
+				fields: ['id'],
 			}),
 		);
 
@@ -27,7 +28,18 @@ const { data: post, refresh: refresh } = await useAsyncData<Post>(`posts-${slug}
 			throw createError({ statusCode: 404, message: `Post not found: ${slug}` });
 		}
 
-		return posts[0] as Post;
+		const post = await $directus.request(
+			readItem('posts', posts[0]!.id, {
+				fields: ['id', 'title', 'content', 'status', 'image', 'description', 'author'],
+				version,
+			}),
+		);
+
+		if (!post) {
+			throw createError({ statusCode: 404, message: `Post not found: ${slug}` });
+		}
+
+		return post as Post;
 	} catch {
 		throw createError({ statusCode: 500, message: `Failed to fetch post: ${slug}` });
 	}
@@ -39,11 +51,22 @@ const { data: relatedPosts, refresh: relatedPostsRefresh } = await useAsyncData<
 		const { $directus } = useNuxtApp();
 
 		try {
-			return await $directus.request<Post[]>(
+			const relatedPosts = await $directus.request<Post[]>(
 				readItems('posts', {
 					filter: { status: { _eq: 'published' }, slug: { _neq: slug } },
 					fields: ['id', 'title', 'image', 'slug'],
 					limit: 2,
+				}),
+			);
+
+			return Promise.all(
+				relatedPosts.map(async (post) => {
+					return await $directus.request<Post>(
+						readItem('posts', post.id, {
+							fields: ['id', 'title', 'image', 'slug'],
+							version,
+						}),
+					);
 				}),
 			);
 		} catch {
