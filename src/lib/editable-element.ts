@@ -8,41 +8,50 @@ export class EditableElement {
 	private static readonly DATASET = 'directus';
 	private static readonly DATA_ATTRIBUTE_VALID_KEYS: Array<keyof EditConfig> = ['collection', 'item', 'fields', 'mode'];
 
+	private activated = false;
 	private optionsWritable = true;
+	private customClass: string | undefined = undefined;
 
 	readonly element: HTMLElement;
 	readonly key: string; // A unique key to identify editable elements – not to be confused with the primary key
 	readonly editConfig: EditConfigStrict;
-	readonly rectObserver: { observe(): void; unobserve(): void };
-	readonly overlayElement: OverlayElement;
 
-	rect: DOMRect;
+	rectObserver?: { observe(): void; unobserve(): void };
+	overlayElement?: OverlayElement;
+
+	rect?: DOMRect;
 	hover = false;
 	disabled = false;
 	onSaved: EditableElementOptions['onSaved'] = undefined;
 
-	private boundMouseenter: (e: MouseEvent) => void;
-	private boundMouseleave: (e: MouseEvent) => void;
+	private boundMouseenter?: (e: MouseEvent) => void;
+	private boundMouseleave?: (e: MouseEvent) => void;
 
 	constructor(element: HTMLElement) {
 		this.element = element;
+		this.key = crypto.randomUUID();
+		this.editConfig = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
+	}
+
+	activate() {
+		if (this.activated) return;
+		this.activated = true;
+
 		this.boundMouseenter = this.onMouseenter.bind(this);
 		this.boundMouseleave = this.onMouseleave.bind(this);
 		this.element.addEventListener('mouseenter', this.boundMouseenter);
 		this.element.addEventListener('mouseleave', this.boundMouseleave);
 
-		this.key = crypto.randomUUID();
-		this.editConfig = EditableElement.editAttrToObject(this.element.dataset[EditableElement.DATASET]!);
-
 		this.rect = this.element.getBoundingClientRect();
 		this.overlayElement = new OverlayElement();
+		this.overlayElement.setCustomClass(this.customClass);
 		this.overlayElement.updateRect(this.rect);
 		this.overlayElement.editButton.addEventListener('click', this.onClickEdit.bind(this));
 		this.overlayElement.aiButton?.addEventListener('click', this.onClickAddToContext.bind(this));
 
 		// @ts-expect-error
 		this.rectObserver = observeRect(this.element, this.onObserveRect.bind(this));
-		this.rectObserver.observe();
+		this.rectObserver!.observe();
 	}
 
 	static query(elements: HTMLElement | HTMLElement[] | undefined | null) {
@@ -106,13 +115,16 @@ export class EditableElement {
 	applyOptions({ customClass, onSaved }: EditableElementOptions, elementsSpecified = false) {
 		if (!this.optionsWritable) return;
 		if (elementsSpecified) this.optionsWritable = false;
-		this.overlayElement.setCustomClass(customClass);
 		if (onSaved !== undefined) this.onSaved = onSaved;
+
+		if (this.overlayElement) this.overlayElement.setCustomClass(customClass);
+		else this.customClass = customClass;
 	}
 
 	removeHoverListener() {
+		if (!this.boundMouseenter) return;
 		this.element.removeEventListener('mouseenter', this.boundMouseenter);
-		this.element.removeEventListener('mouseleave', this.boundMouseleave);
+		this.element.removeEventListener('mouseleave', this.boundMouseleave!);
 	}
 
 	private onClickEdit() {
@@ -137,7 +149,7 @@ export class EditableElement {
 
 		this.hover = hover;
 		this.setParentsHover();
-		this.overlayElement.toggleHover(hover);
+		this.overlayElement!.toggleHover(hover);
 	}
 
 	private setParentsHover() {
@@ -147,13 +159,13 @@ export class EditableElement {
 			const otherElements = hoveredItems.filter((item) => item.element !== hoveredItem.element);
 			const isParentElement = otherElements.some((el) => hoveredItem.element.contains(el.element));
 
-			hoveredItem.overlayElement.toggleParentHover(isParentElement);
+			hoveredItem.overlayElement!.toggleParentHover(isParentElement);
 		});
 	}
 
 	private onObserveRect(rect: DOMRect) {
 		if (this.disabled) return;
 		this.rect = rect;
-		this.overlayElement.updateRect(rect);
+		this.overlayElement?.updateRect(rect);
 	}
 }

@@ -23,12 +23,17 @@ function createEditableElement(config: EditConfig = { collection: 'articles', it
 	return el;
 }
 
-function setupFrame(overrides?: { connect?: boolean; confirm?: boolean }) {
+function setupFrame(overrides?: { connect?: boolean; confirm?: boolean; permittedKeys?: string[] }) {
 	vi.mocked(DirectusFrame).mockImplementation(function (this: any) {
 		Object.assign(this, {
 			connect: vi.fn().mockReturnValue(overrides?.connect ?? true),
 			receiveConfirm: vi.fn().mockResolvedValue(overrides?.confirm ?? true),
-			send: vi.fn(),
+			send: vi.fn().mockImplementation((action: string, data?: any) => {
+				if (action === 'checkFieldAccess' && Array.isArray(data)) {
+					const keys = overrides?.permittedKeys ?? data.map((i: any) => i.key);
+					EditableStore.activateItems(keys);
+				}
+			}),
 			isAiEnabled: vi.fn().mockReturnValue(false),
 		});
 	});

@@ -48,8 +48,9 @@ describe('EditableElement', () => {
 		vi.restoreAllMocks();
 	});
 
-	it('calls rectObserver.observe() in constructor', () => {
-		new EditableElement(createEditableElement());
+	it('calls rectObserver.observe() when activate() is called', () => {
+		const editable = new EditableElement(createEditableElement());
+		editable.activate();
 		expect(mockObserve).toHaveBeenCalledOnce();
 	});
 
@@ -64,8 +65,9 @@ describe('EditableElement', () => {
 	it('sends "edit" action with key, editConfig and rect when edit button is clicked', () => {
 		const el = createEditableElement({ collection: 'articles', item: '42', fields: ['title'] });
 		const editable = new EditableElement(el);
+		editable.activate();
 
-		editable.overlayElement.editButton.click();
+		editable.overlayElement!.editButton.click();
 
 		expect(mockSend).toHaveBeenCalledOnce();
 
@@ -80,8 +82,9 @@ describe('EditableElement', () => {
 		mockIsAiEnabled.mockReturnValue(true);
 		const el = createEditableElement({ collection: 'articles', item: '42', fields: ['title'] });
 		const editable = new EditableElement(el);
+		editable.activate();
 
-		editable.overlayElement.aiButton!.click();
+		editable.overlayElement!.aiButton!.click();
 
 		expect(mockSend).toHaveBeenCalledOnce();
 
@@ -95,6 +98,7 @@ describe('EditableElement', () => {
 	it('sets hover to true on mouseenter and false on mouseleave', () => {
 		const el = createEditableElement();
 		const editable = new EditableElement(el);
+		editable.activate();
 		EditableStore.addItem(editable);
 
 		el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: false }));
@@ -116,8 +120,13 @@ describe('EditableElement', () => {
 			parent.appendChild(child);
 			document.body.appendChild(parent);
 
-			EditableStore.addItem(new EditableElement(parent));
-			EditableStore.addItem(new EditableElement(child));
+			const parentItem = new EditableElement(parent);
+			parentItem.activate();
+			EditableStore.addItem(parentItem);
+
+			const childItem = new EditableElement(child);
+			childItem.activate();
+			EditableStore.addItem(childItem);
 		});
 
 		it('marks parent overlay with parent-hover class when child is hovered', () => {
@@ -140,6 +149,7 @@ describe('EditableElement', () => {
 		it('prevents mouseenter from firing after removeHoverListener is called', () => {
 			const el = createEditableElement();
 			const editable = new EditableElement(el);
+			editable.activate();
 			EditableStore.addItem(editable);
 
 			editable.removeHoverListener();
@@ -151,6 +161,7 @@ describe('EditableElement', () => {
 		it('prevents mouseleave from firing after removeHoverListener is called', () => {
 			const el = createEditableElement();
 			const editable = new EditableElement(el);
+			editable.activate();
 			EditableStore.addItem(editable);
 
 			el.dispatchEvent(new MouseEvent('mouseenter', { bubbles: false }));
@@ -181,6 +192,15 @@ describe('EditableElement', () => {
 			editable.applyOptions({ onSaved: callback2 }, false);
 
 			expect(editable.onSaved).toBe(callback1);
+		});
+
+		it('applies customClass set before activate() once the overlay is created', () => {
+			const editable = new EditableElement(createEditableElement());
+
+			editable.applyOptions({ customClass: 'my-class' });
+			editable.activate();
+
+			expect(document.querySelector('.directus-visual-editing-overlay.my-class')).toBeInstanceOf(HTMLElement);
 		});
 	});
 

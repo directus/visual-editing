@@ -22,7 +22,9 @@ function createEditableElement(config: EditConfig = { collection: 'articles', it
 	const el = document.createElement('div');
 	el.dataset['directus'] = setAttr(config);
 	document.body.appendChild(el);
-	return new EditableElement(el);
+	const item = new EditableElement(el);
+	item.activate();
+	return item;
 }
 
 describe('EditableStore', () => {
@@ -131,6 +133,42 @@ describe('EditableStore', () => {
 		expect(result).not.toContain(item2);
 	});
 
+	describe('activateItems()', () => {
+		it('calls activate() on items whose key is in the list', () => {
+			const item1 = createEditableElement({ collection: 'a', item: '1' });
+			const item2 = createEditableElement({ collection: 'b', item: '2' });
+			EditableStore.addItem(item1);
+			EditableStore.addItem(item2);
+
+			const spy1 = vi.spyOn(item1, 'activate');
+			const spy2 = vi.spyOn(item2, 'activate');
+
+			EditableStore.activateItems([item1.key]);
+
+			expect(spy1).toHaveBeenCalledOnce();
+			expect(spy2).not.toHaveBeenCalled();
+		});
+
+		it('skips items whose key is not in the list', () => {
+			const item = createEditableElement({ collection: 'a', item: '1' });
+			EditableStore.addItem(item);
+
+			const spy = vi.spyOn(item, 'activate');
+
+			EditableStore.activateItems(['non-existent-key']);
+
+			expect(spy).not.toHaveBeenCalled();
+		});
+
+		it('silently skips items not in the store', () => {
+			const item = createEditableElement({ collection: 'a', item: '1' });
+			EditableStore.addItem(item);
+			EditableStore.removeItems([item]);
+
+			expect(() => EditableStore.activateItems([item.key])).not.toThrow();
+		});
+	});
+
 	describe('enableItems()', () => {
 		it('enables all store items when called without arguments', () => {
 			const item1 = createEditableElement({ collection: 'a', item: '1' });
@@ -165,7 +203,7 @@ describe('EditableStore', () => {
 			item.disabled = true;
 			EditableStore.addItem(item);
 
-			const spy = vi.spyOn(item.rectObserver, 'observe');
+			const spy = vi.spyOn(item.rectObserver!, 'observe');
 			spy.mockClear();
 
 			EditableStore.enableItems([item]);
@@ -220,7 +258,7 @@ describe('EditableStore', () => {
 		it('calls rectObserver.unobserve on each disabled item', () => {
 			const item = createEditableElement({ collection: 'a', item: '1' });
 			EditableStore.addItem(item);
-			const spy = vi.spyOn(item.rectObserver, 'unobserve');
+			const spy = vi.spyOn(item.rectObserver!, 'unobserve');
 
 			EditableStore.disableItems([item]);
 
@@ -256,7 +294,7 @@ describe('EditableStore', () => {
 		it('calls rectObserver.unobserve on each removed item', () => {
 			const item = createEditableElement({ collection: 'a', item: '1' });
 			EditableStore.addItem(item);
-			const spy = vi.spyOn(item.rectObserver, 'unobserve');
+			const spy = vi.spyOn(item.rectObserver!, 'unobserve');
 
 			EditableStore.removeItems([item]);
 
@@ -286,7 +324,7 @@ describe('EditableStore', () => {
 		it('calls toggleHighlightActive when highlighting by key', () => {
 			const item = createEditableElement({ collection: 'a', item: '1' });
 			EditableStore.addItem(item);
-			const spy = vi.spyOn(item.overlayElement, 'toggleHighlightActive');
+			const spy = vi.spyOn(item.overlayElement!, 'toggleHighlightActive');
 
 			EditableStore.highlightElement({ key: item.key });
 
@@ -297,7 +335,7 @@ describe('EditableStore', () => {
 		it('calls toggleHighlightActive when highlighting by collection and item', () => {
 			const item = createEditableElement({ collection: 'articles', item: '123' });
 			EditableStore.addItem(item);
-			const spy = vi.spyOn(item.overlayElement, 'toggleHighlightActive');
+			const spy = vi.spyOn(item.overlayElement!, 'toggleHighlightActive');
 
 			EditableStore.highlightElement({ collection: 'articles', item: '123' });
 
@@ -311,8 +349,8 @@ describe('EditableStore', () => {
 			EditableStore.addItem(item1);
 			EditableStore.addItem(item2);
 
-			const spy1 = vi.spyOn(item1.overlayElement, 'toggleHighlightActive');
-			const spy2 = vi.spyOn(item2.overlayElement, 'toggleHighlightActive');
+			const spy1 = vi.spyOn(item1.overlayElement!, 'toggleHighlightActive');
+			const spy2 = vi.spyOn(item2.overlayElement!, 'toggleHighlightActive');
 
 			EditableStore.highlightElement({ key: item1.key });
 			EditableStore.highlightElement({ key: item2.key });
@@ -326,7 +364,7 @@ describe('EditableStore', () => {
 			const item = createEditableElement({ collection: 'a', item: '1' });
 			EditableStore.addItem(item);
 
-			const spy = vi.spyOn(item.overlayElement, 'toggleHighlightActive');
+			const spy = vi.spyOn(item.overlayElement!, 'toggleHighlightActive');
 
 			EditableStore.highlightElement({ key: item.key });
 			EditableStore.highlightElement(null);
