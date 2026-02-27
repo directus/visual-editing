@@ -1,5 +1,6 @@
 import { EditableStore } from './editable-store.ts';
-import type { HighlightElementData, ConfirmData, SendAction, ReceiveData, SavedData } from './types/index.ts';
+import type { EditableElement } from './editable-element.ts';
+import type { ConfirmData, HighlightElementData, ReceiveData, SavedData, SendAction } from './types/index.ts';
 
 /**
  * *Singleton* class to handle communication with Directus in parent frame.
@@ -19,9 +20,8 @@ export class DirectusFrame {
 		window?.addEventListener('message', this.receive.bind(this));
 	}
 
-	connect(origin: string) {
-		this.origin = origin;
-		return this.send('connect');
+	isAiEnabled() {
+		return this.aiEnabled;
 	}
 
 	send(action: SendAction, data?: unknown) {
@@ -36,12 +36,9 @@ export class DirectusFrame {
 		}
 	}
 
-	private sameOrigin(origin: string, url: string) {
-		try {
-			return origin === new URL(url).origin;
-		} catch {
-			return false;
-		}
+	connect(origin: string) {
+		this.origin = origin;
+		return this.send('connect');
 	}
 
 	receive(event: MessageEvent) {
@@ -52,18 +49,10 @@ export class DirectusFrame {
 		const { action, data }: ReceiveData = event.data;
 
 		if (action === 'confirm') this.receiveConfirmAction(data);
+		if (action === 'activateElements') this.receiveActivateElements(data);
 		if (action === 'showEditableElements') this.receiveShowEditableElements(data);
 		if (action === 'saved') this.receiveSaved(data);
 		if (action === 'highlightElement') this.receiveHighlightElement(data);
-	}
-
-	private receiveConfirmAction(data: unknown) {
-		this.confirmed = true;
-		this.aiEnabled = !!(data as ConfirmData)?.aiEnabled;
-	}
-
-	isAiEnabled() {
-		return this.aiEnabled;
 	}
 
 	receiveConfirm() {
@@ -82,6 +71,16 @@ export class DirectusFrame {
 
 			checkConfirmed();
 		});
+	}
+
+	private receiveConfirmAction(data: unknown) {
+		this.confirmed = true;
+		this.aiEnabled = !!(data as ConfirmData)?.aiEnabled;
+	}
+
+	private receiveActivateElements(data: unknown) {
+		const keys: EditableElement['key'][] = Array.isArray(data) ? data : [];
+		EditableStore.activateItems(keys);
 	}
 
 	private receiveShowEditableElements(data: unknown) {
@@ -120,6 +119,14 @@ export class DirectusFrame {
 		} else if (typeof key === 'string') {
 			// Key of type string = UUID from editable-element.ts, looks up via getItemByKey()
 			EditableStore.highlightElement({ key });
+		}
+	}
+
+	private sameOrigin(origin: string, url: string) {
+		try {
+			return origin === new URL(url).origin;
+		} catch {
+			return false;
 		}
 	}
 }

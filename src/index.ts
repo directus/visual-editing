@@ -3,7 +3,7 @@ import { EditableElement } from './lib/editable-element.ts';
 import { EditableStore } from './lib/editable-store.ts';
 import { OverlayManager } from './lib/overlay-manager.ts';
 import { PageManager } from './lib/page-manager.ts';
-import type { EditConfig, EditableElementOptions } from './lib/types/index.ts';
+import type { CheckFieldAccessData, EditConfig, EditableElementOptions } from './lib/types/index.ts';
 
 export async function apply({
 	directusUrl,
@@ -26,16 +26,28 @@ export async function apply({
 
 	const editableElements = EditableElement.query(elements);
 	const scopedItems: EditableElement[] = [];
+	const itemsToCheck: CheckFieldAccessData[] = [];
 
 	editableElements.forEach((element) => {
 		const existingItem = EditableStore.getItem(element);
 		const item = existingItem ?? new EditableElement(element);
 
 		item.applyOptions({ customClass, onSaved }, !!elements);
-
 		scopedItems.push(item);
-		if (!existingItem) EditableStore.addItem(item);
+
+		if (!existingItem) {
+			EditableStore.addItem(item);
+
+			itemsToCheck.push({
+				key: item.key,
+				collection: item.editConfig.collection,
+				item: item.editConfig.item,
+				fields: item.editConfig.fields ?? [],
+			});
+		}
 	});
+
+	if (itemsToCheck.length) directusFrame.send('checkFieldAccess', itemsToCheck);
 
 	return {
 		remove() {

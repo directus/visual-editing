@@ -2,10 +2,10 @@ import type {
 	EditConfig as DirectusEditConfig,
 	ReceiveAction as DirectusReceiveAction,
 	SendAction as DirectusSendAction,
-	SavedData as DirectusSavedData,
-	HighlightElementData as DirectusHighlightElementData,
-	ConfirmData as DirectusConfirmData,
+	SavedData,
 } from './directus.ts';
+
+export type { SavedData, HighlightElementData, ConfirmData, CheckFieldAccessData } from './directus.ts';
 
 export type EditConfigStrict = DirectusEditConfig;
 
@@ -15,10 +15,6 @@ export type SendAction = DirectusReceiveAction;
 export type ReceiveAction = DirectusSendAction;
 
 export type ReceiveData = { action: ReceiveAction | null; data: unknown };
-
-export type SavedData = DirectusSavedData;
-export type HighlightElementData = DirectusHighlightElementData;
-export type ConfirmData = DirectusConfirmData;
 
 export type EditableElementOptions = {
 	customClass?: string | undefined;

@@ -9,6 +9,7 @@ vi.mock('./editable-store.ts', () => ({
 		getItemByEditConfig: vi.fn(),
 		getHoveredItems: vi.fn(),
 		addItem: vi.fn(),
+		activateItems: vi.fn(),
 		enableItems: vi.fn(),
 		disableItems: vi.fn(),
 		removeItems: vi.fn(),
@@ -283,6 +284,41 @@ describe('DirectusFrame', () => {
 					fields: ['title', 'body'],
 				});
 			});
+		});
+	});
+
+	describe('checkFieldAccess action', () => {
+		it('sends checkFieldAccess action with the provided items', () => {
+			const frame = new DirectusFrame();
+			frame.connect(ORIGIN);
+			postMessageSpy.mockClear();
+
+			const items = [{ key: 'k1', collection: 'articles', item: 1, fields: ['title'] }];
+			frame.send('checkFieldAccess', items);
+
+			expect(postMessageSpy).toHaveBeenCalledWith({ action: 'checkFieldAccess', data: items }, ORIGIN);
+		});
+
+		it('activates items with permitted keys when activateElements is received', () => {
+			const frame = new DirectusFrame();
+			frame.connect(ORIGIN);
+
+			frame.send('checkFieldAccess', [{ key: 'k1', collection: 'articles', item: 1, fields: [] }]);
+			frame.receive(makeEvent(ORIGIN, 'activateElements', ['k1']));
+
+			expect(EditableStore.activateItems).toHaveBeenCalledOnce();
+			expect(EditableStore.activateItems).toHaveBeenCalledWith(['k1']);
+		});
+
+		it('activates items with empty array when activateElements data is not an array', () => {
+			const frame = new DirectusFrame();
+			frame.connect(ORIGIN);
+
+			frame.send('checkFieldAccess', []);
+			frame.receive(makeEvent(ORIGIN, 'activateElements', null));
+
+			expect(EditableStore.activateItems).toHaveBeenCalledOnce();
+			expect(EditableStore.activateItems).toHaveBeenCalledWith([]);
 		});
 	});
 

@@ -35,13 +35,19 @@ export class EditableStore {
 		EditableStore.items.push(item);
 	}
 
+	static activateItems(keys: EditableElement['key'][]) {
+		EditableStore.items.forEach((item) => {
+			if (keys.includes(item.key)) item.activate();
+		});
+	}
+
 	static enableItems(selectedItems?: EditableElement[]) {
 		const items = selectedItems ?? EditableStore.items;
 
 		items.forEach((item) => {
 			item.disabled = false;
-			item.rectObserver.observe();
-			item.overlayElement.enable();
+			item.rectObserver?.observe();
+			item.overlayElement?.enable();
 		});
 	}
 
@@ -51,8 +57,8 @@ export class EditableStore {
 		items.forEach((item) => {
 			item.disabled = true;
 			item.hover = false;
-			item.rectObserver.unobserve();
-			item.overlayElement.disable();
+			item.rectObserver?.unobserve();
+			item.overlayElement?.disable();
 		});
 
 		return [...items];
@@ -62,8 +68,8 @@ export class EditableStore {
 		const items = selectedItems ?? EditableStore.items;
 
 		items.forEach((item) => {
-			item.rectObserver.unobserve();
-			item.overlayElement.remove();
+			item.rectObserver?.unobserve();
+			item.overlayElement?.remove();
 			item.removeHoverListener();
 		});
 
@@ -76,7 +82,7 @@ export class EditableStore {
 		this.highlightOverlayElements = show;
 
 		EditableStore.items.forEach((item) => {
-			item.overlayElement.toggleHighlight(show);
+			item.overlayElement?.toggleHighlight(show);
 		});
 	}
 
@@ -84,7 +90,7 @@ export class EditableStore {
 		identifier: { key: string } | { collection: string; item: string | number; fields?: string[] } | null,
 	) {
 		if (this.highlightedKey !== null) {
-			EditableStore.getItemByKey(this.highlightedKey)?.overlayElement.toggleHighlightActive(false);
+			EditableStore.getItemByKey(this.highlightedKey)?.overlayElement?.toggleHighlightActive(false);
 		}
 
 		if (identifier === null) {
@@ -102,7 +108,7 @@ export class EditableStore {
 
 		if (element) {
 			this.highlightedKey = element.key;
-			element.overlayElement.toggleHighlightActive(true);
+			element.overlayElement?.toggleHighlightActive(true);
 		} else {
 			this.highlightedKey = null;
 		}
