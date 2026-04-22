@@ -1,3 +1,8 @@
+> [!WARNING]
+> **This repository is archived.** The `@directus/visual-editing` library has moved into the main [`directus/directus`](https://github.com/directus/directus) monorepo. The template data for the test website lives at [`directus/visual-editing-template`](https://github.com/directus/visual-editing-template).
+>
+> No further development, issues, or PRs are accepted here. Please open issues in `directus/directus`.
+
 # Visual Editing Frontend Library by Directus
 
 This library works together with a Directus instance to enable Visual Editing functionality from within the Visual
